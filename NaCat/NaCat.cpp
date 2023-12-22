@@ -6,7 +6,7 @@
 #include <wil/com.h>
 #include <WebView2EnvironmentOptions.h>
 #include "WebView2.h"
-#include "include/Uilt.h"
+#include "include/Util.h"
 
 using namespace Microsoft::WRL;
 static TCHAR szWindowClass[] = _T("DesktopApp");

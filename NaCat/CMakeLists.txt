@@ -26,7 +26,7 @@ link_libraries("${webview2_SOURCE_DIR}/build/native/${PLATFORM}/WebView2LoaderSt
 
 #### webview2 dependencies end
 # 将源代码添加到此项目的可执行文件。
-add_executable (NaCat WIN32 "NaCat.cpp"  "src/Uilt.cpp" "include/Uilt.h")
+add_executable (NaCat WIN32 "NaCat.cpp"  "src/Util.cpp" "include/Util.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET NaCat PROPERTY CXX_STANDARD 20)
