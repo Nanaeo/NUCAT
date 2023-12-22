@@ -6,9 +6,8 @@
 #include <wil/com.h>
 #include <WebView2EnvironmentOptions.h>
 #include "WebView2.h"
+#include "include/Uilt.h"
 
-#include <iostream>
-#include <filesystem>
 using namespace Microsoft::WRL;
 static TCHAR szWindowClass[] = _T("DesktopApp");
 static TCHAR szTitle[] = _T("NuCat");
@@ -84,11 +83,7 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_ HINSTANCE hPrevInstance, _In
 						GetClientRect(hWnd, &bounds);
 						webviewController->put_Bounds(bounds);
 						//std::filesystem::current_path().wstring().c_str()
-						std::wstring path = std::filesystem::current_path().wstring();
-						std::wstring file = L"Resource\\index.html";
-						std::wstring full_path = L"file:\\\\\\" + path + L"\\" + file;
-						MessageBoxW(NULL, full_path.c_str(), L"", NULL);
-						webview->Navigate(full_path.c_str());
+						webview->Navigate(GetResourceEntry().c_str());
 						EventRegistrationToken token;
 						webview->add_NewWindowRequested(Callback<ICoreWebView2NewWindowRequestedEventHandler>(
 							[](ICoreWebView2* webview, ICoreWebView2NewWindowRequestedEventArgs* args)->HRESULT {
