@@ -31,3 +31,6 @@ add_executable (NaCat WIN32 "NaCat.cpp" "NaCat.h")
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET NaCat PROPERTY CXX_STANDARD 20)
 endif()
+
+file (GLOB EMBED_FILES "${CMAKE_CURRENT_SOURCE_DIR}/../Resource/*.*")
+file(COPY ${EMBED_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resource/)
