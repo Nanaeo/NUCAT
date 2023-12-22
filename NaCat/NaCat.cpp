@@ -147,7 +147,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
-		LRESULT hit;
 	case WM_SIZE:
 		if (webviewController != nullptr) {
 			RECT bounds;

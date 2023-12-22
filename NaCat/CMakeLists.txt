@@ -4,12 +4,12 @@
 # The Windows Implementation Libraries (wil) were created to improve productivity and solve problems commonly seen by Windows developers. by: Microsoft WindowsImplementationLibraryTeam
 FetchContent_Declare(
   wil
-  URL  https://www.nuget.org/api/v2/package/Microsoft.Windows.ImplementationLibrary/1.0.211019.2
+  URL  https://www.nuget.org/api/v2/package/Microsoft.Windows.ImplementationLibrary/1.0.231216.1
 )
 # Microsoft.Web.WebView2
 FetchContent_Declare(
   webview2
-  URL  https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.1072.54
+  URL  https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.2210.55
 )
 FetchContent_MakeAvailable(wil webview2)
 
