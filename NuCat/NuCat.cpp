@@ -10,9 +10,7 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	window.Show();
 	HWND hWnd = window.GetHandle();
 	ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** Handler = (ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler**)malloc(sizeof(ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler));
-	if (Handler == nullptr) {
-		exit(0);
-	}
+	if (Handler == nullptr) return 0;//avoid nullptr
 	Handler = CreatHandler(hWnd);
 	CreateCoreWebView2EnvironmentWithOptions(nullptr, nullptr, nullptr, *Handler);
 	MSG msg;

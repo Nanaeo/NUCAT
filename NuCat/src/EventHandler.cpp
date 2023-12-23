@@ -21,7 +21,7 @@ ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND h
 				GetClientRect(hWnd, &bounds);
 				webviewController->put_Bounds(bounds);
 				MessageBoxW(NULL, GetCurrentPath().c_str(), L"", NULL);
-				webview->Navigate(L"https://bing.com");
+				webview->Navigate(GetResourceEntry().c_str());
 				EventRegistrationToken token;
 				webview->add_NewWindowRequested(Callback<ICoreWebView2NewWindowRequestedEventHandler>(
 					[](ICoreWebView2* webview, ICoreWebView2NewWindowRequestedEventArgs* args)->HRESULT {
