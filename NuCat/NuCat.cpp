@@ -4,8 +4,14 @@
 #include "include/WindowMessage.h"
 #include "include/EventHandler.h"
 using namespace Microsoft::WRL;
-
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
+	//未安装Webview2
+	if (!WebViewIsInstall()) {
+		MessageBoxW(0,L"你未安装WebView2即将跳转下载",L"环境异常",0);
+		ShellExecuteW(NULL, L"open", L"https://go.microsoft.com/fwlink/p/?LinkId=2124703", NULL, NULL, SW_SHOWNORMAL);
+		return 0;
+	}
+	//接下来创建默认窗口
 	WMange window((long long*)&WndProc);
 	window.Show();
 	HWND hWnd = window.GetHandle();

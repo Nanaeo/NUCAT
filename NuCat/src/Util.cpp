@@ -1,5 +1,8 @@
 #include "include/Util.h"
+#include "include/NuCat.h"
 #include <string>
+#include <vector>
+
 std::wstring ResolvePathAndTrimFile(std::wstring path)
 {
     std::wstring::size_type pos = path.find_last_of(L"\\/");
@@ -8,6 +11,17 @@ std::wstring ResolvePathAndTrimFile(std::wstring path)
         return path.substr(0, pos);
     }
     return path;
+}
+
+bool WebViewIsInstall()
+{
+    LPWSTR version_info;
+    GetAvailableCoreWebView2BrowserVersionString(nullptr, &version_info);
+    if (version_info != L"")
+    {
+        return true;
+    }
+    return false;
 }
 
 std::wstring GetCurrentPath()

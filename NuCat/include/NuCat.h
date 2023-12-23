@@ -9,3 +9,4 @@
 #include "WebView2.h"
 static wil::com_ptr<ICoreWebView2Controller> webviewController;
 static wil::com_ptr<ICoreWebView2> webview;
+//Global Var
