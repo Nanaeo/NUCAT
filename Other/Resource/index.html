@@ -83,15 +83,14 @@
 	</style>
 </head>
 <body>
-	<script>window.chrome.webview.postMessage(`Test Message From js`);</script>
 	<div class="header">
 		<h1>NUCAT</h1>
-		<div class="close" onclick="window.close();">X</div>
+		<div class="close" onclick="javascript:window.chrome.webview.postMessage(`window-close`);">X</div>
 	</div>
 	<div class="container">
 		<div class="file-list">
 			<ul>
-				<li><a href="#">文件1</a></li>
+				<li><a href="javascript:window.chrome.webview.postMessage(`Test Message From js`);">文件1</a></li>
 				<li><a href="#">文件2</a></li>
 				<li><a href="#">文件3</a></li>
 			</ul>

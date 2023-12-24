@@ -9,6 +9,7 @@ ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND h
 		env->CreateCoreWebView2Controller(hWnd, Callback<ICoreWebView2CreateCoreWebView2ControllerCompletedHandler>(
 			[hWnd](HRESULT result, ICoreWebView2Controller* controller) -> HRESULT {
 				if (controller != nullptr) {
+					//建议拷贝
 					webviewController = controller;
 					webviewController->get_CoreWebView2(&webview);
 				}
@@ -45,8 +46,10 @@ ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND h
 					[](ICoreWebView2* webview, ICoreWebView2WebMessageReceivedEventArgs* args) -> HRESULT {
 						wil::unique_cotaskmem_string message;
 						args->TryGetWebMessageAsString(&message);
-						MessageBoxW(NULL, message.get(), L"", NULL);
-						webview->PostWebMessageAsString(message.get());
+						if (message.get() == L"window-close") {
+							MessageBoxW(NULL, message.get(), L"", NULL);
+						}
+						//webview->PostWebMessageAsString(message.get());
 						return S_OK;
 					}).Get(), &token);
 				return S_OK;
