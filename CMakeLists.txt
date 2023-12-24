@@ -8,6 +8,8 @@ endif()
 project ("NuCat")
 # 设置 cpp标准同时 设置utf8
 set(CMAKE_CXX_STANDARD 23)
+# 设置W版API
+add_definitions("-DUNICODE" "-D_UNICODE")
 if(MSVC)
 	add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 	add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
