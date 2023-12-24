@@ -13,7 +13,7 @@ WinPipe::~WinPipe() {
     CloseHandle(write_handle_);
 }
 
-std::string WinPipe::RunCommand(const std::string& command) {
+std::string WinPipe::RunCommand(const std::wstring& command) {
     std::string result;
     STARTUPINFO si = { sizeof(STARTUPINFO) };
     si.dwFlags = STARTF_USESTDHANDLES;
@@ -21,7 +21,9 @@ std::string WinPipe::RunCommand(const std::string& command) {
     si.hStdOutput = write_handle_;
     si.hStdError = write_handle_;
     PROCESS_INFORMATION pi;
-    if (!CreateProcess(NULL, (LPWSTR)(command.c_str()), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
+    
+    if (!CreateProcessW(L"C:\\Windows\\System32\\cmd.exe", const_cast<wchar_t*>(command.c_str()), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
+        int error = GetLastError();
         return result;
     }
     CloseHandle(pi.hThread);
@@ -39,5 +41,5 @@ std::string WinPipe::RunCommand(const std::string& command) {
 }
 
 void WinPipe::SetUtf8() {
-    this->RunCommand("chcp 65001 > nul");
+    this->RunCommand(L"chcp 65001 > nul");
 }
