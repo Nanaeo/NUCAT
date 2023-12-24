@@ -25,6 +25,9 @@ NUCAT 是一个压缩软件，它可以帮助你压缩和解压缩文件。它�
 
 代码标准:  17/23
 
-依赖资源:  WebView2 YYJSON (无需手动引入)
+依赖资源:  WebView2 YYJSON (无需手动引入) 7zip需要手动安装
+
+# 感谢
+YYJSON/MICROSOFT/7ZIP 为本项目提供了可能
 
 如果你需要更多帮助，可以查看 NUCAT 的文档。
