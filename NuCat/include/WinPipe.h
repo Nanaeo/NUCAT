@@ -7,8 +7,9 @@ class Pipe {
 public:
     Pipe();
     ~Pipe();
-    void Write(const wstring& data);
-    wstring Read()();
+    SetUtf8();
+    void Write(const string& data);
+    string Read()();
 private:
     HANDLE read_handle_;
     HANDLE write_handle_;
