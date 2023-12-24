@@ -37,3 +37,10 @@ std::wstring GetResourceEntry() {
     std::wstring full_path = L"file:\\\\\\" + path + L"\\" + file;
     return full_path;
 }
+
+std::wstring GetResourcePath(LPCWSTR _path) {
+    std::wstring path = GetCurrentPath();
+    std::wstring file = _path;
+    std::wstring full_path = path + file;
+    return full_path;
+}

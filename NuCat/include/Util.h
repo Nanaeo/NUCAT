@@ -6,3 +6,4 @@ std::wstring GetResourceEntry();
 std::wstring GetCurrentPath();
 std::wstring ResolvePathAndTrimFile(std::wstring path);
 bool WebViewIsInstall();
+std::wstring GetResourcePath(LPCWSTR _path);

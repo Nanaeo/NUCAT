@@ -37,15 +37,3 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 add_executable (NuCat WIN32 ${SOURCES} "NuCat.cpp")
 
-# 移动NUCAT主程序进去
-if(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/Nucat.exe)
-    file(COPY ${CMAKE_CURRENT_BINARY_DIR}/NuCat.exe DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../out/Pack)
-endif()
-
-file(GLOB EMBED_FILES "${CMAKE_CURRENT_SOURCE_DIR}/../Resource/*.*")
-# 移动NUCAT资源文件进PACK
-file(COPY ${EMBED_FILES} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../out/Pack/Resource/)
-# 移动NUCAT资源文件进Debug目录
-file(COPY ${EMBED_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Resource/)
-
-message("-----------------NUCAT_END-----------------")

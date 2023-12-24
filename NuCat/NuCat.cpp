@@ -12,13 +12,14 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 		return 0;
 	}
 	//接下来创建默认窗口
+	MessageBoxW(0, GetResourcePath(L"WebViewData").c_str(), L"环境异常", 0);
 	WMange window((long long*)&WndProc);
 	window.Show();
 	HWND hWnd = window.GetHandle();
 	ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** Handler = (ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler**)malloc(sizeof(ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler));
 	if (Handler == nullptr) return 0;//avoid nullptr
 	Handler = CreatHandler(hWnd);
-	CreateCoreWebView2EnvironmentWithOptions(nullptr, nullptr, nullptr, *Handler);
+	CreateCoreWebView2EnvironmentWithOptions(nullptr,GetResourcePath(L"\\WebViewData").c_str(), nullptr, *Handler);
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0)) {
 		TranslateMessage(&msg);
