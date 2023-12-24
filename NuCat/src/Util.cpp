@@ -44,3 +44,17 @@ std::wstring GetResourcePath(LPCWSTR _path) {
     std::wstring full_path = path + file;
     return full_path;
 }
+std::wstring Get7ZipInstallPath() {
+    HKEY hKey;
+    std::wstring path;
+    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\7-Zip", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+        DWORD type;
+        DWORD size = MAX_PATH;
+        WCHAR buffer[MAX_PATH];
+        if (RegGetValue(hKey, NULL, L"Path", RRF_RT_REG_SZ, &type, buffer, &size) == ERROR_SUCCESS) {
+            path = buffer;
+        }
+        RegCloseKey(hKey);
+    }
+    return path;
+}

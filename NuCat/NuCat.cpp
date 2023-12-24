@@ -18,7 +18,9 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	int argc = 0;
 	LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
 
-
+	//读取7zip安装目录
+	//MessageBoxW(0, Get7ZipInstallPath().c_str(), L"环境异常", 0);
+	
 	//接下来创建默认窗口
 	WMange window((long long*)&WndProc);
 	window.Show();
