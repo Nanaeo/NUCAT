@@ -2,6 +2,7 @@
 #include "include/NuCat.h"
 #include <string>
 #include <vector>
+#include <codecvt>
 
 std::wstring ResolvePathAndTrimFile(std::wstring path)
 {
@@ -57,4 +58,17 @@ std::wstring Get7ZipInstallPath() {
         RegCloseKey(hKey);
     }
     return path;
+}
+std::string Utf16ToUtf8(const std::wstring& utf16) {
+    int length = WideCharToMultiByte(CP_UTF8, 0, utf16.c_str(), -1, NULL, 0, NULL, NULL);
+    std::string utf8(length, 0);
+    WideCharToMultiByte(CP_UTF8, 0, utf16.c_str(), -1, &utf8[0], length, NULL, NULL);
+    return utf8;
+}
+
+std::wstring Utf8ToUtf16(const std::string& utf8) {
+    int length = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), -1, NULL, 0);
+    std::wstring utf16(length, 0);
+    MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), -1, &utf16[0], length);
+    return utf16;
 }

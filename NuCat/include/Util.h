@@ -8,3 +8,5 @@ std::wstring ResolvePathAndTrimFile(std::wstring path);
 bool WebViewIsInstall();
 std::wstring GetResourcePath(LPCWSTR _path);
 std::wstring Get7ZipInstallPath();
+std::wstring Utf8ToUtf16(const std::string& utf8);
+std::string Utf16ToUtf8(const std::wstring& utf16);

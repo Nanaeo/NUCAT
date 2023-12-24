@@ -1,17 +1,13 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <vector>
 #include <windows.h>
-class Pipe {
+#include <string>
+
+class WinPipe {
 public:
-    Pipe();
-    ~Pipe();
+    WinPipe();
+    ~WinPipe();
+    std::string RunCommand(const std::string& command);
     void SetUtf8();
-    void Write(const std::string& data);
-    std::string Read();
-    HANDLE GetReadHandle() const;
-    HANDLE GetWriteHandle() const;
 private:
     HANDLE read_handle_;
     HANDLE write_handle_;
