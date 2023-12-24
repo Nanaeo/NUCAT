@@ -1,5 +1,10 @@
 #include "include/EventHandler.h"
 using namespace Microsoft::WRL;
+bool CompareWchatText(const std::wstring& text1, const std::wstring& text2)
+{
+	return text1.compare(text2) == 0;
+}
+
 ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND hWnd) {
 	ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** Handler = (ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler**)malloc(sizeof(ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler));
 	if (Handler == nullptr) {
@@ -21,7 +26,7 @@ ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND h
 				RECT bounds;
 				GetClientRect(hWnd, &bounds);
 				webviewController->put_Bounds(bounds);
-				MessageBoxW(NULL, GetCurrentPath().c_str(), L"", NULL);
+				//进入默认资源入口
 				webview->Navigate(GetResourceEntry().c_str());
 				EventRegistrationToken token;
 				webview->add_NewWindowRequested(Callback<ICoreWebView2NewWindowRequestedEventHandler>(
@@ -46,8 +51,10 @@ ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND h
 					[](ICoreWebView2* webview, ICoreWebView2WebMessageReceivedEventArgs* args) -> HRESULT {
 						wil::unique_cotaskmem_string message;
 						args->TryGetWebMessageAsString(&message);
-						if (message.get() == L"window-close") {
-							MessageBoxW(NULL, message.get(), L"", NULL);
+						if (CompareWchatText(message.get(), L"window-close")) {
+							//MessageBoxW(NULL, message.get(), L"", NULL);
+							//窗口关闭
+							exit(0);
 						}
 						//webview->PostWebMessageAsString(message.get());
 						return S_OK;
