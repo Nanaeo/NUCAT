@@ -14,6 +14,11 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 		ShellExecuteW(NULL, L"open", L"https://go.microsoft.com/fwlink/p/?LinkId=2124703", NULL, NULL, SW_SHOWNORMAL);
 		return 0;
 	}
+	//解析命令行
+	int argc = 0;
+	LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
+
+
 	//接下来创建默认窗口
 	WMange window((long long*)&WndProc);
 	window.Show();
