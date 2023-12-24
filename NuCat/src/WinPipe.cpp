@@ -21,7 +21,14 @@ public:
         CloseHandle(read_handle_);
         CloseHandle(write_handle_);
     }
-    SetUtf8(){
+    HANDLE GetReadHandle() const {
+        return read_handle_;
+    }
+
+    HANDLE GetWriteHandle() const {
+        return write_handle_;
+    }
+    void SetUtf8(){
         Write("chcp 65001\n");
     }
     void Write(const string& data) {
@@ -45,11 +52,3 @@ private:
     HANDLE read_handle_;
     HANDLE write_handle_;
 };
-
-int main() {
-    Pipe pipe;
-    pipe.Write(u8"dir\n");
-    string output = pipe.Read();
-    cout << output << endl;
-    return 0;
-}

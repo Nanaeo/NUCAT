@@ -2,8 +2,7 @@
 #include <iostream>
 #include <string>
 #include <include/SevenZip.h>
-using namespace std;
-
+#include <include/WinPipe.h>
 class SevenZip {
 public:
     SevenZip() {
@@ -17,13 +16,13 @@ public:
         CloseHandle(process_info_.hThread);
     }
 
-    void ExtractArchive(const string& archive_path, const string& output_path) {
-        string command = "7z.exe x \"" + archive_path + "\" -o\"" + output_path + "\"";
+    void ExtractArchive(const std::string& archive_path, const std::string& output_path) {
+        std::string command = "7z.exe x \"" + archive_path + "\" -o\"" + output_path + "\"";
         ExecuteCommand(command);
     }
 
-    void CompressFiles(const string& archive_path, const vector<string>& file_paths) {
-        string command = "7z.exe a \"" + archive_path + "\"";
+    void CompressFiles(const std::string& archive_path, const std::vector<std::string>& file_paths) {
+        std::string command = "7z.exe a \"" + archive_path + "\"";
         for (const auto& file_path : file_paths) {
             command += " \"" + file_path + "\"";
         }
@@ -31,7 +30,7 @@ public:
     }
 
 private:
-    void ExecuteCommand(const string& command) {
+    void ExecuteCommand(const std::string& command) {
         Pipe pipe;
         ZeroMemory(&startup_info_, sizeof(startup_info_));
         startup_info_.cb = sizeof(startup_info_);

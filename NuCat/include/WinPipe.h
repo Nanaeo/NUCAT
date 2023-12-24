@@ -7,9 +7,11 @@ class Pipe {
 public:
     Pipe();
     ~Pipe();
-    SetUtf8();
-    void Write(const string& data);
-    string Read()();
+    void SetUtf8();
+    void Write(const std::string& data);
+    std::string Read();
+    HANDLE GetReadHandle() const;
+    HANDLE GetWriteHandle() const;
 private:
     HANDLE read_handle_;
     HANDLE write_handle_;
