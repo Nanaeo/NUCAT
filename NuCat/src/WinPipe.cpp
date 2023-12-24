@@ -22,21 +22,21 @@ public:
         CloseHandle(write_handle_);
     }
 
-    void Write(const string& data) {
+    void Write(const wstring& data) {
         DWORD bytes_written;
-        if (!WriteFile(write_handle_, data.c_str(), data.size(), &bytes_written, NULL)) {
+        if (!WriteFile(write_handle_, data.c_str(), data.size() * sizeof(wchar_t), &bytes_written, NULL)) {
             throw runtime_error("WriteFile failed");
         }
     }
 
-    string Read() {
+    wstring Read() {
         const int kBufferSize = 1024;
-        char buffer[kBufferSize];
+        wchar_t buffer[kBufferSize];
         DWORD bytes_read;
-        if (!ReadFile(read_handle_, buffer, kBufferSize, &bytes_read, NULL)) {
+        if (!ReadFile(read_handle_, buffer, kBufferSize * sizeof(wchar_t), &bytes_read, NULL)) {
             throw runtime_error("ReadFile failed");
         }
-        return string(buffer, bytes_read);
+        return wstring(buffer, bytes_read / sizeof(wchar_t));
     }
 
 private:
