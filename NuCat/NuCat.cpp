@@ -4,12 +4,25 @@
 #include "include/WindowMessage.h"
 #include "include/EventHandler.h"
 #include "bit7z/bit7z.hpp"
+#include <fstream>
 
 using namespace Microsoft::WRL;
 wil::com_ptr<ICoreWebView2Controller> webviewController;
 wil::com_ptr<ICoreWebView2> webview;
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
+	//载入多语言设置 未读取配置设置
+	//DWORD dwBytesRead;
+	//char buffer[100];
+	//HANDLE hFile = CreateFile(L"F:\\NEWCPP\\NuCat\\Other\\Config\\Settings.json", GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	//if (hFile == INVALID_HANDLE_VALUE)
+	//{
+	//}
+	//;
+	//if (ReadFile(hFile, buffer, sizeof(buffer), &dwBytesRead, NULL))
+	//{
+	//}
+	//MessageBoxW(0, (LPCWSTR)buffer, L"环境异常", 0);
 	//未安装Webview2
 	if (!WebViewIsInstall()) {
 		MessageBoxW(0, L"你未安装WebView2即将跳转下载", L"环境异常", 0);
@@ -18,9 +31,15 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	}
 	//解析命令行
 	int argc = 0;
-	LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
+	//如果不比较原始文本 会导致CommandLineToArgvW ARGV读取到本程序的地址
+	if (!CompareWchatText(lpCmdLine, L"")) {
+		LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
+		MessageBoxW(0, *argv, L"", 0);
+	}
+
 	//*argv 如果直接拖入文件 argv则为地址
-	//MessageBoxW(0,*argv , L"", 0);
+
+
 	//读取7zip安装目录
 	//MessageBoxW(0, Get7ZipInstallPath().c_str(), L"环境异常", 0);
 	//测试bit7z
@@ -42,7 +61,7 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	if (Handler == nullptr) return 0;//avoid nullptr
 	Handler = CreatHandler(hWnd);
 	CreateCoreWebView2EnvironmentWithOptions(nullptr, GetResourcePath(L"\\WebViewData").c_str(), nullptr, *Handler);
-	
+
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0)) {
 		TranslateMessage(&msg);

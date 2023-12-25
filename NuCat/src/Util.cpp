@@ -76,3 +76,14 @@ std::wstring Utf8ToUtf16(const std::string& utf8) {
 	MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), -1, &utf16[0], length);
 	return utf16;
 }
+std::string U8GetUserDefaultLocaleName(){
+	wchar_t localeName[LOCALE_NAME_MAX_LENGTH];
+	int result = GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH);
+	if (result > 0) {
+		std::wstring localNameU16(localeName);
+		return Utf16ToUtf8(localNameU16);
+	}
+	else {
+		return (char*)u8"zh-CN";
+	}
+}
