@@ -24,7 +24,7 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 
 
 	//WinPipe pipe;
-	//pipe.SetUtf8();
+	////pipe.SetUtf8();
 	//MessageBoxW(0, Utf8ToUtf16(pipe.RunCommand(L"/c chcp 65001&&dir").c_str()).c_str(), L"", 0);
 	//接下来创建默认窗口
 	WMange window((long long*)&WndProc);

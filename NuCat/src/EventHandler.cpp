@@ -1,10 +1,5 @@
 #include "include/EventHandler.h"
 using namespace Microsoft::WRL;
-bool CompareWchatText(const std::wstring& text1, const std::wstring& text2)
-{
-	return text1.compare(text2) == 0;
-}
-
 ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND hWnd) {
 	ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** Handler = (ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler**)malloc(sizeof(ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler));
 	if (Handler == nullptr) {

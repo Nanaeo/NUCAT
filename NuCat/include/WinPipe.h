@@ -11,4 +11,7 @@ public:
 private:
     HANDLE read_handle_;
     HANDLE write_handle_;
+    SECURITY_ATTRIBUTES sa;
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
 };
