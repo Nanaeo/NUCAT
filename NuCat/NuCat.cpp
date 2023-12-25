@@ -12,9 +12,8 @@ wil::com_ptr<ICoreWebView2> webview;
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
 	//载入多语言设置 未读取配置设置
-
-	//载入设置
-	NuSetting NUCAT_SETTING;
+	NuCatGetRealDefaultLocaleName();//utf8编码
+	
 	
 	//设置 Utf8ToUtf16(buffer).c_str() 读取到设置文本UTF16内容
 	//MessageBoxW(0, Utf8ToUtf16(buffer).c_str(), L"环境异常", 0);

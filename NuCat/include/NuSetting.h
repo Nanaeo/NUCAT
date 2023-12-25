@@ -1,6 +1,6 @@
 #pragma once
-#include "include/Header.h"
-#include "include/Util.h"
+#include <iostream>
+#include <include/yyjson.h>
 #include <Windows.h>
 class NuSetting
 {

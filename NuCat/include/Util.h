@@ -1,6 +1,8 @@
 #pragma once
 
-#include "include/Header.h"
+#include <iostream>
+#include <Windows.h>
+#include <include/yyjson.h>
 //#define int64 (long long)
 std::wstring GetResourceEntry();
 std::wstring GetCurrentPath();

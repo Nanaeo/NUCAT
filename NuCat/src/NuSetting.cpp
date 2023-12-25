@@ -1,5 +1,5 @@
 #include "include/NuSetting.h"
-
+#include "include/Util.h"
 NuSetting::NuSetting()
 {
 	std::wstring SettingPath = GetResourcePath(L"\\Config\\Settings.json");
