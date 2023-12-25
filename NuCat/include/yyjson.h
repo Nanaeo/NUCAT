@@ -25,7 +25,7 @@
  @date 2019-03-09
  @author YaoYuan
  */
-
+#pragma warning(disable:28182)
 #ifndef YYJSON_H
 #define YYJSON_H
 
