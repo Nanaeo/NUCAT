@@ -4,6 +4,8 @@
 #include "include/WindowMessage.h"
 #include "include/EventHandler.h"
 #include <include/WinPipe.h>
+#include "bit7z/bit7z.hpp"
+
 using namespace Microsoft::WRL;
 wil::com_ptr<ICoreWebView2Controller> webviewController;
 wil::com_ptr<ICoreWebView2> webview;

@@ -1,1 +1,4 @@
-{}
+{
+  "WebView_NotInstall_Tittle": "环境异常",
+  "WebView_NotInstall_Content": "你未安装WebView2即将跳转下载"
+}

@@ -1,1 +1,4 @@
-{}
+{
+  "WebView_NotInstall_Tittle": "EnvironmentError",
+  "WebView_NotInstall_Content": "You have not installed WebView2 and will be redirected to download soon"
+}

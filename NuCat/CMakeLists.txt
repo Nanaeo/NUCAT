@@ -29,7 +29,16 @@ endif()
 link_libraries("${webview2_SOURCE_DIR}/build/native/${PLATFORM}/WebView2LoaderStatic.lib")
 
 #### webview2 dependencies end
+###bit7z
+###Release版本 link_libraries("${CMAKE_CURRENT_SOURCE_DIR}/bit7z/lib/x64/Release/bit7z.lib")
+FetchContent_Declare(
+  bit7z
+  URL  https://github.com/rikyoz/bit7z/releases/download/v4.0.5/bit7z-v4.0.5-msvc2015_x64.7z
+)
+FetchContent_MakeAvailable(bit7z)
 
+include_directories("${bit7z_SOURCE_DIR}/include/")
+link_libraries("${bit7z_SOURCE_DIR}/lib/x64/Debug/bit7z.lib")
 # 引入include
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
