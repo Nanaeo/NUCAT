@@ -20,9 +20,8 @@
  SOFTWARE.
  *============================================================================*/
 
-#include "yyjson.h"
+#include "include/yyjson.h"
 #include <math.h>
-
 
 
 /*==============================================================================
@@ -42,6 +41,8 @@
 #   pragma GCC diagnostic ignored "-Wunused-macros"
 #   pragma GCC diagnostic ignored "-Wunused-variable"
 #elif defined(_MSC_VER)
+#   pragma warning(disable:6385) 
+#   pragma warning(disable:6011) 
 #   pragma warning(disable:4100) /* unreferenced formal parameter */
 #   pragma warning(disable:4101) /* unreferenced variable */
 #   pragma warning(disable:4102) /* unreferenced label */

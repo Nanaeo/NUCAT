@@ -44,5 +44,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # 编译全部代码
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-add_executable (NuCat WIN32 ${SOURCES} "NuCat.cpp")
+add_executable (NuCat WIN32 ${SOURCES} "src/yyjson.c" "NuCat.cpp")
 

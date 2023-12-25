@@ -87,3 +87,11 @@ std::string U8GetUserDefaultLocaleName(){
 		return (char*)u8"zh-CN";
 	}
 }
+std::string NuCatGetRealDefaultLocaleName() {
+	const char* Setting_Language = NUCAT_SETTING.GetKeyStr("Language");
+	std::string Setting_LanguageU8(Setting_Language);
+	std::string Setting_LanguageU8 = U8GetUserDefaultLocaleName();
+	if (Setting_LanguageU8.compare("") != 0) return Setting_LanguageU8;
+	return Setting_LanguageU8;
+	
+}

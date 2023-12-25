@@ -12,3 +12,4 @@ std::wstring Utf8ToUtf16(const std::string& utf8);
 std::string Utf16ToUtf8(const std::wstring& utf16);
 bool CompareWchatText(const std::wstring& text1, const std::wstring& text2);
 std::string U8GetUserDefaultLocaleName();
+std::string NuCatGetRealDefaultLocaleName();
