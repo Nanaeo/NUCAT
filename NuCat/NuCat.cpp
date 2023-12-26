@@ -9,9 +9,13 @@
 using namespace Microsoft::WRL;
 wil::com_ptr<ICoreWebView2Controller> webviewController;
 wil::com_ptr<ICoreWebView2> webview;
+//加载全局设置到全局变量
+NuSetting* NUCAT_SETTING = new NuSetting();
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
 	//载入多语言设置 未读取配置设置
+	
+	
 	NuCatGetRealDefaultLocaleName();//utf8编码
 	
 	

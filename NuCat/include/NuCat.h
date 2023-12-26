@@ -10,3 +10,4 @@
 extern wil::com_ptr<ICoreWebView2Controller> webviewController;
 extern wil::com_ptr<ICoreWebView2> webview;
 //Global Var
+extern NuSetting* NUCAT_SETTING;

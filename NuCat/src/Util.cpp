@@ -88,8 +88,8 @@ std::string U8GetUserDefaultLocaleName(){
 	}
 }
 std::string NuCatGetRealDefaultLocaleName() {
-	NuSetting NUCAT_SETTING;
-	const char* Setting_Language = NUCAT_SETTING.GetKeyStr("Language");
+	NuSetting _NUCAT_SETTING;
+	const char* Setting_Language = _NUCAT_SETTING.GetKeyStr("Language");
 	std::string Setting_LanguageU8(Setting_Language);
 	std::string Default_LanguageU8 = U8GetUserDefaultLocaleName();
 	if (Default_LanguageU8.compare("") != 0) return Default_LanguageU8;
