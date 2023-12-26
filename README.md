@@ -1,4 +1,4 @@
-<div align="center"><img src="https://github.com/MliKiowa/NUCAT/blob/main/Other/Resource/icon-128.jpg"> </div>
+<div align="center"><img src="https://fastly.jsdelivr.net/gh/MliKiowa/NUCAT/Other/Resource/icon-128.jpg"> </div>
 
 <div align="center"><h1>NUCAT</h1></div>
 
