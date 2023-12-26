@@ -16,41 +16,38 @@ NuSetting* NUCAT_SETTING = new NuSetting();
 NuLanguage* NUCAT_LANG = new NuLanguage(NuCatGetRealDefaultLocaleName());
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
-	
-	
-	
-	//设置 Utf8ToUtf16(buffer).c_str() 读取到设置文本UTF16内容
-	//未安装Webview2
+	// 环境检查-未安装Webview2
 	if (!WebViewIsInstall()) {
 		MessageBoxW(0, NUCAT_LANG->TextW("WebView_NotInstall_Content").c_str(), NUCAT_LANG->TextW("WebView_NotInstall_Tittle").c_str(), 0);
 		ShellExecuteW(NULL, L"open", L"https://go.microsoft.com/fwlink/p/?LinkId=2124703", NULL, NULL, SW_SHOWNORMAL);
 		return 0;
 	}
-	//解析命令行
+	// 环境检查-现在没必要读取7zip安装目录因为7z.dll我们已经默认包括在项目 Get7ZipInstallPath()
+	
+	// 事件处理-解析命令行
 	int argc = 0;
-	//如果不比较原始文本 会导致CommandLineToArgvW ARGV读取到本程序的地址
+
+	// 设置argv默认值
+	std::wstring argvDefaultWSTR(L"");
+	LPWSTR argvDefaultLPWSTR = (LPWSTR)argvDefaultWSTR.c_str();
+	LPWSTR* argv = &argvDefaultLPWSTR;
+
+	// 如果不比较原始文本 会导致CommandLineToArgvW ARGV读取到本程序的地址
 	if (!CompareWchatText(lpCmdLine, L"")) {
-		LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
-		MessageBoxW(0, *argv, L"", 0);
+		argv = CommandLineToArgvW(lpCmdLine, &argc);
+		// 如果只有一个参数 触发 事件-解压 *argv UTF16为文件地址
+		// 否则进行剩下的命令行解析部分
 	}
 
-	//*argv 如果直接拖入文件 argv则为地址
-
-
-	//读取7zip安装目录
-	//MessageBoxW(0, Get7ZipInstallPath().c_str(), L"环境异常", 0);
-	//测试bit7z
-	//压缩代码已测
+	// DONE! TEST bit7z
 
 	/*using namespace bit7z;
 	Bit7zLibrary lib("7z.dll");
 	BitFileCompressor compressor{ lib, BitFormat::Zip };
 	std::vector< std::string > files = { "F:\\NEWCPP\\NuCat\\out\\Pack\\NuCat.appx"};
 	compressor.compress(files, "output_archive.zip");*/
-	//WinPipe pipe;
-	////pipe.SetUtf8();
-	//MessageBoxW(0, Utf8ToUtf16(pipe.RunCommand(L"/c chcp 65001&&dir").c_str()).c_str(), L"", 0);
-	//接下来创建默认窗口
+
+	// 接下来创建默认窗口
 	WMange window((long long*)&WndProc);
 	window.Show();
 	HWND hWnd = window.GetHandle();
