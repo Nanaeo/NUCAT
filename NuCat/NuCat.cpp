@@ -11,19 +11,17 @@ wil::com_ptr<ICoreWebView2Controller> webviewController;
 wil::com_ptr<ICoreWebView2> webview;
 //加载全局设置到全局变量
 NuSetting* NUCAT_SETTING = new NuSetting();
-
+NuLanguage* NUCAT_LANG = new NuLanguage("Zh-cn");
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
-	//载入多语言设置 未读取配置设置
 	
 	
-	NuCatGetRealDefaultLocaleName();//utf8编码
+	//NuCatGetRealDefaultLocaleName();//utf8编码
 	
 	
 	//设置 Utf8ToUtf16(buffer).c_str() 读取到设置文本UTF16内容
-	//MessageBoxW(0, Utf8ToUtf16(buffer).c_str(), L"环境异常", 0);
 	//未安装Webview2
 	if (!WebViewIsInstall()) {
-		MessageBoxW(0, L"你未安装WebView2即将跳转下载", L"环境异常", 0);
+		MessageBoxW(0, NUCAT_LANG->TextW("WebView_NotInstall_Content").c_str(), NUCAT_LANG->TextW("WebView_NotInstall_Tittle").c_str(), 0);
 		ShellExecuteW(NULL, L"open", L"https://go.microsoft.com/fwlink/p/?LinkId=2124703", NULL, NULL, SW_SHOWNORMAL);
 		return 0;
 	}

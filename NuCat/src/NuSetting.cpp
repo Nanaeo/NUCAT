@@ -7,6 +7,10 @@ NuSetting::NuSetting()
 	DWORD dwFileSize = GetFileSize(SettingFile, NULL);
 	DWORD dwBytesRead;
 	char* buffer = (char*)malloc(dwFileSize + 1);
+	if (buffer == nullptr) {
+		//内存申请失败
+		return;
+	}
 	*(buffer + dwFileSize) = '\0';
 	ReadFile(SettingFile, buffer, dwFileSize, &dwBytesRead, NULL);
 	CloseHandle(SettingFile);//关闭文件回收IO
