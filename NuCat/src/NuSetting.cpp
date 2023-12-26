@@ -30,9 +30,14 @@ NuSetting::~NuSetting()
 
 }
 
-const char* NuSetting::GetKeyStr(const char* key)
+std::string NuSetting::GetKeyStr(const char* key)
 {
-	return yyjson_get_str(yyjson_obj_get(SettingJson, key));
+	yyjson_val* Val = yyjson_obj_get(SettingJson, key);
+	if (Val == nullptr) {
+		std::string ErrorText((const char*)u8"");
+		return ErrorText;
+	}
+	return yyjson_get_str(Val);
 }
 
 void NuSetting::SetKey()

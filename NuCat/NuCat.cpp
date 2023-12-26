@@ -11,12 +11,11 @@ wil::com_ptr<ICoreWebView2Controller> webviewController;
 wil::com_ptr<ICoreWebView2> webview;
 //加载全局设置到全局变量
 NuSetting* NUCAT_SETTING = new NuSetting();
-NuLanguage* NUCAT_LANG = new NuLanguage("Zh-cn");
+NuLanguage* NUCAT_LANG = new NuLanguage(NuCatGetRealDefaultLocaleName());
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
 	
 	
-	//NuCatGetRealDefaultLocaleName();//utf8编码
-	
+	//utf8编码
 	
 	//设置 Utf8ToUtf16(buffer).c_str() 读取到设置文本UTF16内容
 	//未安装Webview2

@@ -87,20 +87,24 @@ std::string U8GetUserDefaultLocaleName(){
 		return (char*)u8"zh-CN";
 	}
 }
-std::string NuCatGetRealDefaultLocaleName() {
-	NuSetting _NUCAT_SETTING;
-	const char* Setting_Language = _NUCAT_SETTING.GetKeyStr("Language");
-	std::string Setting_LanguageU8(Setting_Language);
-	std::string Default_LanguageU8 = U8GetUserDefaultLocaleName();
-	if (Default_LanguageU8.compare("") != 0) return Default_LanguageU8;
-	return Setting_LanguageU8;
-	
-}
-bool fileExists(const std::wstring& fileName){
+
+bool FileExists(const std::wstring& fileName){
 	DWORD fileAttributes = GetFileAttributesW(fileName.c_str());
 	if (fileAttributes == INVALID_FILE_ATTRIBUTES)
 	{
 		return false;
 	}
 	return true;
+}
+std::string NuCatGetRealDefaultLocaleName() {
+	NuSetting _NUCAT_SETTING;
+	std::string Setting_LanguageString = _NUCAT_SETTING.GetKeyStr("Language");
+	const char* Setting_Language = Setting_LanguageString.c_str();
+	std::string Setting_LanguageU8(Setting_Language);
+	std::string Default_LanguageU8 = U8GetUserDefaultLocaleName();
+	if (Default_LanguageU8.compare("") != 0) {
+		return Default_LanguageU8;
+	}
+	return Setting_LanguageU8;
+
 }

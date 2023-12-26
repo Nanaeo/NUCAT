@@ -7,7 +7,7 @@ class NuSetting
 public:
 	NuSetting();
 	~NuSetting();
-	const char* GetKeyStr(const char* key);
+	std::string GetKeyStr(const char* key);
 	void SetKey();
 
 private:
