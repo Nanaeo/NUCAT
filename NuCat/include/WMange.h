@@ -4,7 +4,7 @@
 class WMange
 {
 public:
-	WMange(long long* HandlerFunction);
+	WMange(long long* HandlerFunction, std::wstring Tittle);
 	~WMange();
 	void Show();
 

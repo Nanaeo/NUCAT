@@ -49,7 +49,7 @@ bool FileOperator::write(const std::string& content) {
     }
 
     DWORD bytesWritten;
-    if (!WriteFile(hFile, content.c_str(), content.size(), &bytesWritten, NULL)) {
+    if (!WriteFile(hFile, content.c_str(), (DWORD)content.size(), &bytesWritten, NULL)) {
         error_ = GetLastError();
         CloseHandle(hFile);
         return false;
@@ -68,7 +68,7 @@ bool FileOperator::append(const std::string& content) {
     }
 
     DWORD bytesWritten;
-    if (!WriteFile(hFile, content.c_str(), content.size(), &bytesWritten, NULL)) {
+    if (!WriteFile(hFile, content.c_str(), (DWORD)content.size(), &bytesWritten, NULL)) {
         error_ = GetLastError();
         CloseHandle(hFile);
         return false;

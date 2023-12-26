@@ -7,7 +7,8 @@
 #include "include/NuSetting.h"
 #include "include/NuVersion.h"
 #include "include/CommandEvent.h"
-#include "include/Log.h"
+
+
 using namespace Microsoft::WRL;
 wil::com_ptr<ICoreWebView2Controller> webviewController;
 wil::com_ptr<ICoreWebView2> webview;
@@ -19,7 +20,7 @@ NuLanguage* NUCAT_LANG = new NuLanguage(NuCatGetRealDefaultLocaleName());
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
 	NuVersion::Init();
-	Log::Logging("测试Message",Log::Level::LOG_DEBUG);
+	//Log::Logging("Message",Log::Level::LOG_DEBUG);
 	// std::string CurremtVersion = NuVersion::FullVersion; 快速获取版本信息
 	// 环境检查-未安装Webview2
 	if (!WebViewIsInstall()) {
@@ -35,15 +36,11 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	std::wstring argvDefaultWSTR(L"");
 	LPWSTR argvDefaultLPWSTR = (LPWSTR)argvDefaultWSTR.c_str();
 	LPWSTR* argv = &argvDefaultLPWSTR;
-	bool ret_CommandEvent = false;
 	// 如果不比较原始文本 会导致CommandLineToArgvW ARGV读取到本程序的地址
 	if (!CompareWchatText(lpCmdLine, L"")) {
 		argv = CommandLineToArgvW(lpCmdLine, &argc);
-		// 如果只有一个参数 触发 事件-解压 *argv UTF16为文件地址
-		// 否则进行剩下的命令行解析部分
-		ret_CommandEvent = CommandEvent::EventRun(Utf16ToUtf8(*argv), Utf16ToUtf8(lpCmdLine), argc);
-		return 0;
 	}
+	bool ret_CommandEvent = CommandEvent::EventRun(Utf16ToUtf8(*argv), Utf16ToUtf8(lpCmdLine), argc);
 	//接下来为正常双击打开默认显示主页
 	
 	// DONE! TEST bit7z
@@ -55,7 +52,7 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	compressor.compress(files, "output_archive.zip");*/
 
 	// 接下来创建默认窗口
-	WMange window((long long*)&WndProc);
+	WMange window((long long*)&WndProc,L"NuCat");
 	window.Show();
 	HWND hWnd = window.GetHandle();
 	ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** Handler = (ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler**)malloc(sizeof(ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler));

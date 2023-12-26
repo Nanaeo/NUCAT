@@ -1,14 +1,14 @@
 #include "include/WMange.h"
 
-WMange::WMange(long long* HandlerFunction)
+WMange::WMange(long long* HandlerFunction,std::wstring Tittle)
 {
     LRESULT (*HandlerFunctionPtr)(HWND, UINT, WPARAM, LPARAM) = (LRESULT (*)(HWND, UINT, WPARAM, LPARAM))HandlerFunction;
     WNDCLASSW wc = { 0 };
     wc.lpfnWndProc = HandlerFunctionPtr;
     wc.hInstance = GetModuleHandleW(NULL);
-    wc.lpszClassName = L"BlankWindow";
+    wc.lpszClassName = L"AppWindow";
     RegisterClassW(&wc);
-    m_hwnd = CreateWindowW(wc.lpszClassName, L"Blank Window", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, wc.hInstance, NULL);
+    m_hwnd = CreateWindowW(wc.lpszClassName, Tittle.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, wc.hInstance, NULL);
 }
 
 WMange::~WMange()

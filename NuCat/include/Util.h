@@ -1,5 +1,4 @@
 #pragma once
-
 #include <iostream>
 #include <Windows.h>
 #include <include/yyjson.h>
@@ -16,3 +15,5 @@ bool CompareWchatText(const std::wstring& text1, const std::wstring& text2);
 std::string U8GetUserDefaultLocaleName();
 std::string NuCatGetRealDefaultLocaleName();
 bool FileExists(const std::wstring& fileName);
+std::string getCurrentDate();
+std::string getCurrentTimestamp();

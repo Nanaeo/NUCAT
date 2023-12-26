@@ -2,7 +2,8 @@
 #include "include/NuCat.h"
 #include <string>
 #include <vector>
-#include <codecvt>
+#include <chrono>
+#include <format>
 
 bool CompareWchatText(const std::wstring& text1, const std::wstring& text2)
 {
@@ -101,4 +102,19 @@ std::string NuCatGetRealDefaultLocaleName() {
 	}
 	return Default_LanguageU8;
 
+}
+std::string getCurrentDate() {
+	const auto now = std::chrono::system_clock::now();
+	const auto time_zone = std::chrono::current_zone();
+	const auto local_time = time_zone->to_local(now);
+	const auto time_point = std::chrono::time_point_cast<std::chrono::days>(local_time);
+	const auto year_month_day = std::chrono::year_month_day{ time_point };
+	return std::format("{:%Y-%m-%d}", year_month_day);
+}
+std::string getCurrentTimestamp() {
+	const auto now = std::chrono::system_clock::now();
+	const auto duration = now.time_since_epoch();
+	const auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+
+	return std::format("{}", millis);
 }
