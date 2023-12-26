@@ -11,18 +11,21 @@ NuLanguage::NuLanguage(std::string LocalName)
 	std::wstring Default_Full_PathU16 = GetResourcePath(Default_Path16.c_str());
 
 	std::wstring Real_Full_PathU16 = (FileExists(Local_Full_PathU16.c_str()) ? Local_Full_PathU16.c_str(): Default_Full_PathU16.c_str());
-
+	// 获取到文件位置
 
 	LanguageFile = CreateFileW(Real_Full_PathU16.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	DWORD dwFileSize = GetFileSize(LanguageFile, NULL);
 	DWORD dwBytesRead;
-	char* buffer = (char*)malloc(dwFileSize + 1);
+	char* buffer = (char*)malloc(static_cast<size_t>(dwFileSize) + 1);
 	if (buffer == nullptr) {
 		//内存申请失败
 		return;
 	}
 	*(buffer + dwFileSize) = '\0';
-	ReadFile(LanguageFile, buffer, dwFileSize, &dwBytesRead, NULL);
+	bool ret_READ_Result = ReadFile(LanguageFile, buffer, dwFileSize, &dwBytesRead, NULL);
+
+	//读取文件失败
+	if (ret_READ_Result) return;
 	CloseHandle(LanguageFile);//关闭文件回收IO
 	//放到类变量
 	ContentPtr = buffer;

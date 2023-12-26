@@ -8,10 +8,10 @@ public:
 	std::wstring TextW(const char* key);
 	std::string TextU8(const char* key);
 private:
-	HANDLE LanguageFile;
-	char* ContentPtr;
-	int ContentLen;
-	yyjson_val* LanguageJson;
-	yyjson_doc* LanguageJsonRoot;
+	HANDLE LanguageFile = nullptr;
+	char* ContentPtr = nullptr;
+	int ContentLen = 0;
+	yyjson_val* LanguageJson = nullptr;
+	yyjson_doc* LanguageJsonRoot = nullptr ;
 };
 

@@ -6,6 +6,7 @@
 #include "bit7z/bit7z.hpp"
 #include "include/NuSetting.h"
 #include "include/NuVersion.h"
+#include "include/CommandEvent.h"
 
 using namespace Microsoft::WRL;
 wil::com_ptr<ICoreWebView2Controller> webviewController;
@@ -40,7 +41,7 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 		// 如果只有一个参数 触发 事件-解压 *argv UTF16为文件地址
 		// 否则进行剩下的命令行解析部分
 	}
-
+	CommandEvent::EventRun(Utf16ToUtf8(*argv),Utf16ToUtf8(lpCmdLine));
 	// DONE! TEST bit7z
 
 	/*using namespace bit7z;

@@ -3,11 +3,11 @@
 #include <string>
 #include <vector>
 #include <codecvt>
+
 bool CompareWchatText(const std::wstring& text1, const std::wstring& text2)
 {
 	return text1.compare(text2) == 0;
 }
-
 std::wstring ResolvePathAndTrimFile(std::wstring path)
 {
 	std::wstring::size_type pos = path.find_last_of(L"\\/");
