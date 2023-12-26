@@ -7,7 +7,6 @@
 #include "include/NuSetting.h"
 #include "include/NuVersion.h"
 #include "include/CommandEvent.h"
-
 using namespace Microsoft::WRL;
 wil::com_ptr<ICoreWebView2Controller> webviewController;
 wil::com_ptr<ICoreWebView2> webview;
@@ -26,22 +25,24 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 		return 0;
 	}
 	// 环境检查-现在没必要读取7zip安装目录因为7z.dll我们已经默认包括在项目 Get7ZipInstallPath()
-	std::string test = NuVersion::FullVersion;
+	std::string CurremtVersion = NuVersion::FullVersion;
 	// 事件处理-解析命令行
 	int argc = 0;
-
 	// 设置argv默认值
 	std::wstring argvDefaultWSTR(L"");
 	LPWSTR argvDefaultLPWSTR = (LPWSTR)argvDefaultWSTR.c_str();
 	LPWSTR* argv = &argvDefaultLPWSTR;
-
+	bool ret_CommandEvent = false;
 	// 如果不比较原始文本 会导致CommandLineToArgvW ARGV读取到本程序的地址
 	if (!CompareWchatText(lpCmdLine, L"")) {
 		argv = CommandLineToArgvW(lpCmdLine, &argc);
 		// 如果只有一个参数 触发 事件-解压 *argv UTF16为文件地址
 		// 否则进行剩下的命令行解析部分
+		ret_CommandEvent = CommandEvent::EventRun(Utf16ToUtf8(*argv), Utf16ToUtf8(lpCmdLine), argc);
+		return 0;
 	}
-	CommandEvent::EventRun(Utf16ToUtf8(*argv),Utf16ToUtf8(lpCmdLine));
+	//接下来为正常双击打开默认显示主页
+	
 	// DONE! TEST bit7z
 
 	/*using namespace bit7z;

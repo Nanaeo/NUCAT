@@ -11,9 +11,7 @@ public:
 	void SetKey();
 
 private:
-	HANDLE SettingFile;
-	char* ContentPtr;
-	int ContentLen;
-	yyjson_val* SettingJson;
-	yyjson_doc* SettingJsonRoot;
+	HANDLE SettingFile = nullptr;
+	yyjson_val* SettingJson = nullptr;
+	yyjson_doc* SettingJsonRoot = nullptr;
 };

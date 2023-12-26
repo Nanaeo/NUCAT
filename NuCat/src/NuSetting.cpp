@@ -1,26 +1,15 @@
 #include "include/NuSetting.h"
 #include "include/Util.h"
+#include "include/FileOperator.h"
+
 NuSetting::NuSetting()
 {
 	std::wstring SettingPath = GetResourcePath(L"\\Config\\Settings.json");
-	SettingFile = CreateFileW(SettingPath.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	DWORD dwFileSize = GetFileSize(SettingFile, NULL);
-	DWORD dwBytesRead;
-	char* buffer = (char*)malloc(dwFileSize + 1);
-	if (buffer == nullptr) {
-		//内存申请失败
-		return;
-	}
-	*(buffer + dwFileSize) = '\0';
-	ReadFile(SettingFile, buffer, dwFileSize, &dwBytesRead, NULL);
-	CloseHandle(SettingFile);//关闭文件回收IO
-	//放到类变量
-	ContentPtr = buffer;
-	ContentLen = dwFileSize + 1;
-	// \0是字符串结束标准 ContentLen包括\0长度
-
-	//解析
-	SettingJsonRoot = yyjson_read(buffer, strlen(buffer), 0);
+	FileOperator SettingFileOperator(SettingPath.c_str());
+	std::string retFileData;
+	SettingFileOperator.read(retFileData);
+	
+	SettingJsonRoot = yyjson_read(retFileData.c_str(), retFileData.length(), 0);
 	SettingJson = yyjson_doc_get_root(SettingJsonRoot);
 }
 

@@ -1,5 +1,6 @@
 #include "include/NuLanguage.h"
 #include "include/Util.h"
+#include "include/FileOperator.h"
 NuLanguage::NuLanguage(std::string LocalName)
 {
 	std::wstring LocalNameU16 = Utf8ToUtf16(LocalName);
@@ -13,32 +14,17 @@ NuLanguage::NuLanguage(std::string LocalName)
 	std::wstring Real_Full_PathU16 = (FileExists(Local_Full_PathU16.c_str()) ? Local_Full_PathU16.c_str(): Default_Full_PathU16.c_str());
 	// 获取到文件位置
 
-	LanguageFile = CreateFileW(Real_Full_PathU16.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	DWORD dwFileSize = GetFileSize(LanguageFile, NULL);
-	DWORD dwBytesRead;
-	char* buffer = (char*)malloc(static_cast<size_t>(dwFileSize) + 1);
-	if (buffer == nullptr) {
-		//内存申请失败
-		return;
-	}
-	*(buffer + dwFileSize) = '\0';
-	bool ret_READ_Result = ReadFile(LanguageFile, buffer, dwFileSize, &dwBytesRead, NULL);
+	FileOperator LanguageFileOperator(Real_Full_PathU16.c_str());
+	std::string retFileData;
+	LanguageFileOperator.read(retFileData);
 
-	//读取文件失败
-	if (ret_READ_Result) return;
-	CloseHandle(LanguageFile);//关闭文件回收IO
-	//放到类变量
-	ContentPtr = buffer;
-	ContentLen = dwFileSize + 1;
-	// \0是字符串结束标准 ContentLen包括\0长度
-
-	//解析
-	LanguageJsonRoot = yyjson_read(buffer, strlen(buffer), 0);
+	LanguageJsonRoot = yyjson_read(retFileData.c_str(), retFileData.length(), 0);
 	LanguageJson = yyjson_doc_get_root(LanguageJsonRoot);
 }
 
 NuLanguage::~NuLanguage()
 {
+
 	yyjson_doc_free(LanguageJsonRoot);
 }
 
