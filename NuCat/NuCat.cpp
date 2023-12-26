@@ -5,6 +5,7 @@
 #include "include/EventHandler.h"
 #include "bit7z/bit7z.hpp"
 #include "include/NuSetting.h"
+#include "include/NuVersion.h"
 
 using namespace Microsoft::WRL;
 wil::com_ptr<ICoreWebView2Controller> webviewController;
@@ -16,6 +17,7 @@ NuSetting* NUCAT_SETTING = new NuSetting();
 NuLanguage* NUCAT_LANG = new NuLanguage(NuCatGetRealDefaultLocaleName());
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
+	NuVersion::Init();
 	// 环境检查-未安装Webview2
 	if (!WebViewIsInstall()) {
 		MessageBoxW(0, NUCAT_LANG->TextW("WebView_NotInstall_Content").c_str(), NUCAT_LANG->TextW("WebView_NotInstall_Tittle").c_str(), 0);
@@ -23,7 +25,7 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 		return 0;
 	}
 	// 环境检查-现在没必要读取7zip安装目录因为7z.dll我们已经默认包括在项目 Get7ZipInstallPath()
-	
+	std::string test = NuVersion::FullVersion;
 	// 事件处理-解析命令行
 	int argc = 0;
 

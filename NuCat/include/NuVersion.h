@@ -1,5 +1,7 @@
 #pragma once
+#include "include/Header.h"
 namespace NuVersion {
-	const char* FullVersion;
-	const char* Version;
+	void Init();
+	extern std::string FullVersion;
+	extern std::string Version;
 }
