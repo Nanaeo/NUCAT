@@ -3,7 +3,7 @@
 NuLanguage::NuLanguage(std::string LocalName)
 {
 	std::wstring LocalNameU16 = Utf8ToUtf16(LocalName);
-
+	LocalNameU16.pop_back();//去掉\0
 	std::wstring Local_PathU16 = L"\\Language\\" + LocalNameU16 + L".json";
 	std::wstring Default_Path16 = L"\\Language\\zh-CN.json";
 
