@@ -1,14 +1,10 @@
-#pragma
+#pragma once
 #include <string>
-class Log {
-public:
-    enum LogLevel { DEBUG, INFO, WARNING, ERROR };
-    Log(const std::string& filename, LogLevel level);
-    void write(LogLevel level, const std::string& message);
-    ~Log();
-
-private:
-    std::string filename_;
-    FILE* file_;
-    LogLevel level_;
-};
+namespace Log{
+	enum Level
+	{
+		LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_EXIT
+	};
+	void SetLogLevel();
+	void Logging(std::string content, Level ErrorLevel);
+}
