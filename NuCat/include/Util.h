@@ -13,3 +13,5 @@ std::string GetConfigDefaultLocaleName();
 bool FileExists(const std::wstring& fileName);
 std::string getCurrentDate();
 std::string getCurrentTimestamp();
+std::string GetResourcePathU8(char* _path);
+std::string GetResourceU8(char* _file);

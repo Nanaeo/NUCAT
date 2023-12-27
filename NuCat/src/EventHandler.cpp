@@ -1,11 +1,12 @@
 #include "include/EventHandler.h"
 #include "include/Log.h"
 #include "include/webview.h"
+#include <include/Util.h>
 void DefaultWindowBoot() {
 	webview::webview w(false, nullptr);
-	w.set_title("Basic Example");
+	w.set_title("NUCAT");
 	w.set_size(480, 320, WEBVIEW_HINT_NONE);
-	w.set_html("Thanks for using webview!");
+	w.navigate(GetResourceU8((char*)u8"Resource\\index.html"));
 	w.run();
 
 }

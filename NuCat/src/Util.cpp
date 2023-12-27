@@ -97,3 +97,17 @@ std::string getCurrentTimestamp() {
 
 	return std::format("{}", millis);
 }
+std::string GetResourcePathU8(char * _path) {
+	std::wstring path = GetCurrentPath();
+	std::wstring file = Utf8ToUtf16(_path);
+	std::wstring full_path = path + file;
+	std::string full_path_u8 = Utf16ToUtf8(full_path);
+	return full_path_u8;
+}
+std::string GetResourceU8(char* _file) {
+	std::wstring path = GetCurrentPath();
+	std::wstring file = Utf8ToUtf16(_file);
+	std::wstring full_path = L"file:\\\\\\" + path + L"\\" + file;
+	std::string full_path_u8 = Utf16ToUtf8(full_path);
+	return full_path_u8;
+}
