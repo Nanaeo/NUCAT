@@ -1,4 +1,5 @@
 #include "include/EventHandler.h"
+#include <functional>
 using namespace Microsoft::WRL;
 ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND hWnd) {
 	ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** Handler = (ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler**)malloc(sizeof(ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler));
@@ -23,7 +24,9 @@ ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND h
 				webviewController->put_Bounds(bounds);
 				//进入默认资源入口
 				webview->Navigate(GetResourceEntry().c_str());
+
 				EventRegistrationToken token;
+
 				webview->add_NewWindowRequested(Callback<ICoreWebView2NewWindowRequestedEventHandler>(
 					[](ICoreWebView2* webview, ICoreWebView2NewWindowRequestedEventArgs* args)->HRESULT {
 						wil::unique_cotaskmem_string target_uri;
@@ -54,6 +57,7 @@ ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** CreatHandler(HWND h
 						//webview->PostWebMessageAsString(message.get());
 						return S_OK;
 					}).Get(), &token);
+
 				return S_OK;
 			}).Get());
 		return S_OK;

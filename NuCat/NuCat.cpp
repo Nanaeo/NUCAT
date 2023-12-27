@@ -2,7 +2,6 @@
 #include "include/NuCat.h"
 #include "include/WMange.h"
 #include "include/WindowMessage.h"
-#include "include/EventHandler.h"
 #include "bit7z/bit7z.hpp"
 #include "include/NuSetting.h"
 #include "include/NuVersion.h"
@@ -12,6 +11,7 @@
 using namespace Microsoft::WRL;
 wil::com_ptr<ICoreWebView2Controller> webviewController;
 wil::com_ptr<ICoreWebView2> webview;
+
 
 //加载全局设置到全局变量
 NuSetting* NUCAT_SETTING = new NuSetting();
@@ -41,29 +41,5 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 		argv = CommandLineToArgvW(lpCmdLine, &argc);
 	}
 	bool ret_CommandEvent = CommandEvent::EventRun(Utf16ToUtf8(*argv), Utf16ToUtf8(lpCmdLine), argc);
-	//接下来为正常双击打开默认显示主页
-	
-	// DONE! TEST bit7z
-
-	/*using namespace bit7z;
-	Bit7zLibrary lib("7z.dll");
-	BitFileCompressor compressor{ lib, BitFormat::Zip };
-	std::vector< std::string > files = { "F:\\NEWCPP\\NuCat\\out\\Pack\\NuCat.appx"};
-	compressor.compress(files, "output_archive.zip");*/
-
-	// 接下来创建默认窗口
-	WMange window((long long*)&WndProc,L"NuCat");
-	window.Show();
-	HWND hWnd = window.GetHandle();
-	ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler** Handler = (ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler**)malloc(sizeof(ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler));
-	if (Handler == nullptr) return 0;//avoid nullptr
-	Handler = CreatHandler(hWnd);
-	CreateCoreWebView2EnvironmentWithOptions(nullptr, GetResourcePath(L"\\WebViewData").c_str(), nullptr, *Handler);
-
-	MSG msg;
-	while (GetMessage(&msg, NULL, 0, 0)) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
 	return 0;
 }
