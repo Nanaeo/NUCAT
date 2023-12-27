@@ -1,13 +1,13 @@
 #include "include/Version.h"
 
-namespace NuVersion {
+namespace Version {
 	void Init();
 	std::string FullVersion;
 	std::string Version;
 }
 
-void NuVersion::Init()
+void Version::Init()
 {
-	NuVersion::Version = (char*)u8"1.0.0";
-	NuVersion::FullVersion = (char*)u8"1.0.0-Debug.TIME0";
+	Version::Version = (char*)u8"1.0.0";
+	Version::FullVersion = (char*)u8"1.0.0-Debug.TIME0";
 }

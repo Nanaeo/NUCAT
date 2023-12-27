@@ -1,0 +1,26 @@
+#include "include/EventHandler.h"
+#include "include/Log.h"
+#include "include/webview.h"
+void DefaultWindowBoot() {
+	webview::webview w(false, nullptr);
+	w.set_title("Basic Example");
+	w.set_size(480, 320, WEBVIEW_HINT_NONE);
+	w.set_html("Thanks for using webview!");
+	w.run();
+
+}
+void EventHandler::Run(std::string action, std::string argv, int argc)
+{
+	//Log::Logging((char*)u8"",Log::LOG_DEBUG ); 日志测试
+	action.pop_back(); // 去除判断干扰
+	argv.pop_back();   // 去除判断干扰
+	if (action.compare("") == 0 && argc == 0) {
+		// 无参数正常启动 进入主页
+		DefaultWindowBoot();
+	}
+	if (argc == 1 && action.compare("") != 0) {
+		//拖动打开文件
+
+	}
+	// 其它带有命令行操作
+}

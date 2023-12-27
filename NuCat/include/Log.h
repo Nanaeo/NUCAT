@@ -5,6 +5,7 @@ namespace Log {
 	{
 		LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_EXIT
 	};
-	void SetLogLevel();
-	void Logging(std::string content, Level ErrorLevel);
+	extern int CurrentLogLevel;
+	void SetLogLevel(int LogLevel);
+	bool Logging(std::string content, Level ErrorLevel);
 }

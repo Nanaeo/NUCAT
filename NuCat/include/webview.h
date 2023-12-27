@@ -22,6 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#pragma warning(disable:26819)
+#pragma warning(disable:28020)
+#pragma warning(disable:26439)
+#pragma warning(disable:6226)
+#pragma warning(disable:6217)
+
 #ifndef WEBVIEW_H
 #define WEBVIEW_H
 
