@@ -1,19 +1,23 @@
 #include "include/EventHandler.h"
 #include "include/Log.h"
-#include "include/webview.h"
-#include <include/Util.h>
+#include "include/Util.h"
+#include "include/WinUi.h"
+#include "include/Global.h"
+
+HWND hwnd = CreatWindowUI();
+webview::webview WebviewObject(true, &hwnd);
+webview::webview* WebviewPtr = &WebviewObject;
 
 void DefaultWindowBoot() {
-	webview::webview w(true, nullptr);
-	w.set_title("NUCAT");
-	w.set_size(1050, 550, WEBVIEW_HINT_NONE);
-	w.navigate(GetResourceU8((char*)u8"Resource\\index.html"));
+	
+	//设置到全局变量上
+	WebviewObject.navigate(GetResourceU8((char*)u8"Resource\\index.html"));
 	// 绑定退出函数
-	w.bind("exit", [&](const std::string&) -> std::string {
+	WebviewObject.bind("exit", [&](const std::string&) -> std::string {
 		exit(0);
 		return "{}";
 		});
-	w.run();
+	WebviewObject.run();
 
 }
 void EventHandler::Run(std::string action, std::string argv, int argc)

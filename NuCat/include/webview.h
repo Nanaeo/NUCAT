@@ -22,12 +22,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-#pragma warning(disable:26819)
-#pragma warning(disable:28020)
-#pragma warning(disable:26439)
-#pragma warning(disable:6226)
-#pragma warning(disable:6217)
-
 #ifndef WEBVIEW_H
 #define WEBVIEW_H
 
@@ -1350,7 +1344,7 @@ auto parse_version(const T (&version)[Length]) noexcept {
   return parse_version(std::basic_string<T>(version, Length));
 }
 
-std::wstring get_file_version_string(const std::wstring &file_path) noexcept {
+inline std::wstring get_file_version_string(const std::wstring &file_path) noexcept {
   DWORD dummy_handle; // Unused
   DWORD info_buffer_length =
       GetFileVersionInfoSizeW(file_path.c_str(), &dummy_handle);
@@ -2421,7 +2415,6 @@ public:
         std::bind(&win32_edge_engine::on_message, this, std::placeholders::_1);
 
     embed(m_window, debug, cb);
-    resize_widget();
     m_controller->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
   }
 
@@ -2508,7 +2501,9 @@ public:
   void set_html(const std::string &html) {
     m_webview->NavigateToString(widen_string(html).c_str());
   }
-
+  void resize_widget2(){
+      this->resize_widget();
+  }
 private:
   bool embed(HWND wnd, bool debug, msg_cb_t cb) {
     std::atomic_flag flag = ATOMIC_FLAG_INIT;
