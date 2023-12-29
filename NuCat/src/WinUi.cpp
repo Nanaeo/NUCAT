@@ -1,128 +1,108 @@
 #include "include/WinUi.h"
-#include <Windows.h>
-#include <windowsx.h>
-#include <Dwmapi.h>
+#include "include/webview.h"
 #include "include/Global.h"
-#pragma comment(lib, "dwmapi.lib")
-#pragma comment(lib, "UxTheme.lib")
+#include <windows.h>
+#include <Dwmapi.h>
 
-void my_paint(HDC hdc, RECT rc)
+#pragma comment(lib,"Dwmapi.lib")
+
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	HBRUSH brush = CreateSolidBrush(RGB(0, 128, 0));
-	FillRect(hdc, &rc, brush);
-	DeleteObject(brush);
-}
-
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	static RECT border_thickness;
-	switch (uMsg)
+	switch (message)
 	{
-	case WM_CREATE:
+	case WM_NCCALCSIZE:
 	{
-		SetRectEmpty(&border_thickness);
-		if (GetWindowLongPtr(hwnd, GWL_STYLE) & WS_THICKFRAME)
+		if (wParam == TRUE)
 		{
-			AdjustWindowRectEx(&border_thickness, GetWindowLongPtr(hwnd, GWL_STYLE) & ~WS_CAPTION, FALSE, NULL);
-			border_thickness.left *= -1;
-			border_thickness.top *= -1;
+			SetWindowLong(hWnd, 0, 0);
+			return TRUE;
 		}
-		else if (GetWindowLongPtr(hwnd, GWL_STYLE) & WS_BORDER)
-		{
-			SetRect(&border_thickness, 1, 1, 1, 1);
-		}
-
-		MARGINS margins = { 0 };
-		DwmExtendFrameIntoClientArea(hwnd, &margins);
-		SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
-		break;
+		return FALSE;
 	}
 	case WM_SIZE: {
 		WebviewPtr->resize_widget2();
 		break;
 	}
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(hwnd, &ps);
-
-		RECT rc = ps.rcPaint;
-		BP_PAINTPARAMS params = { sizeof(params), BPPF_NOCLIP | BPPF_ERASE };
-		HDC memdc;
-		HPAINTBUFFER hbuffer = BeginBufferedPaint(hdc, &rc, BPBF_TOPDOWNDIB, &params, &memdc);
-
-		my_paint(memdc, rc);
-
-		BufferedPaintSetAlpha(hbuffer, &rc, 255);
-		EndBufferedPaint(hbuffer, TRUE);
-
-		EndPaint(hwnd, &ps);
-		return 0;
-	}
-
-	case WM_NCACTIVATE:
-		return 0;
-
-	case WM_NCCALCSIZE:
-		if (lParam)
-		{
-			NCCALCSIZE_PARAMS* sz = (NCCALCSIZE_PARAMS*)lParam;
-			sz->rgrc[0].left += border_thickness.left;
-			sz->rgrc[0].right -= border_thickness.right;
-			sz->rgrc[0].bottom -= border_thickness.bottom;
-			return 0;
-		}
-		break;
-
 	case WM_NCHITTEST:
 	{
-		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-		ScreenToClient(hwnd, &pt);
+		// 获取光标位置
+		POINT pt;
+		GetCursorPos(&pt);
+		ScreenToClient(hWnd, &pt);
+
+		// 获取窗口大小
 		RECT rc;
-		GetClientRect(hwnd, &rc);
-		enum { left = 1, top = 2, right = 4, bottom = 8, caption = 16 };
-		int hit = 0;
-		if (pt.x < border_thickness.left) hit |= left;
-		if (pt.x > rc.right - border_thickness.right) hit |= right;
-		if (pt.y < border_thickness.top) hit |= top;
-		if (pt.y > rc.bottom - border_thickness.bottom) hit |= bottom;
+		GetClientRect(hWnd, &rc);
 
-		//设置窗口头部30个像素可以用来拖动
-		if (pt.y > border_thickness.top && pt.y < border_thickness.top + 30) hit |= caption;
+		// 设置边框大小
+		const int BORDER_WIDTH = 10;
 
-		if (hit & top && hit & left) return HTTOPLEFT;
-		if (hit & top && hit & right) return HTTOPRIGHT;
-		if (hit & bottom && hit & left) return HTBOTTOMLEFT;
-		if (hit & bottom && hit & right) return HTBOTTOMRIGHT;
-		if (hit & left) return HTLEFT;
-		if (hit & top) return HTTOP;
-		if (hit & right) return HTRIGHT;
-		if (hit & bottom) return HTBOTTOM;
-		if (hit & caption) return HTCAPTION;
-
-		return HTCLIENT;
+		// 检查光标是否在边框上
+		if (pt.x < BORDER_WIDTH) // 左边框
+		{
+			if (pt.y < BORDER_WIDTH)
+				return HTTOPLEFT; // 左上角
+			if (pt.y > rc.bottom - BORDER_WIDTH)
+				return HTBOTTOMLEFT; // 左下角
+			return HTLEFT; // 左边框
+		}
+		if (pt.x > rc.right - BORDER_WIDTH) // 右边框
+		{
+			if (pt.y < BORDER_WIDTH)
+				return HTTOPRIGHT; // 右上角
+			if (pt.y > rc.bottom - BORDER_WIDTH)
+				return HTBOTTOMRIGHT; // 右下角
+			return HTRIGHT; // 右边框
+		}
+		if (pt.y < BORDER_WIDTH)
+			return HTTOP; // 上边框
+		if (pt.y > rc.bottom - BORDER_WIDTH)
+			return HTBOTTOM; // 下边框
+		return HTCAPTION; // 标题栏
 	}
-
-	case WM_DESTROY:
+	case WM_PAINT:
+	{
+		PAINTSTRUCT ps{ 0 };
+		HDC hdc = BeginPaint(hWnd, &ps);
+		// Draw with GDI+ to make sure the alpha channel is opaque.
+		EndPaint(hWnd, &ps);
+		break;
+	}
+	case WM_DESTROY: {
 		PostQuitMessage(0);
-		return 0;
-
+		break;
 	}
-	return DefWindowProc(hwnd, uMsg, wParam, lParam);
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
 }
+
 
 HWND CreatWindowUI()
 {
 	HINSTANCE hInstance = GetModuleHandle(nullptr);
-	WNDCLASS wc = {};
+	WNDCLASS wc = { };
 	wc.lpfnWndProc = WindowProc;
 	wc.hInstance = hInstance;
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.lpszClassName = L"Webview";
+	wc.lpszClassName = L"Sample Window Class";
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW); // 设置光标
 	RegisterClass(&wc);
-	return CreateWindowExW(0, L"Webview", NULL,
-		WS_VISIBLE | WS_THICKFRAME | WS_POPUP,
-		10, 10, 600, 400, NULL, NULL, hInstance, NULL);
 
+	HWND hWnd = CreateWindowEx(0, L"Sample Window Class", L"Sample Window", WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+		NULL, NULL, hInstance, NULL);
 
+	if (hWnd == NULL)
+	{
+		return 0;
+	}
+
+	MARGINS margins = { 0, 0, 0, 1 };
+	DwmExtendFrameIntoClientArea(hWnd, &margins);
+
+	SetWindowPos(hWnd, nullptr, 0, 0, 0, 0, SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+
+	ShowWindow(hWnd, 0);
+	return hWnd;
 }

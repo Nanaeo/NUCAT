@@ -1,10 +1,9 @@
 #include "include/Util.h"
-#include "include/NuCat.h"
 #include <string>
 #include <vector>
 #include <chrono>
 #include <format>
-
+// 工具类
 bool CompareWchatText(const std::wstring& text1, const std::wstring& text2)
 {
 	return text1.compare(text2) == 0;
@@ -17,16 +16,6 @@ std::wstring ResolvePathAndTrimFile(std::wstring path)
 		return path.substr(0, pos);
 	}
 	return path;
-}
-bool WebViewIsInstall()
-{
-	LPWSTR version_info;
-	GetAvailableCoreWebView2BrowserVersionString(nullptr, &version_info);
-	if (!CompareWchatText(L"", version_info))
-	{
-		return true;
-	}
-	return false;
 }
 std::wstring GetCurrentPath()
 {
@@ -72,36 +61,26 @@ std::wstring Utf8ToUtf16(const std::string& utf8) {
 	MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), -1, &utf16[0], length);
 	return utf16;
 }
-std::string U8GetUserDefaultLocaleName(){
+std::string GetConfigDefaultLocaleName() {
 	wchar_t localeName[LOCALE_NAME_MAX_LENGTH];
 	int result = GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH);
 	if (result > 0) {
-		std::wstring localNameU16(localeName);
-		return Utf16ToUtf8(localNameU16);
+		std::wstring localeNameU16(localeName);
+		std::string localNameU8(Utf16ToUtf8(localeNameU16));
+		localNameU8.pop_back();
+		return (char *)(localNameU8.c_str());
 	}
 	else {
-		return (char*)u8"zh-CN";
+		return "zh-CN";
 	}
 }
-bool FileExists(const std::wstring& fileName){
+bool FileExists(const std::wstring& fileName) {
 	DWORD fileAttributes = GetFileAttributesW(fileName.c_str());
 	if (fileAttributes == INVALID_FILE_ATTRIBUTES)
 	{
 		return false;
 	}
 	return true;
-}
-std::string NuCatGetRealDefaultLocaleName() {
-	NuSetting _NUCAT_SETTING;
-	std::string Setting_LanguageString = _NUCAT_SETTING.GetKeyStr("Language");
-	const char* Setting_Language = Setting_LanguageString.c_str();
-	std::string Setting_LanguageU8(Setting_Language);
-	std::string Default_LanguageU8 = U8GetUserDefaultLocaleName();
-	if (Setting_LanguageU8.compare((const char *)u8"") != 0) {
-		return Setting_LanguageU8;
-	}
-	return Default_LanguageU8;
-
 }
 std::string getCurrentDate() {
 	const auto now = std::chrono::system_clock::now();
@@ -117,4 +96,18 @@ std::string getCurrentTimestamp() {
 	const auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
 	return std::format("{}", millis);
+}
+std::string GetResourcePathU8(char * _path) {
+	std::wstring path = GetCurrentPath();
+	std::wstring file = Utf8ToUtf16(_path);
+	std::wstring full_path = path + file;
+	std::string full_path_u8 = Utf16ToUtf8(full_path);
+	return full_path_u8;
+}
+std::string GetResourceU8(char* _file) {
+	std::wstring path = GetCurrentPath();
+	std::wstring file = Utf8ToUtf16(_file);
+	std::wstring full_path = L"file:\\\\\\" + path + L"\\" + file;
+	std::string full_path_u8 = Utf16ToUtf8(full_path);
+	return full_path_u8;
 }
