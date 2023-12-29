@@ -17,6 +17,7 @@ void DefaultWindowBoot() {
 		exit(0);
 		return "{}";
 		});
+	WebviewPtr->resize_widget2();
 	WebviewObject.run();
 
 }
