@@ -1,9 +1,6 @@
-#pragma once
-
-// Copyright Mlikiowa 2023.12.27
-// FileOperator针对Win32平台的文件操作封装 模块化完善
 #include <string>
 #include <windows.h>
+
 class FileOperator {
 public:
     FileOperator(const std::wstring& filePath);

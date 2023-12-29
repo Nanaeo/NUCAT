@@ -1,20 +1,14 @@
 #include "include/Log.h"
-#include "include/Util.h"
 #include "include/FileOperator.h"
+#include "include/Util.h"
 
-int Log::CurrentLogLevel = 2; //WARN以上
-void Log::SetLogLevel(int LogLevel)
+void Log::SetLogLevel()
 {
-	Log::CurrentLogLevel = LogLevel;
 }
-bool Log::Logging(std::string content, Level ErrorLevel)
+void Log::Logging(std::string content, Level ErrorLevel)
 {
-	
 	char* LogLevel[] = { (char*)u8"DEBUG", (char*)u8"INFO", (char*)u8"WARN", (char*)u8"ERROR", (char*)u8"EXIT" };
 	std::string CurrentLogLevel = LogLevel[static_cast<int>(ErrorLevel)];
-	if (static_cast<int>(ErrorLevel) < Log::CurrentLogLevel) {
-		return false;
-	}
 	std::wstring CurrentDate = Utf8ToUtf16(getCurrentDate().c_str());
 	CurrentDate.pop_back();
 	std::wstring path = L"\\Log\\" + CurrentDate + L".txt";
@@ -30,5 +24,4 @@ bool Log::Logging(std::string content, Level ErrorLevel)
 	RealConten.append(content);
 	RealConten.append("\n");
 	LoggFile.append(RealConten.c_str());
-	return true;
 }

@@ -1,5 +1,4 @@
 {
   "WebView_NotInstall_Tittle": "EnvironmentError",
-  "WebView_NotInstall_Content": "You have not installed WebView2 and will be redirected to download soon",
-  "WebView_NotInstall_Downlod": "https://go.microsoft.com/fwlink/p/?LinkId=2124703"
+  "WebView_NotInstall_Content": "You have not installed WebView2 and will be redirected to download soon"
 }

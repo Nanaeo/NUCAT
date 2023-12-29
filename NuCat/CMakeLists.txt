@@ -3,16 +3,18 @@
 #### webview2 dependencies start
 
 # Microsoft.Windows.ImplementationLibrary 
-# The Windows Implementation Libra) were created to improve productivity and solve problems commonly seen by Windows developers. by: Microsoft WindowsImplementationLibraryTeam
+# The Windows Implementation Libraries (wil) were created to improve productivity and solve problems commonly seen by Windows developers. by: Microsoft WindowsImplementationLibraryTeam
 include(FetchContent)
 FetchContent_Declare(
   wil
   URL  https://www.nuget.org/api/v2/package/Microsoft.Windows.ImplementationLibrary/1.0.211019.2
+  URL_HASH SHA1=FB082B22DC30C11CCDB118A0EB9B8A32E99765B1
 )
 # Microsoft.Web.WebView2
 FetchContent_Declare(
   webview2
   URL  https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.1072.54
+  URL_HASH SHA1=aa8ae9db5015a9184011bb195efc5c8caa58a86b
 )
 FetchContent_MakeAvailable(wil webview2)
 
@@ -41,7 +43,16 @@ link_libraries("${bit7z_SOURCE_DIR}/lib/x64/Debug/bit7z.lib")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # 编译全部代码
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/IFace.h 
+           ${CMAKE_CURRENT_BINARY_DIR}/GUIDS.c 
+           ${CMAKE_CURRENT_BINARY_DIR}/Proxy.c 
+           ${CMAKE_CURRENT_BINARY_DIR}/ProxyDll.c
+    COMMAND "E:\\Windows Kits\\10\\bin\\10.0.22621.0\\x64\\midl.exe /h ${CMAKE_CURRENT_SOURCE_DIR}/src/HostObjectSample_h.h ${CMAKE_CURRENT_SOURCE_DIR}/src/HostObjectSample.idl"
+)
+
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 add_executable (NuCat WIN32 ${SOURCES} "src/yyjson.c" "NuCat.cpp")
+#MIDL 编译器" E:\Windows Kits\10\bin\10.0.22621.0\x64\midl.exe "
 
-message("-----------------NUCAT_END---------------")
+
