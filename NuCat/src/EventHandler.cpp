@@ -17,6 +17,12 @@ void DefaultWindowBoot() {
 		exit(0);
 		return "{}";
 		});
+	WebviewObject.bind("moveWindow", [&](const std::string&) -> std::string {
+		SendMessageW(hwnd, WM_SYSCOMMAND, SC_MOVE,0);
+		// 将就用吧反正找不到其它方案
+		//SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
+		return "{}";
+		});
 	WebviewPtr->resize_widget2();
 	WebviewObject.run();
 
