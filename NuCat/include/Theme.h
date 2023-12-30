@@ -6,6 +6,7 @@ class Theme {
 public:
 	Theme();
 	~Theme();
+	std::vector<std::string> ListThemePathU8();
 	std::vector<std::wstring> ListThemePathW();
 private:
 	DirectoryReader ThemeDictoryReader;

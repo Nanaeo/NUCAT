@@ -45,7 +45,8 @@ DWORD DirectoryReader::getFileSize(const std::wstring& filePath) {
     LARGE_INTEGER size;
     size.HighPart = fileData.nFileSizeHigh;
     size.LowPart = fileData.nFileSizeLow;
-    return size.QuadPart;
+    //DWORD 一般超不出 超出了就是不合理的
+    return (DWORD)size.QuadPart;
 }
 
 FILETIME DirectoryReader::getFileCreationTime(const std::wstring& filePath) {

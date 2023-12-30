@@ -8,5 +8,7 @@ namespace Settings {
 	extern yyjson_doc* SettingJsonRoot;
 	void Init();
 	std::string GetKeyStr(const char* key, const char* errorText);
+	std::string GetThemeU8();
+	std::wstring GetThemeW();
 	void SetKey();
 }

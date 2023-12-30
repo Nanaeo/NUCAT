@@ -2,14 +2,11 @@
 #include "include/Util.h"
 #include "include/FileOperator.h"
 // 不需要SettingJsonRoot回收
-namespace Settings {
-	HANDLE SettingFile = nullptr;
-	yyjson_val* SettingJson = nullptr;
-	yyjson_doc* SettingJsonRoot = nullptr;
-	void Init();
-	std::string GetKeyStr(const char* key);
-	void SetKey();
-}
+
+HANDLE Settings::SettingFile = nullptr;
+yyjson_val* Settings::SettingJson = nullptr;
+yyjson_doc* Settings::SettingJsonRoot = nullptr;
+
 void Settings::Init()
 {
 	std::wstring SettingPath = GetResourcePath(L"\\Config\\Settings.json");
@@ -19,6 +16,7 @@ void Settings::Init()
 	SettingJsonRoot = yyjson_read(retFileData.c_str(), retFileData.length(), 0);
 	SettingJson = yyjson_doc_get_root(SettingJsonRoot);
 }
+
 std::string Settings::GetKeyStr(const char* key, const char* errorText = nullptr)
 {
 	yyjson_val* Val = yyjson_obj_get(Settings::SettingJson, key);
@@ -31,4 +29,16 @@ std::string Settings::GetKeyStr(const char* key, const char* errorText = nullptr
 void Settings::SetKey()
 {
 
+}
+
+std::string  Settings::GetThemeU8() 
+{
+	std::string DefaultTheme = Settings::GetKeyStr((char*)u8"Theme", (char*)u8"default");
+	if (DefaultTheme.compare("") == 0) return (char*)u8"default";
+	return DefaultTheme;
+}
+
+std::wstring  Settings::GetThemeW() {
+	std::wstring DefaultTheme = Utf8ToUtf16(Settings::GetThemeU8());
+	return DefaultTheme;
 }
