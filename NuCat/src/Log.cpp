@@ -7,9 +7,9 @@ void Log::SetLogLevel(int LogLevel)
 {
 	Log::CurrentLogLevel = LogLevel;
 }
+
 bool Log::Logging(std::string content, Level ErrorLevel)
 {
-	
 	char* LogLevel[] = { (char*)u8"DEBUG", (char*)u8"INFO", (char*)u8"WARN", (char*)u8"ERROR", (char*)u8"EXIT" };
 	std::string CurrentLogLevel = LogLevel[static_cast<int>(ErrorLevel)];
 	if (static_cast<int>(ErrorLevel) < Log::CurrentLogLevel) {
@@ -20,7 +20,7 @@ bool Log::Logging(std::string content, Level ErrorLevel)
 	std::wstring path = L"\\Log\\" + CurrentDate + L".txt";
 	FileOperator LoggFile(GetResourcePath(path.c_str()).c_str());
 	std::string RealConten;
-	std::string  CurrentTimestamp = getCurrentTimestamp();
+	std::string  CurrentTimestamp = getCurrentDateTime();
 	RealConten.append((char*)u8"[");
 	RealConten.append(CurrentTimestamp);
 	RealConten.append((char*)u8"] ");

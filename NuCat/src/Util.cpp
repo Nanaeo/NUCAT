@@ -90,6 +90,15 @@ std::string getCurrentDate() {
 	const auto year_month_day = std::chrono::year_month_day{ time_point };
 	return std::format("{:%Y-%m-%d}", year_month_day);
 }
+std::string getCurrentDateTime() {
+	const auto now = std::chrono::system_clock::now();
+	const auto time_zone = std::chrono::current_zone();
+	const auto local_time = time_zone->to_local(now);
+	const auto time_point = std::chrono::floor<std::chrono::seconds>(local_time);
+	const auto year_month_day = std::chrono::year_month_day{ time_point };
+	const auto time_of_day = std::chrono::hh_mm_ss{ time_point - std::chrono::floor<std::chrono::days>(time_point) };
+	return std::format("{:%Y-%m-%d %H:%M:%S}", year_month_day, time_of_day);
+}
 std::string getCurrentTimestamp() {
 	const auto now = std::chrono::system_clock::now();
 	const auto duration = now.time_since_epoch();

@@ -1,5 +1,4 @@
 #include "include/Bit7zWrapper.h"
-#include <bit7z/bitfilecompressor.hpp>
 
 std::string mLastError = "";
 bit7z::Bit7zLibrary lib{ "7z.dll" };
@@ -44,6 +43,7 @@ bool Bit7zWrapper::CommpressDirectory(std::string path, bit7z::BitInOutFormat& f
 std::string Bit7zWrapper::GetErrorInfo() {
 	return mLastError;
 }
+
 /* 解压与压缩测试
 Bit7zWrapper::Extract((char*)u8"F:\\CPPDEV\\测试.zip", (char *)u8"F:\\CPPDEV\\测试\\", bit7z::BitFormat::Zip, "");
 std::string filePath = (char*)u8"F:\\CPPDEV\\测试.zip";
