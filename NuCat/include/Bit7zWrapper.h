@@ -5,7 +5,9 @@
 namespace Bit7zWrapper
 {
 	bool Extract(std::string file, std::string outfile, const bit7z::BitInOutFormat& format, std::string password);
+	bool Extract(std::string file, std::string outfile, const bit7z::BitInFormat& format, std::string password);
 	bool GetArchiveInfo(std::string file, const bit7z::BitInOutFormat& format, std::shared_ptr<bit7z::BitArchiveReader>& retData);
 	bool CommpressDirectory(std::string path, bit7z::BitInOutFormat& format, std::wstring outfile, std::string password);
+	bool GetArchiveInfo(std::string file, const bit7z::BitInFormat& format, std::shared_ptr<bit7z::BitArchiveReader>& retData);
 	std::string GetErrorInfo();
 };
