@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <sstream>
+#include <iomanip>
 #include <format>
 // 工具类
 bool CompareWchatText(const std::wstring& text1, const std::wstring& text2)
@@ -95,9 +97,15 @@ std::string getCurrentDateTime() {
 	const auto time_zone = std::chrono::current_zone();
 	const auto local_time = time_zone->to_local(now);
 	const auto time_point = std::chrono::floor<std::chrono::seconds>(local_time);
-	const auto year_month_day = std::chrono::year_month_day{ time_point };
+	const auto year_month_day = std::chrono::year_month_day{ std::chrono::floor<std::chrono::days>(time_point) };
 	const auto time_of_day = std::chrono::hh_mm_ss{ time_point - std::chrono::floor<std::chrono::days>(time_point) };
-	return std::format("{:%Y-%m-%d %H:%M:%S}", year_month_day, time_of_day);
+	std::ostringstream oss;
+	oss << std::format("{:%Y-%m-%d}", year_month_day) << ' '
+		<< std::setw(2) << std::setfill('0') << time_of_day.hours().count() << ':'
+		<< std::setw(2) << std::setfill('0') << time_of_day.minutes().count() << ':'
+		<< std::setw(2) << std::setfill('0') << time_of_day.seconds().count();
+
+	return oss.str();
 }
 std::string getCurrentTimestamp() {
 	const auto now = std::chrono::system_clock::now();
