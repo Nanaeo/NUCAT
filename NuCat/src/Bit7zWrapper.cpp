@@ -44,3 +44,10 @@ bool Bit7zWrapper::CommpressDirectory(std::string path, bit7z::BitInOutFormat& f
 std::string Bit7zWrapper::GetErrorInfo() {
 	return mLastError;
 }
+/* 解压与压缩测试
+Bit7zWrapper::Extract((char*)u8"F:\\CPPDEV\\测试.zip", (char *)u8"F:\\CPPDEV\\测试\\", bit7z::BitFormat::Zip, "");
+std::string filePath = (char*)u8"F:\\CPPDEV\\测试.zip";
+std::shared_ptr<bit7z::BitArchiveReader> reader;
+Bit7zWrapper::GetArchiveInfo(filePath, bit7z::BitFormat::Zip, reader);
+int x = reader->size();
+*/
