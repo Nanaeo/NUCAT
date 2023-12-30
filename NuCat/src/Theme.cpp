@@ -14,7 +14,6 @@ Theme::Theme()
 Theme::~Theme()
 {
 }
-
 std::vector<std::wstring> Theme::ListThemePathW()
 {
 	std::vector<std::wstring> ThemeList = ThemeDictoryReader.getDirectoriesList(GetResourcePath(L"\\Resource\\Theme"));
@@ -35,4 +34,9 @@ std::vector<std::string> Theme::ListThemePathU8() {
 		ThemeListU8.push_back(Utf16ToUtf8(TempElement));
 	}
 	return ThemeListU8;
+}
+std::string Theme::GetThemeEntry(std::string ThemeName)
+{
+	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + ThemeName + (char *)"\\index.html";
+	return GetResourcePathU8((char *)ThemeIndex.c_str());
 }
