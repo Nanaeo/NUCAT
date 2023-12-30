@@ -8,6 +8,7 @@
 #include "include/Webview2Tool.h"
 #include "include/EventHandler.h"
 #include "include/DirectoryReader.h"
+#include "include/Bit7zWrapper.h"
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
 	Version::Init();
