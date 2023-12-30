@@ -44,8 +44,8 @@ void EventHandler::Run(std::string action, std::string argv, int argc)
 		DefaultWindowBoot();
 	}
 	if (argc == 1 && action.compare("") != 0) {
-		//拖动打开文件
+		//拖动打开文件 直接进入解压页面
 
 	}
-	// 其它带有命令行操作
+	// 其它带有命令行操作 包括命令行程序回传命令
 }

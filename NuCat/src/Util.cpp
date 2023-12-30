@@ -128,3 +128,20 @@ std::string GetResourceU8(char* _file) {
 	std::string full_path_u8 = Utf16ToUtf8(full_path);
 	return full_path_u8;
 }
+bool ProgramIsAdmin() {
+	BOOL isAdmin = FALSE;
+	SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
+	PSID AdministratorsGroup;
+	isAdmin = AllocateAndInitializeSid(
+		&NtAuthority,
+		2,
+		SECURITY_BUILTIN_DOMAIN_RID,
+		DOMAIN_ALIAS_RID_ADMINS,
+		0, 0, 0, 0, 0, 0,
+		&AdministratorsGroup);
+	if (isAdmin) {
+		CheckTokenMembership(NULL, AdministratorsGroup, &isAdmin);
+		FreeSid(AdministratorsGroup);
+	}
+	return isAdmin;
+}

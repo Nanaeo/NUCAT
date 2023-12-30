@@ -40,3 +40,16 @@ std::string Theme::GetThemeEntry(std::string ThemeName)
 	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + ThemeName + (char *)"\\index.html";
 	return GetResourcePathU8((char *)ThemeIndex.c_str());
 }
+// 未实现 以下为u8实现
+std::string Theme::LanguageGet(std::string ThemeName, std::string key)
+{
+	return std::string("");
+}
+std::string Theme::LanguageGetAll(std::string ThemeName)
+{
+	return std::string("");
+}
+std::string Theme::GetInfo(std::string ThemeName)
+{
+	return std::string("");
+}

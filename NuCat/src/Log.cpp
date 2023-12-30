@@ -7,7 +7,12 @@ void Log::SetLogLevel(int LogLevel)
 {
 	Log::CurrentLogLevel = LogLevel;
 }
-
+void Log::DeleteAll() {
+	// 清除所有日志
+}
+void Log::SetOutHandler() {
+	// 设置日志拦截
+}
 bool Log::Logging(std::string content, Level ErrorLevel)
 {
 	char* LogLevel[] = { (char*)u8"DEBUG", (char*)u8"INFO", (char*)u8"WARN", (char*)u8"ERROR", (char*)u8"EXIT" };

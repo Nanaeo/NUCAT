@@ -44,3 +44,22 @@ std::string Language::TextU8(const char* key)
 	}
 	return yyjson_get_str(Val);
 }
+// ----- 未实现 ------ 
+// 专为主题
+std::string Language::TextWTheme(const char* key)
+{
+	return std::string("");
+}
+std::string Language::TextU8Theme(const char* key)
+{
+	return std::string("");
+}
+// 一次性加载
+std::string Language::TextU8ThemeAll()
+{
+	return std::string("");
+}
+std::string Language::TextWThemeAll()
+{
+	return std::string("");
+}

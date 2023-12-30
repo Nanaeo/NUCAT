@@ -26,10 +26,6 @@ std::string Settings::GetKeyStr(const char* key, const char* errorText = nullptr
 	}
 	return yyjson_get_str(Val);
 }
-void Settings::SetKey()
-{
-
-}
 
 std::string  Settings::GetThemeU8() 
 {
@@ -41,4 +37,9 @@ std::string  Settings::GetThemeU8()
 std::wstring  Settings::GetThemeW() {
 	std::wstring DefaultTheme = Utf8ToUtf16(Settings::GetThemeU8());
 	return DefaultTheme;
+}
+// 未实现
+void Settings::SetKey()
+{
+
 }
