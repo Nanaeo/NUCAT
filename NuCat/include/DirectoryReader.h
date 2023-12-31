@@ -15,4 +15,7 @@ public:
     DWORD getFileSize(const std::wstring& filePath);
     FILETIME getFileCreationTime(const std::wstring& filePath);
     DWORD GetObjectError();
+    std::vector<std::string> ListPathU8(std::string _path);
+    std::vector<std::string> ListPathU8(std::wstring _path);
+    std::vector<std::wstring> ListPathW(std::wstring _path);
 };

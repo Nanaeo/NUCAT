@@ -3,6 +3,7 @@
 #include "include/Util.h"
 #include "include/Global.h"
 #include "include/Theme.h"
+#include "include/WebBind.h"
 
 webview::webview WebviewObject(true, nullptr);
 HWND hwnd = (HWND)WebviewObject.window();
@@ -12,11 +13,11 @@ void WindowBoot(std::string PageEntry) {
 	SetWindowLongPtrW(hwnd, GWL_STYLE, WS_POPUP | WS_THICKFRAME);
 	SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 	//SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
-	
+
 	//设置到全局变量上
 	WebviewObject.navigate(PageEntry);
-	
-	
+
+
 	// 绑定函数之后封装
 	// 绑定退出函数
 	WebviewObject.bind("exit", [&](const std::string&) -> std::string {
@@ -33,11 +34,14 @@ void WindowBoot(std::string PageEntry) {
 		});
 	// 绑定文件操作api
 	WebviewObject.bind("ListDirectory", [&](const std::string& req) -> std::string {
+		DirectoryReader ListDictoryReader;
 		std::string _Path = webview::detail::json_parse(req, "", 0);
+		std::vector<std::string> ListPathData = ListDictoryReader.ListPathU8(_Path);
+		std::string  retJson = WebBind::ListPathJsonU8(ListPathData);
 		// Log::Logging(_Path,Log::LOG_ERROR); 测试完成u8编码
 		// 获取文件路径
 		// 调用本地方法 封装返回
-		return "{}";
+		return retJson;
 		});
 	// WebviewObject.init("document.body.parentNode.style.overflowX = 'hidden'; ");
 	WebviewPtr->resize_widget2();

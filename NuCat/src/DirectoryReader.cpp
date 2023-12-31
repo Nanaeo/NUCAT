@@ -1,4 +1,5 @@
 #include "include/DirectoryReader.h"
+#include "include/Util.h"
 
 DirectoryReader::DirectoryReader() : errorCode(ERROR_SUCCESS) {}
 
@@ -61,4 +62,33 @@ FILETIME DirectoryReader::getFileCreationTime(const std::wstring& filePath) {
 
 DWORD DirectoryReader::GetObjectError() {
     return errorCode;
+}
+
+std::vector<std::string> DirectoryReader::ListPathU8(std::string _path)
+{
+    std::wstring pathW = Utf8ToUtf16(_path);
+    return this->ListPathU8(pathW);
+}
+
+std::vector<std::string> DirectoryReader::ListPathU8(std::wstring _path) {
+    std::vector<std::wstring> PathList = this->ListPathW(_path);
+    std::vector<std::string> PathListU8;
+    for (auto& TempElement : PathList) {
+        PathListU8.push_back(Utf16ToUtf8(TempElement));
+    }
+    return PathListU8;
+}
+
+std::vector<std::wstring> DirectoryReader::ListPathW(std::wstring _path)
+{
+    _path.pop_back();//转出来多了\0 这个问题大量存在
+    std::vector<std::wstring> ThemeList = this->getDirectoriesList(_path);
+    // ThemeList.erase(ThemeList.begin(), ThemeList.begin() + 2); 擦除不断 性能消耗大 不如新建拷贝
+    std::vector<std::wstring> RealThemeList(0);
+    if (ThemeList.size() <= 2) return RealThemeList;
+    //RealThemeList.resize(ThemeList.size() - 2);
+    for (auto it = ThemeList.begin() + 2; it != ThemeList.end(); ++it) {
+        RealThemeList.push_back(*it);
+    }
+    return RealThemeList;
 }
