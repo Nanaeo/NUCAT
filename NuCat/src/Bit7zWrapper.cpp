@@ -133,7 +133,3 @@ std::shared_ptr<bit7z::BitArchiveReader> reader;
 Bit7zWrapper::GetArchiveInfo(filePath, bit7z::BitFormat::Zip, reader);
 int x = reader->size();
 */
-
-//下面根据后缀名推导 BitInFormat BitInOutFormat 未完成
-//extern const BitInFormat Auto;
-//
