@@ -1,7 +1,7 @@
 #include "include/WebBind.h"
 #include "include/yyjson.h"
 
-std::string WebBind::ListPathJsonU8(const std::vector<std::string>& data)
+std::string WebBind::Vstring2Json(const std::vector<std::string>& data)
 {
 
 	yyjson_mut_doc* doc = yyjson_mut_doc_new(NULL);

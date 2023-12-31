@@ -2,5 +2,5 @@
 #include <string>
 #include <vector>
 namespace WebBind {
-	std::string ListPathJsonU8(const std::vector<std::string>& data);
+	std::string Vstring2Json(const std::vector<std::string>& data);
 }

@@ -37,7 +37,7 @@ void WindowBoot(std::string PageEntry) {
 		DirectoryReader ListDictoryReader;
 		std::string _Path = webview::detail::json_parse(req, "", 0);
 		std::vector<std::string> ListPathData = ListDictoryReader.ListPathU8(_Path);
-		std::string  retJson = WebBind::ListPathJsonU8(ListPathData);
+		std::string  retJson = WebBind::Vstring2Json(ListPathData);
 		// Log::Logging(_Path,Log::LOG_ERROR); 测试完成u8编码
 		// 获取文件路径
 		// 调用本地方法 封装返回

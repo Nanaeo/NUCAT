@@ -160,3 +160,33 @@ std::wstring getExtensionLowercase(const std::wstring& filepath) {
 	std::transform(extension.begin(), extension.end(), extension.begin(), ::towlower);
 	return extension;
 }
+std::string utf8_to_escape_sequence(const std::string& utf8_str) {
+	int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, NULL, 0);
+	wchar_t* wstr = new wchar_t[wlen];
+	MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, wstr, wlen);
+
+	std::ostringstream oss;
+	for (int i = 0; i < wlen; ++i) {
+		oss << "\\u" << std::setfill('0') << std::setw(4) << std::hex << static_cast<int>(wstr[i]);
+	}
+
+	delete[] wstr;
+	return oss.str();
+}
+std::string escape_sequence_to_utf8(const std::string& escape_sequence) {
+	std::wstringstream wss;
+	for (size_t i = 0; i < escape_sequence.length(); i += 6) {
+		std::string hex = escape_sequence.substr(i + 2, 4);
+		wchar_t wc = static_cast<wchar_t>(std::stoi(hex, nullptr, 16));
+		wss << wc;
+	}
+
+	std::wstring unicode_str = wss.str();
+	int len = WideCharToMultiByte(CP_UTF8, 0, unicode_str.c_str(), -1, NULL, 0, NULL, NULL);
+	char* str = new char[len];
+	WideCharToMultiByte(CP_UTF8, 0, unicode_str.c_str(), -1, str, len, NULL, NULL);
+
+	std::string result(str);
+	delete[] str;
+	return result;
+}
