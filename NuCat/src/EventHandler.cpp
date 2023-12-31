@@ -5,11 +5,14 @@
 #include "include/Global.h"
 #include "include/Theme.h"
 
-HWND hwnd = CreatWindowUI();
-webview::webview WebviewObject(true, &hwnd);
+//HWND hwnd = CreatWindowUI();
+webview::webview WebviewObject(true, nullptr);
+HWND hwnd = (HWND)WebviewObject.window();
 webview::webview* WebviewPtr = &WebviewObject;
 
 void WindowBoot(std::string PageEntry) {
+	SetWindowLongPtrW(hwnd, GWL_STYLE, WS_POPUP | WS_THICKFRAME);
+	SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 	//设置到全局变量上
 	WebviewObject.navigate(PageEntry);
 	// 绑定退出函数
@@ -19,13 +22,20 @@ void WindowBoot(std::string PageEntry) {
 		});
 	WebviewObject.bind("moveWindow", [&](const std::string&) -> std::string {
 		SendMessageW(hwnd, WM_SYSCOMMAND, SC_MOVE, 0);
-		//SendMessageW(hwnd, WM_SYSCOMMAND, SC_MOVE|HTCAPTION, 0);
+		// SendMessageW(hwnd, WM_SYSCOMMAND, SC_MOVE|HTCAPTION, 0);
 		// SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(pt.x, pt.y));
 		// 将就用吧反正找不到其它方案
 		// SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
 		return "{}";
 		});
-	WebviewObject.init("document.body.parentNode.style.overflowX = 'hidden'; ");
+	// 绑定文件操作api
+	WebviewObject.bind("ListDirectory", [&](const std::string& req) -> std::string {
+		std::string _Path = webview::detail::json_parse(req, "", 0);
+		// 获取文件路径
+		// 调用本地方法 封装返回
+		return "{}";
+		});
+	// WebviewObject.init("document.body.parentNode.style.overflowX = 'hidden'; ");
 	WebviewPtr->resize_widget2();
 	WebviewObject.run();
 
