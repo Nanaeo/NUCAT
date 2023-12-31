@@ -13,6 +13,7 @@ webview::webview* WebviewPtr = &WebviewObject;
 void WindowBoot(std::string PageEntry) {
 	SetWindowLongPtrW(hwnd, GWL_STYLE, WS_POPUP | WS_THICKFRAME);
 	SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+	//SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
 	//设置到全局变量上
 	WebviewObject.navigate(PageEntry);
 	// 绑定退出函数

@@ -2313,7 +2313,22 @@ namespace webview {
 							MARGINS margins = { 1,1,1,1 };
 							HRESULT hr = S_OK;
 							if (msg == WM_NCCREATE) {
+								//find border thickness
 								SetRectEmpty(&border_thickness);
+								if (GetWindowLongPtr(hwnd, GWL_STYLE) & WS_THICKFRAME)
+								{
+									AdjustWindowRectEx(&border_thickness, GetWindowLongPtr(hwnd, GWL_STYLE) & ~WS_CAPTION, FALSE, NULL);
+									border_thickness.left *= -1;
+									border_thickness.top *= -1;
+								}
+								else if (GetWindowLongPtr(hwnd, GWL_STYLE) & WS_BORDER)
+								{
+									SetRect(&border_thickness, 1, 1, 1, 1);
+								}
+
+								MARGINS margins = { 0 };
+								DwmExtendFrameIntoClientArea(hwnd, &margins);
+								//SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
 								auto* lpcs{ reinterpret_cast<LPCREATESTRUCT>(lp) };
 								w = static_cast<win32_edge_engine*>(lpcs->lpCreateParams);
 								w->m_window = hwnd;
@@ -2332,7 +2347,14 @@ namespace webview {
 
 							switch (msg) {
 							case WM_NCCALCSIZE:
-								return 0;
+								if (lp)
+								{
+									NCCALCSIZE_PARAMS* sz = (NCCALCSIZE_PARAMS*)lp;
+									sz->rgrc[0].left += border_thickness.left;
+									sz->rgrc[0].right -= border_thickness.right;
+									sz->rgrc[0].bottom -= border_thickness.bottom;
+									return 0;
+								}
 								break;
 							case WM_ACTIVATE:
 								hr = DwmExtendFrameIntoClientArea(hwnd, &margins);
