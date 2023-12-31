@@ -29,7 +29,7 @@ std::string WebBind::ListPathJsonU8(const std::vector<std::string>& data)
 		return "";
 	}
 	yyjson_mut_doc_set_root(doc, obj);
-	char* json_text = yyjson_mut_write(doc, YYJSON_WRITE_PRETTY, NULL);
+	char* json_text = yyjson_mut_write(doc, YYJSON_WRITE_ESCAPE_UNICODE, NULL);
 	std::string result = json_text ? json_text : "";
 	yyjson_mut_doc_free(doc);
 	free(json_text);

@@ -74,7 +74,9 @@ std::vector<std::string> DirectoryReader::ListPathU8(std::wstring _path) {
     std::vector<std::wstring> PathList = this->ListPathW(_path);
     std::vector<std::string> PathListU8;
     for (auto& TempElement : PathList) {
-        PathListU8.push_back(Utf16ToUtf8(TempElement));
+        auto test = Utf16ToUtf8(TempElement);
+        test.pop_back();
+        PathListU8.push_back(test);
     }
     return PathListU8;
 }
