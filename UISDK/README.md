@@ -1,12 +1,12 @@
 # JavaScript调用规定
-操作类型-操作动作-参数-参数-...-参数
 
-无参数保持 操作类型-操作动作
-
-window-close 关闭窗口
-
-lang-info-localName 获取当前地区语言类型
-
-lang-get-[key] 获取某一语言的根据[key]找到的值
-# UI入口
-index.html 为入口
+- [ ] NuCatWindowClose          关闭当前窗口
+- [ ] NuCatLanguageGetAll       获取当前主题语言配置所有的值
+- [ ] NuCatLanguageGetKey       获取当前主题语言配置某个的值
+- [ ] NuCatSettingsGetKey       获取程序某个设置
+- [ ] NuCatSettingsSetKey       设置程序某个设置
+- [ ] NuCatListDirectory        获取某个目录下文件夹
+- [ ] NuCatListFile             获取某个目录下所有文件
+- [ ] NuCatListDirectoryFile    获取某个目录下所有和文件夹
+- [ ] NuCatFileExact            解压某个文件到某个文件夹
+- [ ] NuCatDirectoryCompree     压缩某个文件夹
