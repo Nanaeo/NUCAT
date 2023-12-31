@@ -102,6 +102,6 @@ HWND CreatWindowUI()
 
 	HWND hWnd=CreateWindowEx(0, L"NuCat", NULL,
 		WS_VISIBLE | WS_THICKFRAME | WS_POPUP,
-		10, 10, 600, 400, NULL, NULL, hInstance, NULL);
+		10, 10, 580, 313, NULL, NULL, hInstance, NULL);
 	return hWnd;
 }

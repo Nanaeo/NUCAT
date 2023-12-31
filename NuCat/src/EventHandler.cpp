@@ -9,13 +9,9 @@ HWND hwnd = CreatWindowUI();
 webview::webview WebviewObject(true, &hwnd);
 webview::webview* WebviewPtr = &WebviewObject;
 
-void DefaultWindowBoot() {
-
-	Theme ThemeMange;
-	ThemeMange.ListThemePathW();
-	std::string ThemeEntry = (char*)"file:\\\\\\" + ThemeMange.GetThemeEntry("default");
+void WindowBoot(std::string PageEntry) {
 	//设置到全局变量上
-	WebviewObject.navigate(ThemeEntry);
+	WebviewObject.navigate(PageEntry);
 	// 绑定退出函数
 	WebviewObject.bind("exit", [&](const std::string&) -> std::string {
 		exit(0);
@@ -29,6 +25,7 @@ void DefaultWindowBoot() {
 		// SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, 0);
 		return "{}";
 		});
+	WebviewObject.init("document.body.parentNode.style.overflowX = 'hidden'; ");
 	WebviewPtr->resize_widget2();
 	WebviewObject.run();
 
@@ -39,9 +36,12 @@ void EventHandler::Run(std::string action, std::string argv, int argc)
 	action.pop_back(); // 去除判断干扰
 	argv.pop_back();   // 去除判断干扰
 
+	Theme ThemeMange;
 	if (action.compare("") == 0 && argc == 0) {
 		// 无参数正常启动 进入主页
-		DefaultWindowBoot();
+		ThemeMange.ListThemePathW();
+		std::string ThemeEntry = (char*)"file:\\\\\\" + ThemeMange.GetThemeEntry("default");
+		WindowBoot(ThemeEntry);
 	}
 	if (argc == 1 && action.compare("") != 0) {
 		//拖动打开文件 直接进入解压页面

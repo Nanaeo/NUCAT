@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html style="overflow: hidden;">
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>NUCAT</title>
 	<style type="text/css">
 		body {
@@ -10,17 +11,18 @@
 			margin: 0;
 			padding: 0;
 		}
-		.header {
-			background-color: #333;
-			color: #fff;
-			padding: 10px;
-			text-align: center;
-			position: fixed;
-			top: 0;
-			left: 0;
-			right: 0;
-			z-index: 1;
-		}
+        .header {
+            background-image: url('./header.jpg');
+            background-size: cover;
+            filter: blur(8px);
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
 		.header h1 {
 			margin: 0;
 			display: inline-block;
@@ -40,7 +42,7 @@
 			border: 1px solid #ccc;
 			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 			margin: 50px auto;
-			max-width: 960px;
+			max-width: 580px;
 			padding: 20px;
 			width: 100%;
 		}
@@ -91,11 +93,12 @@
 		<div class="file-list">
 			<ul>
 				<li><a href="javascript:window.exit();">文件1</a></li>
-				<li><a href="#">文件2</a></li>
-				<li><a href="#">文件3</a></li>
+				<li><a href="file:///F:/CPPDEV/NuCat/Other/Resource/Theme/default/index.html#">文件2</a></li>
+				<li><a href="file:///F:/CPPDEV/NuCat/Other/Resource/Theme/default/index.html#">文件3</a></li>
 			</ul>
 		</div>
-		<a href="#" class="button">解压文件</a>
+		<a href="file:///F:/CPPDEV/NuCat/Other/Resource/Theme/default/index.html#" class="button">解压文件</a>
 	</div>
-</body>
-</html>
+
+
+</body></html>
