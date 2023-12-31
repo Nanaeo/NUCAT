@@ -2,8 +2,11 @@
 #include "bit7z/bit7z.hpp"
 #include <Windows.h>
 #include <memory>
+
 namespace Bit7zWrapper
 {
+	const bit7z::BitInFormat* GetInformat(const std::string& ext);
+	const bit7z::BitInOutFormat* GetInOutformat(const std::string& ext);
 	bool Extract(std::string file, std::string outfile, const bit7z::BitInOutFormat& format, std::string password);
 	bool Extract(std::string file, std::string outfile, const bit7z::BitInFormat& format, std::string password);
 	bool GetArchiveInfo(std::string file, const bit7z::BitInOutFormat& format, std::shared_ptr<bit7z::BitArchiveReader>& retData);

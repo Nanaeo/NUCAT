@@ -33,7 +33,7 @@ void WindowBoot(std::string PageEntry) {
 		return "{}";
 		});
 	// 绑定文件操作api
-	WebviewObject.bind("ListDirectory", [&](const std::string& req) -> std::string {
+	WebviewObject.bind("NuCatListDirectory", [&](const std::string& req) -> std::string {
 		DirectoryReader ListDictoryReader;
 		std::string _Path = webview::detail::json_parse(req, "", 0);
 		std::vector<std::string> ListPathData = ListDictoryReader.ListPathU8(_Path);

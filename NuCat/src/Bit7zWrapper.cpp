@@ -3,6 +3,67 @@
 std::string mLastError = "";
 bit7z::Bit7zLibrary lib{ "7z.dll" };
 
+const bit7z::BitInFormat* Bit7zWrapper::GetInformat(const std::string& ext) {
+	if (ext == ".rar") return &bit7z::BitFormat::Rar;
+	else if (ext == ".arj") return &bit7z::BitFormat::Arj;
+	else if (ext == ".z") return &bit7z::BitFormat::Z;
+	else if (ext == ".lzh") return &bit7z::BitFormat::Lzh;
+	else if (ext == ".cab") return &bit7z::BitFormat::Cab;
+	else if (ext == ".nsis") return &bit7z::BitFormat::Nsis;
+	else if (ext == ".lzma") return &bit7z::BitFormat::Lzma;
+	else if (ext == ".lzma86") return &bit7z::BitFormat::Lzma86;
+	else if (ext == ".ppmd") return &bit7z::BitFormat::Ppmd;
+	else if (ext == ".vhdx") return &bit7z::BitFormat::Vhdx;
+	else if (ext == ".coff") return &bit7z::BitFormat::COFF;
+	else if (ext == ".ext") return &bit7z::BitFormat::Ext;
+	else if (ext == ".vmdk") return &bit7z::BitFormat::VMDK;
+	else if (ext == ".vdi") return &bit7z::BitFormat::VDI;
+	else if (ext == ".qcow") return &bit7z::BitFormat::QCow;
+	else if (ext == ".gpt") return &bit7z::BitFormat::GPT;
+	else if (ext == ".rar5") return &bit7z::BitFormat::Rar5;
+	else if (ext == ".ihex") return &bit7z::BitFormat::IHex;
+	else if (ext == ".hxs") return &bit7z::BitFormat::Hxs;
+	else if (ext == ".te") return &bit7z::BitFormat::TE;
+	else if (ext == ".uefic") return &bit7z::BitFormat::UEFIc;
+	else if (ext == ".uefis") return &bit7z::BitFormat::UEFIs;
+	else if (ext == ".squashfs") return &bit7z::BitFormat::SquashFS;
+	else if (ext == ".cramfs") return &bit7z::BitFormat::CramFS;
+	else if (ext == ".apm") return &bit7z::BitFormat::APM;
+	else if (ext == ".mslz") return &bit7z::BitFormat::Mslz;
+	else if (ext == ".flv") return &bit7z::BitFormat::Flv;
+	else if (ext == ".swf") return &bit7z::BitFormat::Swf;
+	else if (ext == ".swfc") return &bit7z::BitFormat::Swfc;
+	else if (ext == ".ntfs") return &bit7z::BitFormat::Ntfs;
+	else if (ext == ".fat") return &bit7z::BitFormat::Fat;
+	else if (ext == ".mbr") return &bit7z::BitFormat::Mbr;
+	else if (ext == ".vhd") return &bit7z::BitFormat::Vhd;
+	else if (ext == ".pe") return &bit7z::BitFormat::Pe;
+	else if (ext == ".elf") return &bit7z::BitFormat::Elf;
+	else if (ext == ".macho") return &bit7z::BitFormat::Macho;
+	else if (ext == ".udf") return &bit7z::BitFormat::Udf;
+	else if (ext == ".xar") return &bit7z::BitFormat::Xar;
+	else if (ext == ".mub") return &bit7z::BitFormat::Mub;
+	else if (ext == ".hfs") return &bit7z::BitFormat::Hfs;
+	else if (ext == ".dmg") return &bit7z::BitFormat::Dmg;
+	else if (ext == ".compound") return &bit7z::BitFormat::Compound;
+	else if (ext == ".iso") return &bit7z::BitFormat::Iso;
+	else if (ext == ".chm") return &bit7z::BitFormat::Chm;
+	else if (ext == ".split") return &bit7z::BitFormat::Split;
+	else if (ext == ".rpm") return &bit7z::BitFormat::Rpm;
+	else if (ext == ".deb") return &bit7z::BitFormat::Deb;
+	else if (ext == ".cpio") return &bit7z::BitFormat::Cpio;
+	else return nullptr;  // 如果没有匹配的格式，返回 nullptr
+}
+const bit7z::BitInOutFormat* Bit7zWrapper::GetInOutformat(const std::string& ext) {
+	if (ext == ".zip") return &bit7z::BitFormat::Zip;
+	else if (ext == ".bz2") return &bit7z::BitFormat::BZip2;
+	else if (ext == ".7z") return &bit7z::BitFormat::SevenZip;
+	else if (ext == ".xz") return &bit7z::BitFormat::Xz;
+	else if (ext == ".wim") return &bit7z::BitFormat::Wim;
+	else if (ext == ".tar") return &bit7z::BitFormat::Tar;
+	else if (ext == ".gz") return &bit7z::BitFormat::GZip;
+	else return nullptr;  // 如果没有匹配的格式，返回 nullptr
+}
 bool Bit7zWrapper::Extract(std::string file, std::string outfile, const bit7z::BitInOutFormat& format, std::string password = "") {
 	try {
 		bit7z::BitFileExtractor extractor{ lib, format };
@@ -75,64 +136,4 @@ int x = reader->size();
 
 //下面根据后缀名推导 BitInFormat BitInOutFormat 未完成
 //extern const BitInFormat Auto;
-//#endif
-//extern const BitInFormat Rar;       ///< RAR Archive Format
-//extern const BitInFormat Arj;       ///< ARJ Archive Format
-////NOLINTNEXTLINE(*-identifier-length)
-//extern const BitInFormat Z;         ///< Z Archive Format
-//extern const BitInFormat Lzh;       ///< LZH Archive Format
-//extern const BitInFormat Cab;       ///< CAB Archive Format
-//extern const BitInFormat Nsis;      ///< NSIS Archive Format
-//extern const BitInFormat Lzma;      ///< LZMA Archive Format
-//extern const BitInFormat Lzma86;    ///< LZMA86 Archive Format
-//extern const BitInFormat Ppmd;      ///< PPMD Archive Format
-//extern const BitInFormat Vhdx;      ///< VHDX Archive Format
-//extern const BitInFormat COFF;      ///< COFF Archive Format
-//extern const BitInFormat Ext;       ///< EXT Archive Format
-//extern const BitInFormat VMDK;      ///< VMDK Archive Format
-//extern const BitInFormat VDI;       ///< VDI Archive Format
-//extern const BitInFormat QCow;      ///< QCOW Archive Format
-//extern const BitInFormat GPT;       ///< GPT Archive Format
-//extern const BitInFormat Rar5;      ///< RAR5 Archive Format
-//extern const BitInFormat IHex;      ///< IHEX Archive Format
-//extern const BitInFormat Hxs;       ///< HXS Archive Format
-////NOLINTNEXTLINE(*-identifier-length)
-//extern const BitInFormat TE;        ///< TE Archive Format
-//extern const BitInFormat UEFIc;     ///< UEFIc Archive Format
-//extern const BitInFormat UEFIs;     ///< UEFIs Archive Format
-//extern const BitInFormat SquashFS;  ///< SquashFS Archive Format
-//extern const BitInFormat CramFS;    ///< CramFS Archive Format
-//extern const BitInFormat APM;       ///< APM Archive Format
-//extern const BitInFormat Mslz;      ///< MSLZ Archive Format
-//extern const BitInFormat Flv;       ///< FLV Archive Format
-//extern const BitInFormat Swf;       ///< SWF Archive Format
-//extern const BitInFormat Swfc;      ///< SWFC Archive Format
-//extern const BitInFormat Ntfs;      ///< NTFS Archive Format
-//extern const BitInFormat Fat;       ///< FAT Archive Format
-//extern const BitInFormat Mbr;       ///< MBR Archive Format
-//extern const BitInFormat Vhd;       ///< VHD Archive Format
-////NOLINTNEXTLINE(*-identifier-length)
-//extern const BitInFormat Pe;        ///< PE Archive Format
-//extern const BitInFormat Elf;       ///< ELF Archive Format
-//extern const BitInFormat Macho;     ///< MACHO Archive Format
-//extern const BitInFormat Udf;       ///< UDF Archive Format
-//extern const BitInFormat Xar;       ///< XAR Archive Format
-//extern const BitInFormat Mub;       ///< MUB Archive Format
-//extern const BitInFormat Hfs;       ///< HFS Archive Format
-//extern const BitInFormat Dmg;       ///< DMG Archive Format
-//extern const BitInFormat Compound;  ///< COMPOUND Archive Format
-//extern const BitInFormat Iso;       ///< ISO Archive Format
-//extern const BitInFormat Chm;       ///< CHM Archive Format
-//extern const BitInFormat Split;     ///< SPLIT Archive Format
-//extern const BitInFormat Rpm;       ///< RPM Archive Format
-//extern const BitInFormat Deb;       ///< DEB Archive Format
-//extern const BitInFormat Cpio;      ///< CPIO Archive Format
 //
-//extern const BitInOutFormat Zip;        ///< ZIP Archive Format
-//extern const BitInOutFormat BZip2;      ///< BZIP2 Archive Format
-//extern const BitInOutFormat SevenZip;   ///< 7Z Archive Format
-////NOLINTNEXTLINE(*-identifier-length)
-//extern const BitInOutFormat Xz;         ///< XZ Archive Format
-//extern const BitInOutFormat Wim;        ///< WIM Archive Format
-//extern const BitInOutFormat Tar;        ///< TAR Archive Format
-//extern const BitInOutFormat GZip;       ///< GZIP Archive Format

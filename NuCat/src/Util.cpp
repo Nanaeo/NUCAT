@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iomanip>
 #include <format>
+#include <algorithm>
 // 工具类
 bool CompareWchatText(const std::wstring& text1, const std::wstring& text2)
 {
@@ -144,4 +145,18 @@ bool ProgramIsAdmin() {
 		FreeSid(AdministratorsGroup);
 	}
 	return isAdmin;
+}
+std::string getExtensionLowercase(const std::string& filepath) {
+	std::size_t pos = filepath.rfind('.');
+	if (pos == std::string::npos) return "";
+	std::string extension = filepath.substr(pos);
+	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+	return extension;
+}
+std::wstring getExtensionLowercase(const std::wstring& filepath) {
+	std::size_t pos = filepath.rfind(L'.');
+	if (pos == std::wstring::npos) return L"";
+	std::wstring extension = filepath.substr(pos);
+	std::transform(extension.begin(), extension.end(), extension.begin(), ::towlower);
+	return extension;
 }
