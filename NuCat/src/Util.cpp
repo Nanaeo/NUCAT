@@ -26,12 +26,6 @@ std::wstring GetCurrentPath()
 	GetModuleFileNameW(nullptr, appPath, ARRAYSIZE(appPath));
 	return ResolvePathAndTrimFile(appPath);
 }
-std::wstring GetResourceEntry() {
-	std::wstring path = GetCurrentPath();
-	std::wstring file = L"Resource\\index.html";
-	std::wstring full_path = L"file:\\\\\\" + path + L"\\" + file;
-	return full_path;
-}
 std::wstring GetResourcePath(LPCWSTR _path) {
 	std::wstring path = GetCurrentPath();
 	std::wstring file = _path;
@@ -224,4 +218,11 @@ std::string escape_sequence_to_utf8WithoutAscii(const std::string& str) {
 		}
 	}
 	return oss.str();
+}
+// 废弃函数具有歧义
+std::wstring GetResourceEntry() {
+	std::wstring path = GetCurrentPath();
+	std::wstring file = L"Resource\\index.html";
+	std::wstring full_path = L"file:\\\\\\" + path + L"\\" + file;
+	return full_path;
 }

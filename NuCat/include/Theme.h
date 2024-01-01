@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <vector>
 #include <string>
+// 写成类还是命名空间还是有待考虑
 class Theme {
 public:
 	Theme();

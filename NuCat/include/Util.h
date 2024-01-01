@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <Windows.h>
-std::wstring GetResourceEntry();
 std::wstring GetCurrentPath();
 std::wstring ResolvePathAndTrimFile(std::wstring path);
 std::wstring GetResourcePath(LPCWSTR _path);
