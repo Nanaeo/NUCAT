@@ -21,3 +21,5 @@ std::wstring getExtensionLowercase(const std::wstring& filepath);
 std::string getExtensionLowercase(const std::string& filepath);
 std::string utf8_to_escape_sequence(const std::string& utf8_str);
 std::string escape_sequence_to_utf8(const std::string& escape_sequence);
+std::string utf8_to_escape_sequenceWithoutAscii(const std::string& utf8_str);
+std::string escape_sequence_to_utf8WithoutAscii(const std::string& escape_sequence);

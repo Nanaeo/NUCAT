@@ -190,3 +190,38 @@ std::string escape_sequence_to_utf8(const std::string& escape_sequence) {
 	delete[] str;
 	return result;
 }
+std::string utf8_to_escape_sequenceWithoutAscii(const std::string& utf8_str) {
+	int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, NULL, 0);
+	wchar_t* wstr = new wchar_t[wlen];
+	MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, wstr, wlen);
+	std::ostringstream oss;
+	for (int i = 0; i < wlen; ++i) {
+		if (wstr[i] >= 0 && wstr[i] <= 127) { // ASCII范围
+			oss << static_cast<char>(wstr[i]);
+		}
+		else {
+			oss << "\\u" << std::setfill('0') << std::setw(4) << std::hex << static_cast<int>(wstr[i]);
+		}
+	}
+	delete[] wstr;
+	return oss.str();
+}
+std::string escape_sequence_to_utf8WithoutAscii(const std::string& str) {
+	std::ostringstream oss;
+	for (size_t i = 0; i < str.size(); ++i) {
+		if (str[i] == '\\' && i + 1 < str.size() && str[i + 1] == 'u') {
+			std::string hex = str.substr(i + 2, 4);
+			int unicode;
+			std::istringstream(hex) >> std::hex >> unicode;
+			wchar_t wstr[] = { static_cast<wchar_t>(unicode), 0 };
+			char utf8[5] = { 0 };
+			WideCharToMultiByte(CP_UTF8, 0, wstr, -1, utf8, sizeof(utf8), NULL, NULL);
+			oss << utf8;
+			i += 5; // 跳过已处理的字符
+		}
+		else {
+			oss << str[i];
+		}
+	}
+	return oss.str();
+}
