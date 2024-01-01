@@ -13,11 +13,9 @@ void WindowBoot(std::string PageEntry) {
 	SetWindowLongPtrW(hwnd, GWL_STYLE, WS_POPUP | WS_THICKFRAME);
 	SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 	//SetWindowPos(hwnd, NULL, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
-
-	//设置到全局变量上
+	//WebviewObject.init("alert(\"test\")");
 	WebviewObject.navigate(PageEntry);
-
-
+	//WebviewObject.eval("alert(\"test\")");
 	// 绑定函数之后封装
 	// 绑定退出函数
 	WebviewObject.bind("exit", [&](const std::string&) -> std::string {
@@ -57,12 +55,14 @@ void EventHandler::Run(std::string action, std::string argv, int argc)
 	Theme ThemeMange;
 	if (action.compare("") == 0 && argc == 0) {
 		// 无参数正常启动 进入主页
-		ThemeMange.ListThemePathW();
 		std::string ThemeEntry = (char*)"file:\\\\\\" + ThemeMange.GetThemeEntry("default");
 		WindowBoot(ThemeEntry);
 	}
 	if (argc == 1 && action.compare("") != 0) {
 		//拖动打开文件 直接进入解压页面
+		MessageBoxW(NULL, Utf8ToUtf16(argv).c_str(), L"", NULL);
+		std::string ThemeEntry = (char*)"file:\\\\\\" + ThemeMange.GetThemeEntry("default") + "#action=demo&path=" + argv;
+		WindowBoot(ThemeEntry);
 
 	}
 	// 其它带有命令行操作 包括命令行程序回传命令

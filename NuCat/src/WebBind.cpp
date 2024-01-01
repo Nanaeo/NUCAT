@@ -1,5 +1,6 @@
 #include "include/WebBind.h"
 #include "include/yyjson.h"
+#include "include/Util.h"
 
 std::string WebBind::Vstring2Json(const std::vector<std::string>& data)
 {
@@ -34,4 +35,9 @@ std::string WebBind::Vstring2Json(const std::vector<std::string>& data)
 	yyjson_mut_doc_free(doc);
 	free(json_text);
 	return result;
+}
+std::string WebBind::String2Json(std::string _data) {
+	// 需要去除"干扰
+	std::string _ret = (char*)u8"{\"data\":\"" + _data + (char*)u8"\"}";
+	return  _ret;
 }
