@@ -4,7 +4,6 @@
 
 std::string WebBind::Vstring2Json(const std::vector<std::string>& data)
 {
-
 	yyjson_mut_doc* doc = yyjson_mut_doc_new(NULL);
 	if (!doc) return "";
 	yyjson_mut_val* arr = yyjson_mut_arr(doc);

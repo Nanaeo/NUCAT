@@ -53,6 +53,7 @@ void EventHandler::Run(std::string action, std::string argv, int argc)
 	argv.pop_back();   // 去除判断干扰
 
 	Theme ThemeMange;
+	auto InfoTheme = ThemeMange.GetInfoString("default");
 	if (action.compare("") == 0 && argc == 0) {
 		// 无参数正常启动 进入主页
 		std::string ThemeEntry = (char*)"file:\\\\\\" + ThemeMange.GetThemeEntry("default");

@@ -1,11 +1,13 @@
 // 管理主题
 #include "include/DirectoryReader.h"
+#include "include/FileOperator.h"
 #include "include/Util.h"
 #include "include/Theme.h"
 //#include "include/Log.h" 不要在内部使用日志 外面用
 #include <vector>
 #include <algorithm>
 #include <string>
+
 
 Theme::Theme()
 {
@@ -49,17 +51,17 @@ std::string Theme::LanguageGetAll(std::string ThemeName)
 {
 	return std::string("");
 }
-std::string Theme::GetInfo(std::string ThemeName)
+std::string Theme::GetInfoString(std::string ThemeName)
 {
 	std::wstring ThemeNameU16 = Utf8ToUtf16(ThemeName);
 	ThemeNameU16.pop_back();//去掉\0
 	std::wstring Local_PathU16 = L"\\Resource\\Theme\\" + ThemeNameU16 + L"\\package.json";
 	std::wstring Default_Path16 = L"\\Resource\\Theme\\default\\package.json";
-
 	std::wstring Local_Full_PathU16 = GetResourcePath(Local_PathU16.c_str());
 	std::wstring Default_Full_PathU16 = GetResourcePath(Default_Path16.c_str());
-
 	std::wstring Real_Full_PathU16 = (FileExists(Local_Full_PathU16.c_str()) ? Local_Full_PathU16.c_str() : Default_Full_PathU16.c_str());
-
-	return std::string("");
+	FileOperator ThemeFileOperator(Real_Full_PathU16.c_str());
+	std::string retFileData;
+	ThemeFileOperator.read(retFileData);
+	return retFileData;
 }
