@@ -1,12 +1,13 @@
 #include "include/ThemeLang.h"
+#include <include/FileOperator.h>
 ThemeLang::ThemeLang(std::string ThemeName, std::string LocalName)
 {
 	std::wstring LocalNameU16 = Utf8ToUtf16(LocalName);
 	LocalNameU16.pop_back();//去掉\0
 	std::wstring ThemeNameU16 = Utf8ToUtf16(ThemeName);
 	ThemeNameU16.pop_back();//去掉\0
-	std::wstring Local_PathU16 = L"\\Resource\\Theme\\"+ ThemeNameU16 +"Language\\" + LocalNameU16 + L".json";
-	std::wstring Default_Path16 = L"\\Resource\\Theme\\" + ThemeNameU16 + "Language\\zh-CN.json";;
+	std::wstring Local_PathU16 = L"\\Resource\\Theme\\"+ ThemeNameU16 + L"Language\\" + LocalNameU16 + L".json";
+	std::wstring Default_Path16 = L"\\Resource\\Theme\\" + ThemeNameU16 + L"Language\\zh-CN.json";;
 
 	std::wstring Local_Full_PathU16 = GetResourcePath(Local_PathU16.c_str());
 	std::wstring Default_Full_PathU16 = GetResourcePath(Default_Path16.c_str());
@@ -27,7 +28,7 @@ ThemeLang::~ThemeLang()
 
 std::string ThemeLang::LanguageGet(std::string key)
 {
-	yyjson_val* Val = yyjson_obj_get(LanguageJson, key);
+	yyjson_val* Val = yyjson_obj_get(LanguageJson, key.c_str());
 	if (Val == nullptr) {
 		std::string ErrorText((const char*)u8"Not Load Language TEXT");
 		return ErrorText;
