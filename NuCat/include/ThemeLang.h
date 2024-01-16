@@ -1,3 +1,7 @@
+#pragma once
+#include <Windows.h>
+#include <string>
+#include "include/yyjson.h"
 class ThemeLang
 {
 public:

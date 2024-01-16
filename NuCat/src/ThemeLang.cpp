@@ -1,3 +1,4 @@
+#include "include/Theme.h"
 ThemeLang::ThemeLang(std::string ThemeName, std::string LocalName)
 {
 	std::wstring LocalNameU16 = Utf8ToUtf16(LocalName);
