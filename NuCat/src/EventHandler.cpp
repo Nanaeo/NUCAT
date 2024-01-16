@@ -52,17 +52,17 @@ void EventHandler::Run(std::string action, std::string argv, int argc)
 	action.pop_back(); // 去除判断干扰
 	argv.pop_back();   // 去除判断干扰
 
-	Theme ThemeMange;
-	auto InfoTheme = ThemeMange.GetInfoString("default");
+	Theme ThemeMange("default");
+	auto InfoTheme = ThemeMange.GetInfoString();
 	if (action.compare("") == 0 && argc == 0) {
 		// 无参数正常启动 进入主页
-		std::string ThemeEntry = (char*)"file:\\\\\\" + ThemeMange.GetThemeEntry("default");
+		std::string ThemeEntry = (char*)"file:\\\\\\" + Theme::GetThemeEntry("default");
 		WindowBoot(ThemeEntry);
 	}
 	if (argc == 1 && action.compare("") != 0) {
 		//拖动打开文件 直接进入解压页面
 		MessageBoxW(NULL, Utf8ToUtf16(argv).c_str(), L"", NULL);
-		std::string ThemeEntry = (char*)"file:\\\\\\" + ThemeMange.GetThemeEntry("default") + "#action=demo&path=" + argv;
+		std::string ThemeEntry = (char*)"file:\\\\\\" + Theme::GetThemeEntry("default") + "#action=demo&path=" + argv;
 		WindowBoot(ThemeEntry);
 
 	}

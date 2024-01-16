@@ -2,17 +2,23 @@
 #include <Windows.h>
 #include <vector>
 #include <string>
+#include "yyjson.h"
 // 写成类还是命名空间还是有待考虑
 class Theme {
 public:
-	Theme();
+	Theme(std::string ThemeName);
 	~Theme();
-	std::string GetInfoString(std::string ThemeName);
-	std::string GetThemeEntry(std::string ThemeName);
-	std::vector<std::string> ListThemePathU8();
-	std::vector<std::wstring> ListThemePathW(); 
-	std::string LanguageGetAll(std::string ThemeName);
-	std::string LanguageGet(std::string ThemeName,std::string key);
+	std::string GetInfoString();
+	std::string SDKGetVersion();
+	std::string SDKGetValue(std::string Key);
+	std::string LanguageGetAll();
+	std::string LanguageGet(std::string key);
+	static std::string GetThemeEntry(std::string ThemeName);
+	static std::vector<std::string> ListThemePathU8();
+	static std::vector<std::wstring> ListThemePathW();
 private:
-	DirectoryReader ThemeDictoryReader;
+	std::string _ThemeName;
+	std::string retFileData;
+	yyjson_val* ThemeJson;
+	yyjson_doc* ThemeJsonRoot;
 };
