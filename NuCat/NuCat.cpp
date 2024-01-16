@@ -9,8 +9,10 @@
 #include "include/EventHandler.h"
 #include "include/DirectoryReader.h"
 #include "include/Bit7zWrapper.h"
+#include "include/ThemeLang.h"
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
+	ThemeLang Test("default", "zh-CN");
 	//Bit7zWrapper::Extract((char*)u8"F:\\CPPDEV\\测试.zip", (char *)u8"F:\\CPPDEV\\测试\\", bit7z::BitFormat::Zip, "");
    // Version::Init();
    // 初始化版本信息
