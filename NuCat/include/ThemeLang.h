@@ -7,8 +7,8 @@ class ThemeLang
 public:
 	ThemeLang(std::string ThemeName,std::string LocalName);
 	~ThemeLang();
-	std::string ThemeLang::LanguageGet(std::string key);
-	std::string ThemeLang::LanguageGetAll();
+	std::string LanguageGet(std::string key);
+	std::string LanguageGetAll();
 
 private:
 	yyjson_val* LanguageJson;
