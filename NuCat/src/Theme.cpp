@@ -7,7 +7,6 @@
 #include <vector>
 #include <algorithm>
 #include <string>
-#include <include/yyjson.h>
 
 
 Theme::Theme(std::string ThemeName)
@@ -28,13 +27,14 @@ Theme::Theme(std::string ThemeName)
 
 Theme::~Theme()
 {
+	//暂时还没写回收资源
 }
 
 std::vector<std::wstring> Theme::ListThemePathW()
 {
 	DirectoryReader ThemeDictoryReader;
 	std::vector<std::wstring> ThemeList = ThemeDictoryReader.getDirectoriesList(GetResourcePath(L"\\Resource\\Theme"));
-	// ThemeList.erase(ThemeList.begin(), ThemeList.begin() + 2); 擦除不断 性能消耗大 不如新建拷贝
+	// ThemeList.erase(ThemeList.begin(), ThemeList.begin() + 2); 擦除不了 且性能消耗大 不如新建拷贝
 	std::vector<std::wstring> RealThemeList(0);
 	if (ThemeList.size() <= 2) return RealThemeList;
 	//RealThemeList.resize(ThemeList.size() - 2);
@@ -51,31 +51,31 @@ std::vector<std::string> Theme::ListThemePathU8() {
 		ThemeListU8.push_back(Utf16ToUtf8(TempElement));
 	}
 	return ThemeListU8;
+}					
+		
+std::string Theme::GetValueStr(const char* key, const char* errorText = nullptr)
+{
+	yyjson_val* Val = yyjson_obj_get(ThemeJson, key);
+	if (Val == nullptr) {
+		if (errorText == nullptr) return "";
+		return errorText;
+	}
+	return yyjson_get_str(Val);
 }
-
 std::string Theme::GetThemeEntry(std::string ThemeName)
 {
 	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + ThemeName + (char*)"\\index.html";
 	return GetResourcePathU8((char*)ThemeIndex.c_str());
 }
-// 未实现 以下为u8实现
-std::string Theme::LanguageGet(std::string key)
-{
-	return std::string("");
-}
-std::string Theme::LanguageGetAll()
-{
-	return std::string("");
-}
+
 std::string Theme::GetInfoString()
 {
 	return retFileData;
 }
+
 std::string Theme::SDKGetVersion()
 {
-	return std::string("");
-}
-std::string Theme::SDKGetValue(std::string Key)
-{
-	return std::string("");
+	std::string ProtoVersion = this->GetValueStr((char*)u8"ProtoVersion", (char*)u8"1.0.0");
+	if (ProtoVersion.compare("") == 0) return (char*)u8"1.0.0";
+	return ProtoVersion;
 }

@@ -10,13 +10,15 @@ public:
 	~Theme();
 	std::string GetInfoString();
 	std::string SDKGetVersion();
-	std::string SDKGetValue(std::string Key);
+	std::string GetValueStr(const char* key, const char* errorText);
 	std::string LanguageGetAll();
 	std::string LanguageGet(std::string key);
 	static std::string GetThemeEntry(std::string ThemeName);
 	static std::vector<std::string> ListThemePathU8();
 	static std::vector<std::wstring> ListThemePathW();
 private:
+	yyjson_val* ThemeLanguageJson;
+	yyjson_doc* ThemeLanguageJsonRoot;
 	std::string _ThemeName;
 	std::string retFileData;
 	yyjson_val* ThemeJson;
