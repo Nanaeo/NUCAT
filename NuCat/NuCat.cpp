@@ -1,21 +1,12 @@
-﻿#include <Windows.h>
-#include <chrono>
-#include "include/Log.h"
-#include "include/Version.h"
-#include "include/Language.h"
+﻿#include "include/Log.h"
+#include "include/LangFactory.h"
 #include "include/Settings.h"
 #include "include/Util.h"
 #include "include/Webview2Tool.h"
 #include "include/EventHandler.h"
-#include "include/DirectoryReader.h"
-#include "include/Bit7zWrapper.h"
-#include "include/ThemeLang.h"
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
-	ThemeLang Test("default", "zh-CN");
-	//Bit7zWrapper::Extract((char*)u8"F:\\CPPDEV\\测试.zip", (char *)u8"F:\\CPPDEV\\测试\\", bit7z::BitFormat::Zip, "");
-   // Version::Init();
-   // 初始化版本信息
+	// 初始化版本信息
 	Settings::Init();
 	// 初始化设置
 	std::string LangConfig = Settings::GetKeyStr("Language", "zh-CN");
@@ -25,11 +16,11 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	}
 	Log::SetLogLevel(std::stoi(Settings::GetKeyStr("LogLevel", "2")));
 	// 设置错误输出等级
-	Language::Init(LangConfig.c_str());
+	auto Lang = LangFactory::getInstance("System", LangFactory::GetMainFilePathW(LangConfig));
 	// 加载多语言
 	if (!WebViewIsInstall()) {
-		MessageBoxW(0, Language::TextW("WebView_NotInstall_Content").c_str(), Language::TextW("WebView_NotInstall_Tittle").c_str(), 0);
-		ShellExecuteW(NULL, L"open", Language::TextW("WebView_NotInstall_Downlod").c_str(), NULL, NULL, SW_SHOWNORMAL);
+		MessageBoxW(0, Lang->TextW("WebView_NotInstall_Content").c_str(), Lang->TextW("WebView_NotInstall_Tittle").c_str(), 0);
+		ShellExecuteW(NULL, L"open", Lang->TextW("WebView_NotInstall_Downlod").c_str(), NULL, NULL, SW_SHOWNORMAL);
 		return 0;
 	}
 	// 判断Webview2 Environment
@@ -43,5 +34,6 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 		argv = CommandLineToArgvW(lpCmdLine, &argc);
 	}
 	EventHandler::Run(Utf16ToUtf8(*argv), Utf16ToUtf8(lpCmdLine), argc);
+	// Bit7zWrapper::Extract((char*)u8"F:\\CPPDEV\\测试.zip", (char *)u8"F:\\CPPDEV\\测试\\", bit7z::BitFormat::Zip, "");
 	return 0;
 }

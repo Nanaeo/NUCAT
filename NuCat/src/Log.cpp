@@ -21,7 +21,6 @@ bool Log::Logging(std::string content, Level ErrorLevel)
 		return false;
 	}
 	std::wstring CurrentDate = Utf8ToUtf16(getCurrentDate().c_str());
-	CurrentDate.pop_back();
 	std::wstring path = L"\\Log\\" + CurrentDate + L".txt";
 	FileOperator LoggFile(GetResourcePath(path.c_str()).c_str());
 	std::string RealConten;

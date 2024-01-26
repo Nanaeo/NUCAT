@@ -1,11 +1,10 @@
 #include "include/ThemeLang.h"
 #include <include/FileOperator.h>
+
 ThemeLang::ThemeLang(std::string ThemeName, std::string LocalName)
 {
 	std::wstring LocalNameU16 = Utf8ToUtf16(LocalName);
-	LocalNameU16.pop_back();//去掉\0
 	std::wstring ThemeNameU16 = Utf8ToUtf16(ThemeName);
-	ThemeNameU16.pop_back();//去掉\0
 	std::wstring Local_PathU16 = L"\\Resource\\Theme\\"+ ThemeNameU16 + L"Language\\" + LocalNameU16 + L".json";
 	std::wstring Default_Path16 = L"\\Resource\\Theme\\" + ThemeNameU16 + L"Language\\zh-CN.json";;
 

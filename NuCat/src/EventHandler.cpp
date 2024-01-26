@@ -49,11 +49,10 @@ void WindowBoot(std::string PageEntry) {
 void EventHandler::Run(std::string action, std::string argv, int argc)
 {
 	//Log::Logging((char*)u8"",Log::LOG_DEBUG ); 日志测试
-	action.pop_back(); // 去除判断干扰
-	argv.pop_back();   // 去除判断干扰
 
 	Theme ThemeMange("default");
 	auto InfoTheme = ThemeMange.GetInfoString();
+	//action.pop_back();
 	if (action.compare("") == 0 && argc == 0) {
 		// 无参数正常启动 进入主页
 		std::string ThemeEntry = (char*)"file:\\\\\\" + Theme::GetThemeEntry("default");

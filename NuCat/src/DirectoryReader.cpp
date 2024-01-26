@@ -75,7 +75,6 @@ std::vector<std::string> DirectoryReader::ListPathU8(std::wstring _path) {
     std::vector<std::string> PathListU8;
     for (auto& TempElement : PathList) {
         auto test = Utf16ToUtf8(TempElement);
-        test.pop_back();
         PathListU8.push_back(test);
     }
     return PathListU8;
@@ -83,7 +82,6 @@ std::vector<std::string> DirectoryReader::ListPathU8(std::wstring _path) {
 
 std::vector<std::wstring> DirectoryReader::ListPathW(std::wstring _path)
 {
-    _path.pop_back();//转出来多了\0 这个问题大量存在
     std::vector<std::wstring> ThemeList = this->getDirectoriesList(_path);
     // ThemeList.erase(ThemeList.begin(), ThemeList.begin() + 2); 擦除不断 性能消耗大 不如新建拷贝
     std::vector<std::wstring> RealThemeList(0);

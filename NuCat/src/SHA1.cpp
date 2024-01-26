@@ -25,20 +25,16 @@ void SHA1::update(std::istream& is)
 
 std::string SHA1::final()
 {
-	// Add padding and total message length
 	uint64_t total_bits = transforms * 512 + buffer.size() * 8;
 	buffer.push_back(0x80);
 	while (buffer.size() < 56) {
 		buffer.push_back(0x00);
 	}
-
-	// Append total length in bits and transform
 	for (int i = 0; i < 8; i++) {
 		buffer.push_back(static_cast<unsigned char>((total_bits >> ((7 - i) * 8)) & 0xFF));
 	}
 	transform(buffer.data(), buffer.size());
 
-	// Convert to hex string
 	std::ostringstream result;
 	for (unsigned int i : digest) {
 		result << std::hex << std::uppercase;
@@ -65,7 +61,6 @@ void SHA1::transform(const uint8_t* data, size_t len)
 		return;
 	}
 
-	// Break chunk into sixteen 32-bit words
 	uint32_t block[80];
 	for (int i = 0; i < 16; i++) {
 		block[i] = (data[i * 4 + 0] << 24) |
@@ -74,19 +69,16 @@ void SHA1::transform(const uint8_t* data, size_t len)
 			(data[i * 4 + 3]);
 	}
 
-	// Extend the sixteen 32-bit words into eighty 32-bit words
 	for (int i = 16; i < 80; i++) {
 		block[i] = rotate_left(block[i - 3] ^ block[i - 8] ^ block[i - 14] ^ block[i - 16], 1);
 	}
 
-	// Initialize hash value for this chunk
 	uint32_t a = digest[0];
 	uint32_t b = digest[1];
 	uint32_t c = digest[2];
 	uint32_t d = digest[3];
 	uint32_t e = digest[4];
 
-	// Main loop
 	for (int i = 0; i < 80; i++) {
 		uint32_t f, k;
 		if (i < 20) {

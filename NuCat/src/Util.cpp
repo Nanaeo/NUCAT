@@ -50,21 +50,23 @@ std::string Utf16ToUtf8(const std::wstring& utf16) {
 	int length = WideCharToMultiByte(CP_UTF8, 0, utf16.c_str(), -1, NULL, 0, NULL, NULL);
 	std::string utf8(length, 0);
 	WideCharToMultiByte(CP_UTF8, 0, utf16.c_str(), -1, &utf8[0], length, NULL, NULL);
+	utf8.pop_back();
 	return utf8;
 }
 std::wstring Utf8ToUtf16(const std::string& utf8) {
 	int length = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), -1, NULL, 0);
 	std::wstring utf16(length, 0);
 	MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), -1, &utf16[0], length);
+	utf16.pop_back();
 	return utf16;
 }
+
 std::string GetConfigDefaultLocaleName() {
 	wchar_t localeName[LOCALE_NAME_MAX_LENGTH];
 	int result = GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH);
 	if (result > 0) {
 		std::wstring localeNameU16(localeName);
 		std::string localNameU8(Utf16ToUtf8(localeNameU16));
-		localNameU8.pop_back();
 		return (char *)(localNameU8.c_str());
 	}
 	else {

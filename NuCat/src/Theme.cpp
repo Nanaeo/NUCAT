@@ -13,7 +13,6 @@ Theme::Theme(std::string ThemeName)
 {
 	_ThemeName = ThemeName;
 	std::wstring ThemeNameU16 = Utf8ToUtf16(ThemeName);
-	ThemeNameU16.pop_back();//去掉\0
 	std::wstring Local_PathU16 = L"\\Resource\\Theme\\" + ThemeNameU16 + L"\\package.json";
 	std::wstring Default_Path16 = L"\\Resource\\Theme\\default\\package.json";
 	std::wstring Local_Full_PathU16 = GetResourcePath(Local_PathU16.c_str());

@@ -1,19 +1,15 @@
 #pragma once
 #include <iostream>
-#include <include/yyjson.h>
 #include <Windows.h>
-
-namespace Language
+#include "include/JsonReader.h"
+#include "include/Util.h"
+class Language :public JsonReader
 {
-	extern yyjson_val* LanguageJson;
-	extern yyjson_doc* LanguageJsonRoot;
-	void Init(std::string LocalName);
-	std::wstring TextW(const char* key);
-	std::string TextU8(const char* key);
-	std::string TextU8Theme(const char* key);
-	std::string TextWTheme(const char* key);
-	std::string TextU8ThemeAll();
-	std::string TextWThemeAll();
+public:
+	Language(const std::string& id, std::wstring langfile);
+	~Language();
+	const std::string& getId() const;
+	const std::wstring TextW(const std::string& Key, const std::string& ErrorValue = "Load Error");
+private:
+	std::string id_;
 };
-
-
