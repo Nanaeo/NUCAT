@@ -52,7 +52,7 @@ void EventHandler::Run(std::string action, std::string argv, int argc)
 	//Log::Logging((char*)u8"",Log::LOG_DEBUG ); 日志测试
 
 	Theme ThemeMange("default");
-	auto InfoTheme = ThemeMange.GetInfoString();
+	auto InfoTheme = ThemeMange.SDKGetVersion();
 	//action.pop_back();
 	if (action.compare("") == 0 && argc == 0) {
 		// 无参数正常启动 进入主页

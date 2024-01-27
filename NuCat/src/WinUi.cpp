@@ -103,7 +103,7 @@ HWND CreatWindowUI()
 	wc.lpszClassName = L"NuCat";
 	RegisterClass(&wc);
 
-	HWND hWnd=CreateWindowEx(0, L"NuCat", NULL,
+	HWND hWnd = CreateWindowEx(0, L"NuCat", NULL,
 		WS_VISIBLE | WS_THICKFRAME | WS_POPUP,
 		10, 10, 650, 340, NULL, NULL, hInstance, NULL);
 	return hWnd;
