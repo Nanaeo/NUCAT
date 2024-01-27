@@ -12,5 +12,5 @@ public:
 	~Settings();
 	static Settings* getInstance();
 private:
-	
+
 };

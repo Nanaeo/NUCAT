@@ -13,7 +13,8 @@ std::wstring  Settings::GetThemeW() {
 	std::wstring DefaultTheme = Utf8ToUtf16(Settings::GetThemeU8());
 	return DefaultTheme;
 }
-Settings::Settings() :JsonReader(L"\\Config\\Settings.json") {}
+
+Settings::Settings() :JsonReader(GetResourcePath(L"\\Config\\Settings.json")) {}
 
 Settings::~Settings()
 {
