@@ -12,10 +12,13 @@ public:
 	const std::string getStringValue(const std::string& Key, const std::string& ErrorValue = "Load Error");
 	bool setNumberValue(const std::string& Key, const int& Value);
 	const int getNumberValue(const std::string& Key, const int& ErrorValue = 0);
-	bool writeCacheToFile();//保持内存内容到文件
+	bool writeCacheToFile();
+	const std::string getJsonAll();
+	//保持内存内容到文件
 	~JsonReader();
 
 private:
+	std::string retFileData;
 	yyjson_val* JsonVal;
 	yyjson_doc* JsonRoot;
 };

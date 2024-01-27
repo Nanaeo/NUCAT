@@ -5,7 +5,6 @@
 #include <vector>
 #include <string>
 #include "yyjson.h"
-// 写成类还是命名空间还是有待考虑
 class Theme:public JsonReader
 {
 public:

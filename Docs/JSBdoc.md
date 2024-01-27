@@ -1,3 +1,6 @@
+# JS Bridge
+Webview与Nucat数据交换依赖于所谓的Js Bridge，将Js函数绑定到Nucat Native接口上，具体支持API如下
+
 # JavaScript调用规定
 
 - [ ] NuCatWindowClose          关闭当前窗口

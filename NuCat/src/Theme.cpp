@@ -11,15 +11,10 @@
 Theme::Theme(std::string ThemeName) :JsonReader(getFilePath(ThemeName))
 {
 	_ThemeName = ThemeName;
-	
-	
-}
 
-Theme::~Theme()
-{
-	//暂时还没写回收资源
-}
 
+}
+Theme::~Theme() {}
 std::vector<std::wstring> Theme::ListThemePathW()
 {
 	DirectoryReader ThemeDictoryReader;
@@ -33,7 +28,6 @@ std::vector<std::wstring> Theme::ListThemePathW()
 	}
 	return RealThemeList;
 }
-
 std::wstring Theme::getFilePath(std::string ThemeName)
 {
 	std::wstring ThemeNameU16 = Utf8ToUtf16(ThemeName);
@@ -44,7 +38,6 @@ std::wstring Theme::getFilePath(std::string ThemeName)
 	std::wstring Real_Full_PathU16 = (FileExists(Local_Full_PathU16.c_str()) ? Local_Full_PathU16.c_str() : Default_Full_PathU16.c_str());
 	return Real_Full_PathU16;
 }
-
 std::vector<std::string> Theme::ListThemePathU8() {
 	std::vector<std::wstring> ThemeList = Theme::ListThemePathW();
 	std::vector<std::string> ThemeListU8;
@@ -52,7 +45,7 @@ std::vector<std::string> Theme::ListThemePathU8() {
 		ThemeListU8.push_back(Utf16ToUtf8(TempElement));
 	}
 	return ThemeListU8;
-}					
+}
 std::string Theme::GetThemeEntry(std::string ThemeName)
 {
 	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + ThemeName + (char*)"\\index.html";
