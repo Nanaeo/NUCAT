@@ -1,5 +1,6 @@
 #include "include/EventHandler.h"
 #include "include/Log.h"
+#include "include/DirectoryReader.h"
 #include "include/Util.h"
 #include "include/Global.h"
 #include "include/Theme.h"
