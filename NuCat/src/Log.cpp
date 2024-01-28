@@ -1,6 +1,7 @@
 #include "include/Log.h"
 #include "include/Util.h"
 #include "include/FileOperator.h"
+#include "include/DirectoryReader.h"
 std::function<bool(std::string, Log::Level, std::string)> HandlerFunction = Log::DefaultHandler;
 
 int Log::CurrentLogLevel = 2; //WARN以上
@@ -10,6 +11,8 @@ void Log::SetLogLevel(int LogLevel)
 }
 void Log::DeleteAll() {
 	// 清除所有日志 直接清空整个日志目录
+	DirectoryReader Reader;
+	Reader.deleteAllFilesInDirectory(GetResourcePath(L"\\Log\\"));
 }
 void Log::SetOutHandler(std::function<bool(std::string, Log::Level, std::string)> callback) {
 	HandlerFunction = callback;

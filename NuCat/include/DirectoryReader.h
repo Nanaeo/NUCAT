@@ -9,7 +9,7 @@ private:
 
 public:
     DirectoryReader();
-
+    void deleteAllFilesInDirectory(const std::wstring& directoryPath);
     std::vector<std::wstring> getFilesList(const std::wstring& directoryPath);
     std::vector<std::wstring> getDirectoriesList(const std::wstring& directoryPath);
     DWORD getFileSize(const std::wstring& filePath);
