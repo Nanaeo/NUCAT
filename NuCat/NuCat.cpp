@@ -1,18 +1,20 @@
 ﻿#include "include/Log.h"
 #include "include/LangFactory.h"
+#include "include/Settings.h"
 #include "include/Util.h"
 #include "include/Webview2Tool.h"
 #include "include/EventHandler.h"
-#include "include/Settings.h"
+
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
-	auto SysSettings = Settings::getInstance();
+	// 初始化版本信息
+	Settings::Init();
 	// 初始化设置
-	std::string LangConfig = SysSettings->getStringValue("Language", "zh-CN");
+	std::string LangConfig = Settings::GetKeyStr("Language", "zh-CN");
 	if (LangConfig.compare("") == 0) {
 		LangConfig.clear();
 		LangConfig.append(GetConfigDefaultLocaleName());
 	}
-	Log::SetLogLevel(SysSettings->getNumberValue("LogLevel", 2));
+	Log::SetLogLevel(std::stoi(Settings::GetKeyStr("LogLevel", "2")));
 	// 设置错误输出等级
 	auto Lang = LangFactory::getInstance("System", LangFactory::GetMainFilePathW(LangConfig));
 	// 加载多语言

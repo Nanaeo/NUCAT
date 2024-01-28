@@ -2,7 +2,6 @@
 
 std::string mLastError = "";
 bit7z::Bit7zLibrary lib{ "7z.dll" };
-//这里没有验证环境可能导致程序缺少依赖而无法启动
 
 const bit7z::BitInFormat* Bit7zWrapper::GetInformat(const std::string& ext) {
 	if (ext == ".rar") return &bit7z::BitFormat::Rar;

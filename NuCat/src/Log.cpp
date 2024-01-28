@@ -1,17 +1,17 @@
 #include "include/Log.h"
 #include "include/Util.h"
 #include "include/FileOperator.h"
-//2024/01/27 等待重构部分
+
 int Log::CurrentLogLevel = 2; //WARN以上
 void Log::SetLogLevel(int LogLevel)
 {
 	Log::CurrentLogLevel = LogLevel;
 }
 void Log::DeleteAll() {
-	// 清除所有日志 直接清空整个日志目录
+	// 清除所有日志
 }
 void Log::SetOutHandler() {
-	// 设置日志拦截 通过注册函数 让文件out被修改 
+	// 设置日志拦截
 }
 bool Log::Logging(std::string content, Level ErrorLevel)
 {

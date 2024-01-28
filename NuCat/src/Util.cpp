@@ -221,3 +221,10 @@ std::string escape_sequence_to_utf8WithoutAscii(const std::string& str) {
 	}
 	return oss.str();
 }
+std::wstring GetResourceEntry() {
+	// 废弃函数具有歧义
+	std::wstring path = GetCurrentPath();
+	std::wstring file = L"Resource\\index.html";
+	std::wstring full_path = L"file:\\\\\\" + path + L"\\" + file;
+	return full_path;
+}

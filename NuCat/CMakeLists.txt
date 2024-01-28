@@ -25,7 +25,9 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(PLATFORM "x86")
 endif()
 link_libraries("${webview2_SOURCE_DIR}/build/native/${PLATFORM}/WebView2LoaderStatic.lib")
-
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     set(_BUILD_TYPE "Debug")
 elseif("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
@@ -37,10 +39,9 @@ endif()
 ###Release版本 link_libraries("${CMAKE_CURRENT_SOURCE_DIR}/bit7z/lib/x64/Release/bit7z.lib")
 FetchContent_Declare(
   bit7z
-  URL  https://ghproxy.org/https://github.com/rikyoz/bit7z/releases/download/v4.0.5/bit7z-v4.0.5-msvc2015_x64.7z
+  URL  https://github.com/rikyoz/bit7z/releases/download/v4.0.5/bit7z-v4.0.5-msvc2015_x64.7z
 )
 FetchContent_MakeAvailable(bit7z)
-
 include_directories("${bit7z_SOURCE_DIR}/include/")
 link_libraries("${bit7z_SOURCE_DIR}/lib/x64/${_BUILD_TYPE}/bit7z.lib")
 # 引入include

@@ -49,4 +49,3 @@ std::string WebBind::String2Json(std::string _data) {
 	std::string _ret = (char*)u8"{\"data\":\"" + _data_handle + (char*)u8"\"}";
 	return  _ret;
 }
-// 下面实现JSB部分
