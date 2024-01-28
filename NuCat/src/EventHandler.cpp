@@ -42,7 +42,8 @@ void WindowBoot(std::string PageEntry) {
 		// 调用本地方法 封装返回
 		return retJson;
 		});
-	// WebviewObject.init("document.body.parentNode.style.overflowX = 'hidden'; ");
+	
+	//WebviewObject.eval("alert('hidden'); ");
 	WebviewPtr->resize_widget2();
 	WebviewObject.run();
 
@@ -56,7 +57,7 @@ void EventHandler::Run(std::string action, std::string argv, int argc)
 	//action.pop_back();
 	if (action.compare("") == 0 && argc == 0) {
 		// 无参数正常启动 进入主页
-		std::string ThemeEntry = (char*)"file:\\\\\\" + Theme::GetThemeEntry("default");
+		std::string ThemeEntry = (char*)"file:\\\\\\" + Theme::GetThemeFile("default","Test.html");
 		WindowBoot(ThemeEntry);
 	}
 	if (argc == 1 && action.compare("") != 0) {

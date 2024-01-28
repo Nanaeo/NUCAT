@@ -5,6 +5,7 @@
 #include "include/EventHandler.h"
 #include "include/Settings.h"
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
+	// 预先需要检查7Z依赖情况
 	auto SysSettings = Settings::getInstance();
 	// 初始化设置
 	std::string LangConfig = SysSettings->getStringValue("Language", "zh-CN");
