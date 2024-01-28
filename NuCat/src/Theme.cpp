@@ -3,32 +3,18 @@
 #include "include/FileOperator.h"
 #include "include/Util.h"
 #include "include/Theme.h"
-//#include "include/Log.h" 不要在内部使用日志 外面用
 #include <vector>
 #include <algorithm>
 #include <string>
 
 
-Theme::Theme(std::string ThemeName)
+Theme::Theme(std::string ThemeName) :JsonReader(getFilePath(ThemeName))
 {
 	_ThemeName = ThemeName;
-	std::wstring ThemeNameU16 = Utf8ToUtf16(ThemeName);
-	std::wstring Local_PathU16 = L"\\Resource\\Theme\\" + ThemeNameU16 + L"\\package.json";
-	std::wstring Default_Path16 = L"\\Resource\\Theme\\default\\package.json";
-	std::wstring Local_Full_PathU16 = GetResourcePath(Local_PathU16.c_str());
-	std::wstring Default_Full_PathU16 = GetResourcePath(Default_Path16.c_str());
-	std::wstring Real_Full_PathU16 = (FileExists(Local_Full_PathU16.c_str()) ? Local_Full_PathU16.c_str() : Default_Full_PathU16.c_str());
-	FileOperator ThemeFileOperator(Real_Full_PathU16.c_str());
-	ThemeFileOperator.read(retFileData);
-	ThemeJsonRoot = yyjson_read(retFileData.c_str(), retFileData.length(), 0);
-	ThemeJson = yyjson_doc_get_root(ThemeJsonRoot);
-}
 
-Theme::~Theme()
-{
-	//暂时还没写回收资源
-}
 
+}
+Theme::~Theme() {}
 std::vector<std::wstring> Theme::ListThemePathW()
 {
 	DirectoryReader ThemeDictoryReader;
@@ -42,7 +28,16 @@ std::vector<std::wstring> Theme::ListThemePathW()
 	}
 	return RealThemeList;
 }
-
+std::wstring Theme::getFilePath(std::string ThemeName)
+{
+	std::wstring ThemeNameU16 = Utf8ToUtf16(ThemeName);
+	std::wstring Local_PathU16 = L"\\Resource\\Theme\\" + ThemeNameU16 + L"\\package.json";
+	std::wstring Default_Path16 = L"\\Resource\\Theme\\default\\package.json";
+	std::wstring Local_Full_PathU16 = GetResourcePath(Local_PathU16.c_str());
+	std::wstring Default_Full_PathU16 = GetResourcePath(Default_Path16.c_str());
+	std::wstring Real_Full_PathU16 = (FileExists(Local_Full_PathU16.c_str()) ? Local_Full_PathU16.c_str() : Default_Full_PathU16.c_str());
+	return Real_Full_PathU16;
+}
 std::vector<std::string> Theme::ListThemePathU8() {
 	std::vector<std::wstring> ThemeList = Theme::ListThemePathW();
 	std::vector<std::string> ThemeListU8;
@@ -50,31 +45,15 @@ std::vector<std::string> Theme::ListThemePathU8() {
 		ThemeListU8.push_back(Utf16ToUtf8(TempElement));
 	}
 	return ThemeListU8;
-}					
-		
-std::string Theme::GetValueStr(const char* key, const char* errorText = nullptr)
-{
-	yyjson_val* Val = yyjson_obj_get(ThemeJson, key);
-	if (Val == nullptr) {
-		if (errorText == nullptr) return "";
-		return errorText;
-	}
-	return yyjson_get_str(Val);
 }
 std::string Theme::GetThemeEntry(std::string ThemeName)
 {
 	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + ThemeName + (char*)"\\index.html";
 	return GetResourcePathU8((char*)ThemeIndex.c_str());
 }
-
-std::string Theme::GetInfoString()
-{
-	return retFileData;
-}
-
 std::string Theme::SDKGetVersion()
 {
-	std::string ProtoVersion = this->GetValueStr((char*)u8"ProtoVersion", (char*)u8"1.0.0");
+	std::string ProtoVersion = getStringValue((char*)u8"ProtoVersion", (char*)u8"1.0.0");
 	if (ProtoVersion.compare("") == 0) return (char*)u8"1.0.0";
 	return ProtoVersion;
 }

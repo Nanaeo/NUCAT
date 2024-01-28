@@ -2,7 +2,6 @@
 
 JsonReader::JsonReader(const std::wstring& FileName):FileOperator(FileName)
 {
-	std::string retFileData;
 	read(retFileData);
 	JsonRoot = yyjson_read(retFileData.c_str(), retFileData.length(), 0);
 	JsonVal = yyjson_doc_get_root(JsonRoot);
@@ -31,6 +30,7 @@ bool JsonReader::setStringValue(const std::string& Key, const std::string& Value
 	yyjson_mut_set_str(mut_val, Value.c_str());
 	JsonRoot = yyjson_mut_doc_imut_copy(mut_doc, nullptr);
 	JsonVal = yyjson_doc_get_root(JsonRoot);
+	retFileData = yyjson_mut_write(mut_doc, YYJSON_WRITE_ESCAPE_UNICODE, NULL);
 	return true;
 }
 
@@ -48,6 +48,7 @@ bool JsonReader::setNumberValue(const std::string& Key, const int& Value)
 	yyjson_doc_free(JsonRoot);
 	JsonRoot = yyjson_mut_doc_imut_copy(mut_doc, nullptr);
 	JsonVal = yyjson_doc_get_root(JsonRoot);
+	retFileData = yyjson_mut_write(mut_doc, YYJSON_WRITE_ESCAPE_UNICODE, NULL);
 	return true;
 }
 
@@ -71,6 +72,11 @@ bool JsonReader::writeCacheToFile()
 	bool result = write(content);
 	free(json_str); // Don't forget to free the memory!
 	return result;
+}
+
+const std::string JsonReader::getJsonAll() {
+	//实际上需要处理中文编码情况 与写入后未刷新情况 当前仅仅演示
+	return retFileData;
 }
 
 JsonReader::~JsonReader()
