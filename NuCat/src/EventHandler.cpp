@@ -5,6 +5,7 @@
 #include "include/Global.h"
 #include "include/Theme.h"
 #include "include/WebBind.h"
+#include "include/ThemeFactory.h"
 
 webview::webview WebviewObject(true, nullptr);
 HWND hwnd = (HWND)WebviewObject.window();
@@ -33,16 +34,23 @@ void WindowBoot(std::string PageEntry) {
 		});
 	// 绑定文件操作api
 	WebviewObject.bind("NuCatListDirectory", [&](const std::string& req) -> std::string {
-		DirectoryReader ListDictoryReader;
 		std::string _Path = webview::detail::json_parse(req, "", 0);
-		std::vector<std::string> ListPathData = ListDictoryReader.ListPathU8(Theme::GetThemeFile("default",_Path));
+		std::vector<std::string> ListPathData = DirectoryReader::ListPathU8(Theme::GetThemeFile("default",_Path));
 		std::string  retJson = WebBind::Vstring2Json(ListPathData);
 		// Log::Logging(_Path,Log::LOG_ERROR); 测试完成u8编码
 		// 获取文件路径
 		// 调用本地方法 封装返回
 		return retJson;
 		});
-	
+	WebviewObject.bind("NuCatListFile", [&](const std::string& req) -> std::string {
+		std::string _Path = webview::detail::json_parse(req, "", 0);
+		std::vector<std::string> ListPathData = DirectoryReader::ListFileU8(Theme::GetThemeFile("default", _Path));
+		std::string  retJson = WebBind::Vstring2Json(ListPathData);
+		// Log::Logging(_Path,Log::LOG_ERROR); 测试完成u8编码
+		// 获取文件路径
+		// 调用本地方法 封装返回
+		return retJson;
+		});
 	WebviewPtr->resize_widget2();
 	WebviewObject.run();
 

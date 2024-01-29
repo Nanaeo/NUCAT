@@ -2,6 +2,20 @@
 #include "include/Util.h"
 
 DirectoryReader::DirectoryReader() : errorCode(ERROR_SUCCESS) {}
+std::vector<std::string> DirectoryReader::ListFileU8(std::wstring _path) {
+	std::vector<std::wstring> FileList = DirectoryReader::getFilesList(_path);
+	std::vector<std::string> FileListU8;
+	for (auto& TempElement : FileList) {
+		auto test = Utf16ToUtf8(TempElement);
+		FileListU8.push_back(test);
+	}
+	return FileListU8;
+}
+std::vector<std::string> DirectoryReader::ListFileU8(std::string _path)
+{
+	std::wstring pathW = Utf8ToUtf16(_path);
+	return DirectoryReader::ListFileU8(pathW);
+}
 
 void DirectoryReader::deleteAllFilesInDirectory(const std::wstring& directoryPath)
 {
@@ -33,7 +47,6 @@ std::vector<std::wstring> DirectoryReader::getFilesList(const std::wstring& dire
 	WIN32_FIND_DATAW findData;
 	HANDLE hFind = FindFirstFileW((directoryPath + L"\\*").c_str(), &findData);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		errorCode = GetLastError();
 		return files;
 	}
 	do {
@@ -50,7 +63,6 @@ std::vector<std::wstring> DirectoryReader::getDirectoriesList(const std::wstring
 	WIN32_FIND_DATAW findData;
 	HANDLE hFind = FindFirstFileW((directoryPath + L"\\*").c_str(), &findData);
 	if (hFind == INVALID_HANDLE_VALUE) {
-		errorCode = GetLastError();
 		return directories;
 	}
 	do {
@@ -65,7 +77,6 @@ std::vector<std::wstring> DirectoryReader::getDirectoriesList(const std::wstring
 DWORD DirectoryReader::getFileSize(const std::wstring& filePath) {
 	WIN32_FILE_ATTRIBUTE_DATA fileData;
 	if (!GetFileAttributesExW(filePath.c_str(), GetFileExInfoStandard, &fileData)) {
-		errorCode = GetLastError();
 		return 0;
 	}
 	LARGE_INTEGER size;
@@ -78,25 +89,20 @@ DWORD DirectoryReader::getFileSize(const std::wstring& filePath) {
 FILETIME DirectoryReader::getFileCreationTime(const std::wstring& filePath) {
 	WIN32_FILE_ATTRIBUTE_DATA fileData;
 	if (!GetFileAttributesExW(filePath.c_str(), GetFileExInfoStandard, &fileData)) {
-		errorCode = GetLastError();
 		FILETIME ft = { 0, 0 };
 		return ft;
 	}
 	return fileData.ftCreationTime;
 }
 
-DWORD DirectoryReader::GetObjectError() {
-	return errorCode;
-}
-
 std::vector<std::string> DirectoryReader::ListPathU8(std::string _path)
 {
 	std::wstring pathW = Utf8ToUtf16(_path);
-	return this->ListPathU8(pathW);
+	return DirectoryReader::ListPathU8(pathW);
 }
 
 std::vector<std::string> DirectoryReader::ListPathU8(std::wstring _path) {
-	std::vector<std::wstring> PathList = this->ListPathW(_path);
+	std::vector<std::wstring> PathList = DirectoryReader::ListPathW(_path);
 	std::vector<std::string> PathListU8;
 	for (auto& TempElement : PathList) {
 		auto test = Utf16ToUtf8(TempElement);
@@ -107,7 +113,7 @@ std::vector<std::string> DirectoryReader::ListPathU8(std::wstring _path) {
 
 std::vector<std::wstring> DirectoryReader::ListPathW(std::wstring _path)
 {
-	std::vector<std::wstring> ThemeList = this->getDirectoriesList(_path);
+	std::vector<std::wstring> ThemeList = DirectoryReader::getDirectoriesList(_path);
 	// ThemeList.erase(ThemeList.begin(), ThemeList.begin() + 2); 擦除不了 性能消耗大 不如新建拷贝
 	std::vector<std::wstring> RealThemeList(0);
 	if (ThemeList.size() <= 2) return RealThemeList;
