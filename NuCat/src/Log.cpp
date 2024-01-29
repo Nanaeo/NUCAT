@@ -51,3 +51,8 @@ bool Log::DefaultHandler(std::string Content, Level ErrorLevel, std::string LogL
 	LoggFile.append(RealConten.c_str());
 	return true;
 }
+// 用于阻止日志
+bool Log::BlankHandler(std::string Content, Level ErrorLevel, std::string LogLevelStr)
+{
+	return true;
+}

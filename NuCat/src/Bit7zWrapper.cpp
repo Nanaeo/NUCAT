@@ -122,7 +122,6 @@ bool Bit7zWrapper::CommpressDirectory(std::string path, bit7z::BitInOutFormat& f
 	}
 	return true;
 }
-
 std::string Bit7zWrapper::GetErrorInfo() {
 	return mLastError;
 }

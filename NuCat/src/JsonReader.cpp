@@ -1,6 +1,6 @@
 #include "include/JsonReader.h"
 
-JsonReader::JsonReader(const std::wstring& FileName):FileOperator(FileName)
+JsonReader::JsonReader(const std::wstring& FileName) :FileOperator(FileName)
 {
 	read(retFileData);
 	JsonRoot = yyjson_read(retFileData.c_str(), retFileData.length(), 0);
@@ -44,7 +44,7 @@ bool JsonReader::setNumberValue(const std::string& Key, const int& Value)
 	if (mut_val == nullptr) {
 		return false;
 	}
-	yyjson_mut_set_int(mut_val,Value);
+	yyjson_mut_set_int(mut_val, Value);
 	yyjson_doc_free(JsonRoot);
 	JsonRoot = yyjson_mut_doc_imut_copy(mut_doc, nullptr);
 	JsonVal = yyjson_doc_get_root(JsonRoot);
@@ -52,7 +52,7 @@ bool JsonReader::setNumberValue(const std::string& Key, const int& Value)
 	return true;
 }
 
-const int JsonReader::getNumberValue(const std::string& Key,const int& ErrorValue)
+const int JsonReader::getNumberValue(const std::string& Key, const int& ErrorValue)
 {
 	yyjson_val* Val = yyjson_obj_get(JsonVal, Key.c_str());
 	if (Val == nullptr) {
@@ -75,8 +75,9 @@ bool JsonReader::writeCacheToFile()
 }
 
 const std::string JsonReader::getJsonAll() {
-	//实际上需要处理中文编码情况 与写入后未刷新情况 当前仅仅演示
-	return retFileData;
+	yyjson_mut_doc* mut_doc = yyjson_doc_mut_copy(JsonRoot, nullptr);
+	char* json_text = yyjson_mut_write(mut_doc, YYJSON_WRITE_ESCAPE_UNICODE, NULL);//重新编码unicode字符
+	return json_text;
 }
 
 JsonReader::~JsonReader()

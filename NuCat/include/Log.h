@@ -12,4 +12,5 @@ namespace Log {
 	void SetOutHandler(std::function<bool(std::string, Log::Level, std::string)> callback);
 	bool Logging(std::string content, Level ErrorLevel);
 	bool DefaultHandler(std::string content, Level ErrorLevel, std::string LogLevelStr);
+	bool BlankHandler(std::string Content, Level ErrorLevel, std::string LogLevelStr);
 }
