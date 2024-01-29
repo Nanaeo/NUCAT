@@ -19,11 +19,11 @@ void WindowBoot(std::string PageEntry) {
 	//WebviewObject.eval("alert(\"test\")");
 	// 绑定函数之后封装
 	// 绑定退出函数
-	WebviewObject.bind("exit", [&](const std::string&) -> std::string {
+	WebviewObject.bind("NuCatExit", [&](const std::string&) -> std::string {
 		exit(0);
 		return "{}";
 		});
-	WebviewObject.bind("moveWindow", [&](const std::string&) -> std::string {
+	WebviewObject.bind("NuCatMoveWindow", [&](const std::string&) -> std::string {
 		SendMessageW(hwnd, WM_SYSCOMMAND, SC_MOVE, 0);
 		// SendMessageW(hwnd, WM_SYSCOMMAND, SC_MOVE|HTCAPTION, 0);
 		// SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(pt.x, pt.y));
@@ -35,7 +35,7 @@ void WindowBoot(std::string PageEntry) {
 	WebviewObject.bind("NuCatListDirectory", [&](const std::string& req) -> std::string {
 		DirectoryReader ListDictoryReader;
 		std::string _Path = webview::detail::json_parse(req, "", 0);
-		std::vector<std::string> ListPathData = ListDictoryReader.ListPathU8(_Path);
+		std::vector<std::string> ListPathData = ListDictoryReader.ListPathU8(Theme::GetThemeFile("default",_Path));
 		std::string  retJson = WebBind::Vstring2Json(ListPathData);
 		// Log::Logging(_Path,Log::LOG_ERROR); 测试完成u8编码
 		// 获取文件路径
@@ -43,7 +43,6 @@ void WindowBoot(std::string PageEntry) {
 		return retJson;
 		});
 	
-	//WebviewObject.eval("alert('hidden'); ");
 	WebviewPtr->resize_widget2();
 	WebviewObject.run();
 

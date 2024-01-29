@@ -37,7 +37,6 @@ std::string WebBind::Vstring2Json(const std::vector<std::string>& data)
 }
 std::string WebBind::String2Json(const std::string& data) {
 	std::string _data = data;
-	// 去除"干扰
 	std::string toReplace = "\"";
 	std::string replaceWith = "\\\"";
 	size_t pos = 0;
@@ -45,7 +44,6 @@ std::string WebBind::String2Json(const std::string& data) {
 		_data.replace(pos, toReplace.length(), replaceWith);
 		pos += replaceWith.length();
 	}
-	// 处理中文以及Unicode代码
 	std::string _data_handle = utf8_to_escape_sequenceWithoutAscii(_data);
 	std::string _ret = (char*)u8"{\"data\":\"" + _data_handle + (char*)u8"\"}";
 	return  _ret;

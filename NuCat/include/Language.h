@@ -11,5 +11,5 @@ public:
 	const std::string& getId() const;
 	const std::wstring TextW(const std::string& Key, const std::string& ErrorValue = "Load Error");
 private:
-	std::string id_;
+	std::string _id;
 };

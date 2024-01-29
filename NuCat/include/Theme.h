@@ -12,6 +12,7 @@ public:
 	Theme(std::string ThemeName);
 	~Theme();
 	std::string SDKGetVersion();
+	const std::string& getId() const;
 	static std::string GetThemeEntry(std::string ThemeName);
 	static std::string GetThemeFile(std::string ThemeName, std::string FilePath);
 	static std::vector<std::string> ListThemePathU8();

@@ -108,7 +108,7 @@ std::vector<std::string> DirectoryReader::ListPathU8(std::wstring _path) {
 std::vector<std::wstring> DirectoryReader::ListPathW(std::wstring _path)
 {
 	std::vector<std::wstring> ThemeList = this->getDirectoriesList(_path);
-	// ThemeList.erase(ThemeList.begin(), ThemeList.begin() + 2); 擦除不断 性能消耗大 不如新建拷贝
+	// ThemeList.erase(ThemeList.begin(), ThemeList.begin() + 2); 擦除不了 性能消耗大 不如新建拷贝
 	std::vector<std::wstring> RealThemeList(0);
 	if (ThemeList.size() <= 2) return RealThemeList;
 	//RealThemeList.resize(ThemeList.size() - 2);

@@ -53,7 +53,7 @@ std::string Theme::GetThemeEntry(std::string ThemeName)
 }
 std::string Theme::GetThemeFile(std::string ThemeName, std::string FilePath)
 {
-	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + ThemeName + (char*)"\\"+FilePath;
+	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + ThemeName + (char*)"\\" + FilePath;
 	return GetResourcePathU8((char*)ThemeIndex.c_str());
 }
 std::string Theme::SDKGetVersion()
@@ -61,4 +61,8 @@ std::string Theme::SDKGetVersion()
 	std::string ProtoVersion = getStringValue((char*)u8"ProtoVersion", (char*)u8"1.0.0");
 	if (ProtoVersion.compare("") == 0) return (char*)u8"1.0.0";
 	return ProtoVersion;
+}
+const std::string& Theme::getId() const
+{
+	return _ThemeName;
 }
