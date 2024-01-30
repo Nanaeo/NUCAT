@@ -5,7 +5,6 @@
 
 class DirectoryReader {
 private:
-	DWORD errorCode;
 
 public:
 	DirectoryReader();

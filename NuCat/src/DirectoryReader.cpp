@@ -1,7 +1,7 @@
 #include "include/DirectoryReader.h"
 #include "include/Util.h"
 
-DirectoryReader::DirectoryReader() : errorCode(ERROR_SUCCESS) {}
+DirectoryReader::DirectoryReader() {}
 std::vector<std::string> DirectoryReader::ListFileU8(std::wstring _path) {
 	std::vector<std::wstring> FileList = DirectoryReader::getFilesList(_path);
 	std::vector<std::string> FileListU8;
