@@ -7,6 +7,7 @@
 #include "include/WebBind.h"
 #include "include/ThemeFactory.h"
 #include "include/LangFactory.h"
+#include <include/Bit7zWrapper.h>
 webview::webview WebviewObject(true, nullptr);
 HWND hwnd = (HWND)WebviewObject.window();
 webview::webview* WebviewPtr = &WebviewObject;
@@ -53,13 +54,23 @@ void WindowBoot(std::string PageEntry) {
 		});
 	// helper api
 	// bit7z api
+	WebviewObject.bind("NuCat7ZAutoExtract", [&](const std::string& req) -> std::string {
+		std::string File = webview::detail::json_parse(req, "", 0);
+		std::string OutPath = webview::detail::json_parse(req, "", 1);
+		std::string Password = webview::detail::json_parse(req, "", 2);
+
+		Bit7zWrapper::Extract(File, OutPath, Bit7zWrapper::GetInformatE(getExtensionLowercaseU8(File)), Password);
+		// WEBBIND待完善
+		return "{}";
+		});
+
 	WebviewPtr->resize_widget2();
 	WebviewObject.run();
 
 }
 void EventHandler::Run(std::string action, std::string argv, int argc)
 {
-	//Log::Logging((char*)u8"",Log::LOG_DEBUG ); 日志测试
+	// Log::Logging((char*)u8"",Log::LOG_DEBUG ); 日志测试
 	RunTimeInfo["CurrentTheme"] = "default";
 	Theme ThemeMange(RunTimeInfo["CurrentTheme"]);
 	auto InfoTheme = ThemeMange.SDKGetVersion();

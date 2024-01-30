@@ -67,7 +67,7 @@ std::string GetConfigDefaultLocaleName() {
 	if (result > 0) {
 		std::wstring localeNameU16(localeName);
 		std::string localNameU8(Utf16ToUtf8(localeNameU16));
-		return (char *)(localNameU8.c_str());
+		return (char*)(localNameU8.c_str());
 	}
 	else {
 		return "zh-CN";
@@ -111,7 +111,7 @@ std::string getCurrentTimestamp() {
 
 	return std::format("{}", millis);
 }
-std::string GetResourcePathU8(char * _path) {
+std::string GetResourcePathU8(char* _path) {
 	std::wstring path = GetCurrentPath();
 	std::wstring file = Utf8ToUtf16(_path);
 	std::wstring full_path = path + file;
@@ -142,13 +142,6 @@ bool ProgramIsAdmin() {
 	}
 	return isAdmin;
 }
-std::string getExtensionLowercase(const std::string& filepath) {
-	std::size_t pos = filepath.rfind('.');
-	if (pos == std::string::npos) return "";
-	std::string extension = filepath.substr(pos);
-	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
-	return extension;
-}
 std::wstring getExtensionLowercase(const std::wstring& filepath) {
 	std::size_t pos = filepath.rfind(L'.');
 	if (pos == std::wstring::npos) return L"";
@@ -156,6 +149,15 @@ std::wstring getExtensionLowercase(const std::wstring& filepath) {
 	std::transform(extension.begin(), extension.end(), extension.begin(), ::towlower);
 	return extension;
 }
+std::string getExtensionLowercaseU8(const std::string& filepath) {
+	std::size_t pos = filepath.rfind('.');
+	if (pos == std::string::npos) return "";
+	std::string extension = filepath.substr(pos);
+	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+	return extension;
+}
+
+
 std::string utf8_to_escape_sequence(const std::string& utf8_str) {
 	int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, NULL, 0);
 	wchar_t* wstr = new wchar_t[wlen];
