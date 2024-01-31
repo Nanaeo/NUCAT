@@ -70,14 +70,15 @@ bool JsonReader::writeCacheToFile()
 	}
 	std::string content(json_str, len);
 	bool result = write(content);
-	free(json_str); // Don't forget to free the memory!
+	delete json_str;
 	return result;
 }
 
 const std::string JsonReader::getJsonAll() {
 	yyjson_mut_doc* mut_doc = yyjson_doc_mut_copy(JsonRoot, nullptr);
-	char* json_text = yyjson_mut_write(mut_doc, YYJSON_WRITE_ESCAPE_UNICODE, NULL);//重新编码unicode字符
-	return json_text;
+	char* json_text = yyjson_mut_write(mut_doc, YYJSON_WRITE_ESCAPE_UNICODE, NULL);// 重新编码unicode字符
+	std::unique_ptr<char[]> json_text_ptr(json_text);
+	return std::string(json_text_ptr.get());
 }
 
 JsonReader::~JsonReader()
