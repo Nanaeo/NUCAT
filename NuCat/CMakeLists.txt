@@ -1,7 +1,6 @@
 ﻿message("-----------------NUCAT_START---------------")
-
+add_definitions("-DBIT7Z_AUTO_FORMAT")
 #### webview2 dependencies start
-
 # Microsoft.Windows.ImplementationLibrary 
 # The Windows Implementation Libra) were created to improve productivity and solve problems commonly seen by Windows developers. by: Microsoft WindowsImplementationLibraryTeam
 include(FetchContent)
@@ -36,21 +35,10 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
 #### webview2 dependencies end
-###bit7z
-###Release版本 link_libraries("${CMAKE_CURRENT_SOURCE_DIR}/bit7z/lib/x64/Release/bit7z.lib")
-FetchContent_Declare(
-  bit7z
-  URL  https://ghproxy.org/https://github.com/rikyoz/bit7z/releases/download/v4.0.5/bit7z-v4.0.5-msvc2015_x64.7z
-)
-FetchContent_MakeAvailable(bit7z)
-
-include_directories("${bit7z_SOURCE_DIR}/include/")
-link_libraries("${bit7z_SOURCE_DIR}/lib/x64/${_BUILD_TYPE}/bit7z.lib")
 # 引入include
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
 # 编译全部代码
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 add_executable (NuCat WIN32 ${SOURCES} "src/yyjson.c" "NuCat.cpp")
-
+target_link_libraries(NuCat PRIVATE bit7z )
 message("-----------------NUCAT_END---------------")

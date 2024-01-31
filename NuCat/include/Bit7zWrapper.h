@@ -1,4 +1,3 @@
-#define BIT7Z_AUTO_FORMAT
 #include "bit7z/bit7z.hpp"
 #include <Windows.h>
 #include <memory>
@@ -15,4 +14,5 @@ namespace Bit7zWrapper
 	bool CommpressDirectory(std::string path, bit7z::BitInOutFormat& format, std::wstring outfile, std::string password);
 	bool GetArchiveInfo(std::string file, const bit7z::BitInFormat& format, std::shared_ptr<bit7z::BitArchiveReader>& retData);
 	std::string GetErrorInfo();
+	bool GetArchiveInfoWithIsEncrypted(std::string path, const bit7z::BitInFormat& format, std::shared_ptr<bit7z::BitArchiveReader>& retData, bool& isEncrypted, bool& isHeaderEncrypted);
 };

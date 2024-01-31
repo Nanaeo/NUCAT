@@ -5,6 +5,8 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 project ("NuCat")
+set(BIT7Z_AUTO_FORMAT true)
+# 设置编译标记
 # 设置 cpp标准同时 设置utf8
 set(CMAKE_CXX_STANDARD 23)
 # 设置W版API
@@ -13,13 +15,14 @@ if(MSVC)
 	add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 	add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 endif()
-
+add_subdirectory("Depend/bit7z")
 add_subdirectory ("NuCat")
 
 # 移动NUCAT主程序进去
 if(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/NuCat/NuCat.exe)
     file(COPY ${CMAKE_CURRENT_BINARY_DIR}/NuCat/NuCat.exe DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/out/Pack)
 endif()
+
 # 移动NUCAT资源文件进PACK
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/Other/" DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/out/Pack/)
 # 移动NUCAT资源文件进主程序 Debug目录

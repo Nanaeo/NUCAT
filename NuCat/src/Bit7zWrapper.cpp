@@ -191,7 +191,7 @@ bool Bit7zWrapper::GetArchiveInfo(std::string file, const bit7z::BitInFormat& fo
 bool Bit7zWrapper::CommpressDirectory(std::string path, bit7z::BitInOutFormat& format, std::wstring outfile, std::string password = "") {
 	try {
 		// BitFileCompressor( const Bit7zLibrary& lib, const BitInOutFormat& format );
-		bit7z::BitFileCompressor compressor{lib,format};
+		bit7z::BitFileCompressor compressor{ lib,format };
 		if (password.compare("") != 0) compressor.setPassword(password);
 		compressor.compressDirectory(path.c_str(), (const char*)outfile.c_str());
 	}
@@ -204,7 +204,18 @@ bool Bit7zWrapper::CommpressDirectory(std::string path, bit7z::BitInOutFormat& f
 std::string Bit7zWrapper::GetErrorInfo() {
 	return mLastError;
 }
-
+bool Bit7zWrapper::GetArchiveInfoWithIsEncrypted(std::string path, const bit7z::BitInFormat& format, std::shared_ptr<bit7z::BitArchiveReader>& retData, bool& isEncrypted, bool& isHeaderEncrypted) {
+	try {
+		retData = std::make_shared<bit7z::BitArchiveReader>(lib, path, format);
+		isEncrypted = retData->isEncrypted();
+		isHeaderEncrypted = retData->isHeaderEncrypted(lib, path, format);
+	}
+	catch (const bit7z::BitException& ex) {
+		mLastError = ex.what();
+		return false;
+	}
+	return true;
+}
 /* 解压与压缩测试
 Bit7zWrapper::Extract((char*)u8"F:\\CPPDEV\\测试.zip", (char *)u8"F:\\CPPDEV\\测试\\", bit7z::BitFormat::Zip, "");
 std::string filePath = (char*)u8"F:\\CPPDEV\\测试.zip";
