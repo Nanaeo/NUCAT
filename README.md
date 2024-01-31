@@ -40,6 +40,8 @@ NuCat 所有代码开源，其主要功能是7zGUI，同时保证上游代码开
 
 NuCat并未实现压缩与解压缩等等代码
 
+如果你需要部分代码例如7z.dll 请前往其开源仓库查找
+
 ## 感谢
 YYJSON/webview2/7ZIP/bit7z/webview/@xichanggumeng/@Simplxss 为本项目提供了可能
 
