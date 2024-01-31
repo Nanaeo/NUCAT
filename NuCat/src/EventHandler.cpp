@@ -52,6 +52,12 @@ void WindowBoot(std::string PageEntry) {
 		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(RunTimeInfo["CurrentTheme"], RunTimeInfo["CurrentLang"]));
 		return Lang->getJsonAll();
 		});
+	WebviewObject.bind("NuCatThemeLangGet", [&](const std::string& req) -> std::string {
+		std::string Key = webview::detail::json_parse(req, "", 0);
+		std::string GID = (char*)u8"Theme-" + RunTimeInfo["CurrentTheme"] + (char*)u8"-" + RunTimeInfo["CurrentLang"];
+		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(RunTimeInfo["CurrentTheme"], RunTimeInfo["CurrentLang"]));
+		return Lang->getStringValue(Key);
+		});
 	// helper api
 	// bit7z api
 	WebviewObject.bind("NuCat7ZAutoExtract", [&](const std::string& req) -> std::string {
