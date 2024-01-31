@@ -1,7 +1,7 @@
 <div align="center"><img src="https://gcore.jsdelivr.net/gh/MliKiowa/NUCAT/Other/Resource/icon-128.jpg"> </div>
 
 <div align="center"><h1>NUCAT</h1></div>
-
+<div align="center"><p>开源免费图形化压缩工具</p></div>
 NUCAT 是一个压缩软件，它可以帮助你压缩和解压缩文件。它支持多种文件格式，包括 ZIP、RAR、7Z 等。此外，它还具有以下特点：
 
 - **高速操作**：依赖 7ZIP 因此压缩和解压缩速度非常快。
