@@ -40,7 +40,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	case WM_SIZE: {
-		WebviewPtr->resize_widget2();
+		//WebviewPtr->resize_widget2();
 		break;
 	}
 	case WM_NCACTIVATE:
@@ -97,7 +97,7 @@ HWND CreatWindowUI()
 {
 	HINSTANCE hInstance = GetModuleHandle(nullptr);
 	WNDCLASS wc = {};
-	wc.lpfnWndProc = WindowProc;
+	//wc.lpfnWndProc = WindowProc;
 	wc.hInstance = hInstance;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.lpszClassName = L"NuCat";
