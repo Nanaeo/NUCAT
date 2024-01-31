@@ -9,6 +9,7 @@ public:
     static std::shared_ptr<Language> getInstance(const std::string& id, const std::wstring& langfile);
     static std::wstring GetMainFilePathW(std::string LocalName);
     static std::wstring GetThemeFilePathW(std::string ThemeName, std::string LocalName);
+    std::shared_ptr<Language> GetCurrentSysInstance();
 private:
     LangFactory() = default;
 

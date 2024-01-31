@@ -12,8 +12,6 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	auto SysSettings = Settings::getInstance();
 	// 初始化设置
 	std::string LangConfig = SysSettings->getStringValue("Language", "zh-CN");
-	
-	RunTimeInfo["CurrentLang"] = LangConfig;
 	if (LangConfig.compare("") == 0) {
 		LangConfig.clear();
 		LangConfig.append(GetConfigDefaultLocaleName());

@@ -22,11 +22,8 @@ void WindowBoot(std::string PageEntry) {
 }
 void EventHandler::Run(std::string action, std::string argv, int argc)
 {
-	// Log::Logging((char*)u8"",Log::LOG_DEBUG ); 日志测试
-	RunTimeInfo["CurrentTheme"] = "default";
-	Theme ThemeMange(RunTimeInfo["CurrentTheme"]);
-	auto InfoTheme = ThemeMange.SDKGetVersion();
-	//action.pop_back();
+	ThemeFactory::getInstance("default");//初始化
+	ThemeFactory::SetCurrentTheme("default");//设置标识
 	if (action.compare("") == 0 && argc == 0) {
 		// 无参数正常启动 进入主页
 		std::string ThemeEntry = (char*)"file:\\\\\\" + Theme::GetThemeFile("default", "Test.html");

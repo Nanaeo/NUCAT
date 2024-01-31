@@ -66,3 +66,12 @@ const std::string& Theme::getId() const
 {
 	return _ThemeName;
 }
+const std::string& Theme::GetCurrentLang() const
+{
+	return ThemeCurrentLang;
+}
+const bool Theme::SetCurrentLang(std::string ThemeLang)
+{
+	ThemeCurrentLang = ThemeLang;
+	return true;
+}

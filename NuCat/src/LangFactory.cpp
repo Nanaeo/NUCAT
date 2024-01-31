@@ -40,3 +40,13 @@ std::wstring LangFactory::GetThemeFilePathW(std::string ThemeName, std::string L
 	std::wstring Real_Full_PathU16 = (FileExists(Local_Full_PathU16.c_str()) ? Local_Full_PathU16.c_str() : Default_Full_PathU16.c_str());
 	return Real_Full_PathU16;
 }
+
+std::shared_ptr<Language> LangFactory::GetCurrentSysInstance() {
+	auto it = instances_.find("System");
+	if (it == instances_.end()) {
+		return nullptr;
+	}
+	else {
+		return it->second;
+	}
+}

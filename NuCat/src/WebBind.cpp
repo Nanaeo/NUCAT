@@ -4,8 +4,10 @@
 #include "include/Global.h"
 #include "include/DirectoryReader.h"
 #include "include/Theme.h"
+#include "include/ThemeFactory.h"
 #include "include/LangFactory.h"
 #include "include/Bit7zWrapper.h"
+#include "include/Settings.h"
 std::string WebBind::Vstring2Json(const std::vector<std::string>& data)
 {
 	yyjson_mut_doc* doc = yyjson_mut_doc_new(NULL);
@@ -68,13 +70,23 @@ std::string WebBind::Bool2Json(bool data) {
 }
 // 下面实现JSB部分 
 void WebBind::RegJsBridge() {
-	// window api
+	auto SysSettings = Settings::getInstance();
+	std::string LangConfig = SysSettings->getStringValue("Language", "zh-CN");
+	if (LangConfig.compare("") == 0) {
+		LangConfig.clear();
+		LangConfig.append(GetConfigDefaultLocaleName());
+	}
+	auto Lang = LangFactory::getInstance("System", LangFactory::GetMainFilePathW(LangConfig));
+	auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+	if (CurrentTheme != nullptr) {
+		CurrentTheme->SetCurrentLang(LangConfig);
+	}
 	WebviewObject.bind("NuCatExit", [&](const std::string&) -> std::string {
 		exit(0);
 		return "{}";
 		});
 	WebviewObject.bind("NuCatMoveWindow", [&](const std::string&) -> std::string {
-		SendMessageW(WebViewHwnd, WM_SYSCOMMAND, SC_MOVE, 0);
+		SendMessageW((HWND)WebviewObject.window(), WM_SYSCOMMAND, SC_MOVE, 0);
 		// SendMessageW(hwnd, WM_SYSCOMMAND, SC_MOVE|HTCAPTION, 0);
 		// SendMessage(hwnd, WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(pt.x, pt.y));
 		// 将就用吧反正找不到其它方案
@@ -84,13 +96,21 @@ void WebBind::RegJsBridge() {
 	// fs api
 	WebviewObject.bind("NuCatListDirectory", [&](const std::string& req) -> std::string {
 		std::string _Path = webview::detail::json_parse(req, "", 0);
-		std::vector<std::string> ListPathData = DirectoryReader::ListPathU8(Theme::GetThemeFile(RunTimeInfo["CurrentTheme"], _Path));
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		std::vector<std::string> ListPathData = DirectoryReader::ListPathU8(Theme::GetThemeFile(CurrentTheme->getId(), _Path));
 		std::string  retJson = WebBind::Vstring2Json(ListPathData);
 		return retJson;
 		});
 	WebviewObject.bind("NuCatListFile", [&](const std::string& req) -> std::string {
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
 		std::string _Path = webview::detail::json_parse(req, "", 0);
-		std::vector<std::string> ListPathData = DirectoryReader::ListFileU8(Theme::GetThemeFile(RunTimeInfo["CurrentTheme"], _Path));
+		std::vector<std::string> ListPathData = DirectoryReader::ListFileU8(Theme::GetThemeFile(CurrentTheme->getId(), _Path));
 		std::string  retJson = WebBind::Vstring2Json(ListPathData);
 		return retJson;
 		});
@@ -105,27 +125,39 @@ void WebBind::RegJsBridge() {
 		});
 	// language api
 	WebviewObject.bind("NuCatGetThemeLangAll", [&](const std::string& req) -> std::string {
-		std::string GID = (char*)u8"Theme-" + RunTimeInfo["CurrentTheme"] + (char*)u8"-" + RunTimeInfo["CurrentLang"];
-		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(RunTimeInfo["CurrentTheme"], RunTimeInfo["CurrentLang"]));
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		std::string ThemeLang = CurrentTheme->GetCurrentLang();
+		std::string GID = (char*)u8"Theme-" + CurrentTheme->getId() + (char*)u8"-" + ThemeLang;
+		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(CurrentTheme->getId(), ThemeLang));
 		return Lang->getJsonAll();
 		});
 	WebviewObject.bind("NuCatGetThemeLang", [&](const std::string& req) -> std::string {
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		std::string ThemeLang = CurrentTheme->GetCurrentLang();
 		std::string Key = webview::detail::json_parse(req, "", 0);
-		std::string GID = (char*)u8"Theme-" + RunTimeInfo["CurrentTheme"] + (char*)u8"-" + RunTimeInfo["CurrentLang"];
-		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(RunTimeInfo["CurrentTheme"], RunTimeInfo["CurrentLang"]));
+		std::string GID = (char*)u8"Theme-" + CurrentTheme->getId() + (char*)u8"-" + ThemeLang;
+		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(CurrentTheme->getId(), ThemeLang));
 		return Lang->getStringValue(Key);
 		});
 	WebviewObject.bind("NuCatGetOtherThemeLangAll", [&](const std::string& req) -> std::string {
 		std::string Theme = webview::detail::json_parse(req, "", 0);
-		std::string GID = (char*)u8"Theme-" + Theme + (char*)u8"-" + RunTimeInfo["CurrentLang"];
-		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(RunTimeInfo["CurrentTheme"], RunTimeInfo["CurrentLang"]));
+		std::string ThemeLang = webview::detail::json_parse(req, "", 1);
+		std::string GID = (char*)u8"Theme-" + Theme + (char*)u8"-" + ThemeLang;
+		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(Theme, ThemeLang));
 		return Lang->getJsonAll();
 		});
 	WebviewObject.bind("NuCatGetOtherThemeLang", [&](const std::string& req) -> std::string {
 		std::string Theme = webview::detail::json_parse(req, "", 0);
-		std::string Key = webview::detail::json_parse(req, "", 1);
-		std::string GID = (char*)u8"Theme-" + Theme + (char*)u8"-" + RunTimeInfo["CurrentLang"];
-		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(RunTimeInfo["CurrentTheme"], RunTimeInfo["CurrentLang"]));
+		std::string ThemeLang = webview::detail::json_parse(req, "", 1);
+		std::string Key = webview::detail::json_parse(req, "", 2);
+		std::string GID = (char*)u8"Theme-" + Theme + (char*)u8"-" + ThemeLang;
+		auto Lang = LangFactory::getInstance(GID, LangFactory::GetThemeFilePathW(Theme, ThemeLang));
 		return Lang->getStringValue(Key);
 		});
 	WebviewObject.bind("NuCatGetSysLang", [&](const std::string& req) -> std::string {

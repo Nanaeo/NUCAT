@@ -1,8 +1,8 @@
 #include "include/Bit7zWrapper.h"
-
+#pragma warning(disable:4101)
 std::string mLastError = "";
 bit7z::Bit7zLibrary lib{ "7z.dll" };
-//这里没有验证环境可能导致程序缺少依赖而无法启动
+//这里没有验证环境可能导致程序缺少依赖而无法启动 修好这个需要重构
 
 const bit7z::BitInFormat* Bit7zWrapper::GetInformat(const std::string& ext) {
 	using namespace bit7z::BitFormat;
@@ -151,7 +151,6 @@ bool Bit7zWrapper::Extract(std::string file, std::string outfile, const bit7z::B
 
 	}
 	catch (const bit7z::BitException& ex) {
-		mLastError = ex.what();
 		return false;
 	}
 	return true;
@@ -163,7 +162,6 @@ bool Bit7zWrapper::Extract(std::string file, std::string outfile, const bit7z::B
 
 	}
 	catch (const bit7z::BitException& ex) {
-		mLastError = ex.what();
 		return false;
 	}
 	return true;
@@ -173,7 +171,6 @@ bool Bit7zWrapper::GetArchiveInfo(std::string file, const bit7z::BitInOutFormat&
 		retData = std::make_shared<bit7z::BitArchiveReader>(lib, file.c_str(), format);
 	}
 	catch (const bit7z::BitException& ex) {
-		mLastError = ex.what();
 		return false;
 	}
 	return true;
@@ -183,7 +180,6 @@ bool Bit7zWrapper::GetArchiveInfo(std::string file, const bit7z::BitInFormat& fo
 		retData = std::make_shared<bit7z::BitArchiveReader>(lib, file.c_str(), format);
 	}
 	catch (const bit7z::BitException& ex) {
-		mLastError = ex.what();
 		return false;
 	}
 	return true;
@@ -196,13 +192,9 @@ bool Bit7zWrapper::CommpressDirectory(std::string path, bit7z::BitInOutFormat& f
 		compressor.compressDirectory(path.c_str(), (const char*)outfile.c_str());
 	}
 	catch (const bit7z::BitException& ex) {
-		mLastError = ex.what();
 		return false;
 	}
 	return true;
-}
-std::string Bit7zWrapper::GetErrorInfo() {
-	return mLastError;
 }
 bool Bit7zWrapper::GetArchiveInfoWithIsEncrypted(std::string path, const bit7z::BitInFormat& format, std::shared_ptr<bit7z::BitArchiveReader>& retData, bool& isEncrypted, bool& isHeaderEncrypted) {
 	try {
@@ -211,7 +203,6 @@ bool Bit7zWrapper::GetArchiveInfoWithIsEncrypted(std::string path, const bit7z::
 		isHeaderEncrypted = retData->isHeaderEncrypted(lib, path, format);
 	}
 	catch (const bit7z::BitException& ex) {
-		mLastError = ex.what();
 		return false;
 	}
 	return true;

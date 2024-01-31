@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include "yyjson.h"
-class Theme:public JsonReader
+class Theme :public JsonReader
 {
 public:
 	std::wstring getFilePath(std::string ThemeName);
@@ -13,6 +13,8 @@ public:
 	~Theme();
 	std::string SDKGetVersion();
 	const std::string& getId() const;
+	const std::string& GetCurrentLang() const;
+	const bool SetCurrentLang(std::string ThemeLang);
 	static std::string GetThemeEntry(std::string ThemeName);
 	static std::string GetThemeFile(std::string ThemeName, std::string FilePath);
 	static std::vector<std::string> ListThemePathU8();
@@ -20,4 +22,5 @@ public:
 private:
 	std::string _ThemeName;
 	std::string retFileData;
+	std::string ThemeCurrentLang = "";
 };
