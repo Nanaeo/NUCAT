@@ -52,4 +52,14 @@ std::string WebBind::Number2Json(int data) {
 	std::string _ret = (char*)u8"{\"data\":\"" + std::to_string(data) + (char*)u8"\"}";
 	return  _ret;
 }
+std::string WebBind::Bool2Json(bool data) {
+	std::string _ret;
+	if (data) {
+		_ret = (char*)u8"{\"data\":true}";
+	}
+	else {
+		_ret = (char*)u8"{\"data\":false}";
+	}
+	return  _ret;
+}
 // 下面实现JSB部分

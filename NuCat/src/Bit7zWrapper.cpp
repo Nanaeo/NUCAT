@@ -54,6 +54,13 @@ const bit7z::BitInFormat* Bit7zWrapper::GetInformat(const std::string& ext) {
 	else if (ext == ".rpm") return &Rpm;
 	else if (ext == ".deb") return &Deb;
 	else if (ext == ".cpio") return &Cpio;
+	else if (ext == ".zip") return &Zip;
+	else if (ext == ".bz2") return &BZip2;
+	else if (ext == ".7z") return &SevenZip;
+	else if (ext == ".xz") return &Xz;
+	else if (ext == ".wim") return &Wim;
+	else if (ext == ".tar") return &Tar;
+	else if (ext == ".gz") return &GZip;
 	else return nullptr;  // 如果没有匹配的格式，返回 nullptr
 }
 const bit7z::BitInOutFormat* Bit7zWrapper::GetInOutformat(const std::string& ext) {
@@ -128,6 +135,13 @@ const bit7z::BitInFormat& Bit7zWrapper::GetInformatE(const std::string& ext) {
 	else if (ext == ".rpm") return Rpm;
 	else if (ext == ".deb") return Deb;
 	else if (ext == ".cpio") return Cpio;
+	else if (ext == ".zip") return Zip;
+	else if (ext == ".bz2") return BZip2;
+	else if (ext == ".7z") return SevenZip;
+	else if (ext == ".xz") return Xz;
+	else if (ext == ".wim") return Wim;
+	else if (ext == ".tar") return Tar;
+	else if (ext == ".gz") return GZip;
 	else return Rar;  // 如果没有匹配的格式，返回 nullptr
 }
 bool Bit7zWrapper::Extract(std::string file, std::string outfile, const bit7z::BitInOutFormat& format, std::string password = "") {

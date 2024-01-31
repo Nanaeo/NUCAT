@@ -58,10 +58,8 @@ void WindowBoot(std::string PageEntry) {
 		std::string File = webview::detail::json_parse(req, "", 0);
 		std::string OutPath = webview::detail::json_parse(req, "", 1);
 		std::string Password = webview::detail::json_parse(req, "", 2);
-
-		Bit7zWrapper::Extract(File, OutPath, Bit7zWrapper::GetInformatE(getExtensionLowercaseU8(File)), Password);
-		// WEBBIND待完善
-		return "{}";
+		bool ret = Bit7zWrapper::Extract(File, OutPath, Bit7zWrapper::GetInformatE(getExtensionLowercaseU8(File)), Password);
+		return WebBind::Bool2Json(ret);
 		});
 
 	WebviewPtr->resize_widget2();
