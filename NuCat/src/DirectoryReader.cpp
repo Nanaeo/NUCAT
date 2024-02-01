@@ -2,124 +2,79 @@
 #include "include/Util.h"
 
 DirectoryReader::DirectoryReader() {}
-std::vector<std::string> DirectoryReader::ListFileU8(std::wstring _path) {
-	std::vector<std::wstring> FileList = DirectoryReader::getFilesList(_path);
+std::vector<std::string> DirectoryReader::GetListFileU8(const std::wstring& _path) {
 	std::vector<std::string> FileListU8;
-	for (auto& TempElement : FileList) {
-		auto test = Utf16ToUtf8(TempElement);
-		FileListU8.push_back(test);
+	for (const auto& entry : std::filesystem::directory_iterator(_path)) {
+		auto ret = entry.path().u8string();
+		FileListU8.push_back(std::string(ret.begin(), ret.end()));
 	}
 	return FileListU8;
 }
-std::vector<std::string> DirectoryReader::ListFileU8(std::string _path)
-{
+std::vector<std::string> DirectoryReader::GetListFileU8(const std::string& _path) {
 	std::wstring pathW = Utf8ToUtf16(_path);
-	return DirectoryReader::ListFileU8(pathW);
+	return DirectoryReader::GetListFileU8(pathW);
 }
-
-void DirectoryReader::deleteAllFilesInDirectory(const std::wstring& directoryPath)
-{
-	WIN32_FIND_DATAW findData;
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-	std::wstring filePath = directoryPath + L"\\*";
-	hFind = FindFirstFileW(filePath.c_str(), &findData);
-	if (hFind == INVALID_HANDLE_VALUE) {
-		return;
-	}
-	do {
-		if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			if (wcscmp(findData.cFileName, L".") != 0 && wcscmp(findData.cFileName, L"..") != 0) {
-				std::wstring subDirectoryPath = directoryPath + L"\\" + findData.cFileName;
-				deleteAllFilesInDirectory(subDirectoryPath);
-				RemoveDirectoryW(subDirectoryPath.c_str());
-			}
+void DirectoryReader::deleteAllFilesInDirectory(const std::wstring& directoryPath) {
+	for (const auto& entry : std::filesystem::recursive_directory_iterator(directoryPath)) {
+		if (entry.is_directory()) {
+			std::filesystem::remove_all(entry.path());
 		}
 		else {
-			std::wstring filePath = directoryPath + L"\\" + findData.cFileName;
-			DeleteFileW(filePath.c_str());
+			std::filesystem::remove(entry.path());
 		}
-	} while (FindNextFileW(hFind, &findData) != 0);
-	FindClose(hFind);
-}
-
-std::vector<std::wstring> DirectoryReader::getFilesList(const std::wstring& directoryPath) {
-	std::vector<std::wstring> files;
-	WIN32_FIND_DATAW findData;
-	HANDLE hFind = FindFirstFileW((directoryPath + L"\\*").c_str(), &findData);
-	if (hFind == INVALID_HANDLE_VALUE) {
-		return files;
 	}
-	do {
-		if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-			files.push_back(findData.cFileName);
+}
+std::vector<std::wstring> DirectoryReader::GetFilesList(const std::wstring& directoryPath) {
+	std::vector<std::wstring> files;
+	for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
+		if (entry.is_regular_file()) {
+			files.push_back(entry.path().wstring());
 		}
-	} while (FindNextFileW(hFind, &findData));
-	FindClose(hFind);
+	}
 	return files;
 }
 
-std::vector<std::wstring> DirectoryReader::getDirectoriesList(const std::wstring& directoryPath) {
+std::vector<std::wstring> DirectoryReader::GetDirectoriesList(const std::wstring& directoryPath) {
 	std::vector<std::wstring> directories;
-	WIN32_FIND_DATAW findData;
-	HANDLE hFind = FindFirstFileW((directoryPath + L"\\*").c_str(), &findData);
-	if (hFind == INVALID_HANDLE_VALUE) {
-		return directories;
-	}
-	do {
-		if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			directories.push_back(findData.cFileName);
+	for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
+		if (entry.is_directory()) {
+			directories.push_back(entry.path().wstring());
 		}
-	} while (FindNextFileW(hFind, &findData));
-	FindClose(hFind);
+	}
 	return directories;
 }
-
-DWORD DirectoryReader::getFileSize(const std::wstring& filePath) {
-	WIN32_FILE_ATTRIBUTE_DATA fileData;
-	if (!GetFileAttributesExW(filePath.c_str(), GetFileExInfoStandard, &fileData)) {
-		return 0;
-	}
-	LARGE_INTEGER size;
-	size.HighPart = fileData.nFileSizeHigh;
-	size.LowPart = fileData.nFileSizeLow;
-	//DWORD 一般超不出 超出了就是不合理的
-	return (DWORD)size.QuadPart;
+int DirectoryReader::GetFileSize(const std::wstring& filePath) {
+	return static_cast<int>(std::filesystem::file_size(filePath));
 }
 
-FILETIME DirectoryReader::getFileCreationTime(const std::wstring& filePath) {
-	WIN32_FILE_ATTRIBUTE_DATA fileData;
-	if (!GetFileAttributesExW(filePath.c_str(), GetFileExInfoStandard, &fileData)) {
-		FILETIME ft = { 0, 0 };
-		return ft;
-	}
-	return fileData.ftCreationTime;
+std::string DirectoryReader::GetFileCreationTime(const std::wstring& filePath) {
+	auto time = std::filesystem::last_write_time(filePath);
+	auto duration = time.time_since_epoch();
+	auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+	return std::to_string(seconds);
 }
 
-std::vector<std::string> DirectoryReader::ListPathU8(std::string _path)
-{
+
+std::vector<std::string> DirectoryReader::GetListPathU8(const std::string& _path) {
 	std::wstring pathW = Utf8ToUtf16(_path);
-	return DirectoryReader::ListPathU8(pathW);
+	return DirectoryReader::GetListPathU8(pathW);
 }
 
-std::vector<std::string> DirectoryReader::ListPathU8(std::wstring _path) {
-	std::vector<std::wstring> PathList = DirectoryReader::ListPathW(_path);
+std::vector<std::string> DirectoryReader::GetListPathU8(const std::wstring& _path) {
+	std::vector<std::wstring> PathList = DirectoryReader::GetListPathW(_path);
 	std::vector<std::string> PathListU8;
-	for (auto& TempElement : PathList) {
-		auto test = Utf16ToUtf8(TempElement);
-		PathListU8.push_back(test);
+	for (const auto& TempElement : PathList) {
+		PathListU8.push_back(Utf16ToUtf8(TempElement));
 	}
 	return PathListU8;
 }
 
-std::vector<std::wstring> DirectoryReader::ListPathW(std::wstring _path)
-{
-	std::vector<std::wstring> ThemeList = DirectoryReader::getDirectoriesList(_path);
-	// ThemeList.erase(ThemeList.begin(), ThemeList.begin() + 2); 擦除不了 性能消耗大 不如新建拷贝
-	std::vector<std::wstring> RealThemeList(0);
-	if (ThemeList.size() <= 2) return RealThemeList;
-	//RealThemeList.resize(ThemeList.size() - 2);
-	for (auto it = ThemeList.begin() + 2; it != ThemeList.end(); ++it) {
-		RealThemeList.push_back(*it);
+std::vector<std::wstring> DirectoryReader::GetListPathW(const std::wstring& _path) {
+	std::vector<std::wstring> RealThemeList;
+	for (const auto& entry : std::filesystem::directory_iterator(_path)) {
+		if (entry.is_directory()) {
+			RealThemeList.push_back(entry.path().wstring());
+		}
 	}
 	return RealThemeList;
 }
