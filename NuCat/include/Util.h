@@ -11,6 +11,7 @@ bool CompareWchatText(const std::wstring& text1, const std::wstring& text2);
 std::string GetConfigDefaultLocaleName();
 bool FileExists(const std::wstring& fileName);
 std::string getCurrentDate();
+std::string GetExecutableFilePath();
 std::string getCurrentTimestamp();
 std::string GetResourcePathU8(char* _path);
 std::string GetResourceU8(char* _file);

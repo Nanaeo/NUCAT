@@ -16,6 +16,13 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(PLATFORM "x86")
 endif()
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
+    add_definitions(-D _WIN_PLATFORM_)
+endif()
+
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
+    add_definitions(-D _LINUX_PLATFORM_)
+endif()
 link_libraries("${PROJECT_SOURCE_DIR}/Depend/webview2/build/native/${PLATFORM}/WebView2LoaderStatic.lib")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})

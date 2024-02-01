@@ -174,8 +174,22 @@ std::string getExtensionLowercaseU8(const std::string& filepath) {
 	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 	return extension;
 }
-
-
+std::string GetExecutableFilePath() {
+	std::string executable_name;
+#if defined(_WIN_PLATFORM_)
+	char path[MAX_PATH];
+	if (GetModuleFileNameA(NULL, path, MAX_PATH)) {
+		executable_name = path;
+	}
+#elif defined(_LINUX_PLATFORM_)
+	char path[PATH_MAX];
+	ssize_t count = readlink("/proc/self/exe", path, PATH_MAX);
+	if (count != -1) {
+		executable_name = std::string(path, count);
+	}
+#endif
+	return executable_name;
+}
 std::string utf8_to_escape_sequence(const std::string& utf8_str) {
 	int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, NULL, 0);
 	wchar_t* wstr = new wchar_t[wlen];
