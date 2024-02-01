@@ -81,6 +81,7 @@ void WebBind::RegJsBridge() {
 	if (CurrentTheme != nullptr) {
 		CurrentTheme->SetCurrentLang(LangConfig);
 	}
+	// win api
 	WebviewObject.bind("NuCatExit", [&](const std::string&) -> std::string {
 		exit(0);
 		return "{}";
@@ -115,6 +116,7 @@ void WebBind::RegJsBridge() {
 		return retJson;
 		});
 	WebviewObject.bind("NuCatReadThemeFile", [&](const std::string& req) -> std::string {
+
 		return "";
 		});
 	WebviewObject.bind("NuCatWriteThemeFile", [&](const std::string& req) -> std::string {

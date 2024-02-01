@@ -60,7 +60,25 @@ std::wstring Utf8ToUtf16(const std::string& utf8) {
 	utf16.pop_back();
 	return utf16;
 }
-
+std::string Base64EncodeU8(const std::string& inStr) {
+	const unsigned char* str = reinterpret_cast<const unsigned char*>(inStr.c_str());
+	const char* base64Table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	int len = static_cast<int> (inStr.length());
+	int pad = len % 3;
+	int base64Len = 4 * ((len + 2) / 3);
+	std::string strBase64(base64Len, '\0');
+	for (int i = 0, j = 0; i < len; i += 3, j += 4) {
+		strBase64[j] = base64Table[(str[i] >> 2)];
+		if (j + 3 > base64Len) {
+			//预先计算好了 这里是在忽略编译器报错
+			return std::string("");
+		}
+		strBase64[j + 1] = base64Table[(((str[i] & 0x3) << 4) | (i + 1 < len ? str[i + 1] >> 4 : 0))];
+		strBase64[j + 2] = (i + 1 < len) ? base64Table[(((str[i + 1] & 0xf) << 2) | (i + 2 < len ? str[i + 2] >> 6 : 0))] : '=';
+		strBase64[j + 3] = (i + 2 < len) ? base64Table[(str[i + 2] & 0x3f)] : '=';
+	}
+	return strBase64;
+}
 std::string GetConfigDefaultLocaleName() {
 	wchar_t localeName[LOCALE_NAME_MAX_LENGTH];
 	int result = GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH);

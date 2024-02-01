@@ -1,6 +1,13 @@
 ﻿message("-----------------NUCAT_START---------------")
 add_definitions("-DBIT7Z_AUTO_FORMAT")
+# Build Type
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    add_definitions(-D DEBUG)
+endif()
 
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+    add_definitions(-D RELEASE)
+endif()
 include_directories(SYSTEM "${PROJECT_SOURCE_DIR}/Depend/wil/include/")
 include_directories(SYSTEM "${PROJECT_SOURCE_DIR}/Depend/webview2/build/native/include/")
 
