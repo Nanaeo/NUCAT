@@ -174,19 +174,21 @@ std::string getExtensionLowercaseU8(const std::string& filepath) {
 	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 	return extension;
 }
-std::string GetExecutableFilePath() {
-	std::string executable_name;
+NativeString  GetExecutableFilePathE() {
 #if defined(_WIN_PLATFORM_)
-	char path[MAX_PATH];
-	if (GetModuleFileNameA(NULL, path, MAX_PATH)) {
+	std::wstring executable_name;
+	WCHAR path[MAX_PATH];
+	if (GetModuleFileNameW(NULL, path, MAX_PATH)) {
 		executable_name = path;
 	}
 #elif defined(_LINUX_PLATFORM_)
+	std::string executable_name;
 	char path[PATH_MAX];
 	ssize_t count = readlink("/proc/self/exe", path, PATH_MAX);
 	if (count != -1) {
 		executable_name = std::string(path, count);
 	}
+
 #endif
 	return executable_name;
 }

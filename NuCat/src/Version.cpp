@@ -13,6 +13,7 @@ std::string BuildType = "RELEASE";
 #endif
 auto GetVersionHash = []()->std::string {
 	SHA1 sha1;
+	//GetExecutableFilePath();
 	std::fstream file(GetExecutableFilePath(), std::ios::binary | std::ios::in);
 	if (!file) {
 		return "ErrorHash";
