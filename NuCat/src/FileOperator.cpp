@@ -68,3 +68,5 @@ bool FileOperator<std::wstring>::RemoveFile()
 	}
 	return true;
 }
+template class FileOperator<std::wstring>;
+template class FileOperator<std::string>;
