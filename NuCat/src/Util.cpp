@@ -174,7 +174,7 @@ std::string getExtensionLowercaseU8(const std::string& filepath) {
 	std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 	return extension;
 }
-NativeString  GetExecutableFilePathE() {
+NativeString  GetExecutableFilePath() {
 #if defined(_WIN_PLATFORM_)
 	std::wstring executable_name;
 	WCHAR path[MAX_PATH];

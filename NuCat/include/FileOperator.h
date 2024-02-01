@@ -13,4 +13,5 @@ public:
 private:
     T filePath;
 };
-
+template class FileOperator<std::wstring>;
+template class FileOperator<std::string>;

@@ -1,6 +1,7 @@
 #include "include/FileOperator.h"
 #include <fstream>
 #include <string>
+#include <iostream>
 template<typename T>
 FileOperator<T>::FileOperator(const T& inFilePath)
 {
@@ -53,10 +54,16 @@ bool FileOperator<T>::AppendContent(const std::string& content)
 	file.close();
 	return true;
 }
-template<typename T>
-bool FileOperator<T>::RemoveFile()
+bool FileOperator<std::string>::RemoveFile()
 {
 	if (std::remove(filePath.c_str()) != 0) {
+		return false;
+	}
+	return true;
+}
+bool FileOperator<std::wstring>::RemoveFile()
+{
+	if (_wremove(filePath.c_str()) != 0) {
 		return false;
 	}
 	return true;
