@@ -51,6 +51,16 @@ std::string Theme::GetThemeEntry(std::string ThemeName)
 	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + ThemeName + (char*)"\\index.html";
 	return GetResourcePathU8((char*)ThemeIndex.c_str());
 }
+std::string Theme::GetThemeEntry()
+{
+	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + _ThemeName + (char*)"\\index.html";
+	return GetResourcePathU8((char*)ThemeIndex.c_str());
+}
+std::string Theme::GetThemeFile(std::string FilePath)
+{
+	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + _ThemeName + (char*)"\\" + FilePath;
+	return GetResourcePathU8((char*)ThemeIndex.c_str());
+}
 std::string Theme::GetThemeFile(std::string ThemeName, std::string FilePath)
 {
 	std::string ThemeIndex = (char*)"\\Resource\\Theme\\" + ThemeName + (char*)"\\" + FilePath;

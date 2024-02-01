@@ -6,6 +6,7 @@
 #include "include/WebBind.h"
 #include "include/ThemeFactory.h"
 #include "include/LangFactory.h"
+#include <include/Settings.h>
 webview::webview WebviewObject(true, nullptr);
 HWND WebViewHwnd = (HWND)WebviewObject.window();
 void WindowBoot(std::string PageEntry) {
@@ -22,18 +23,20 @@ void WindowBoot(std::string PageEntry) {
 }
 void EventHandler::Run(std::string action, std::string argv, int argc)
 {
-	ThemeFactory::getInstance("default");//初始化
-	ThemeFactory::SetCurrentTheme("default");//设置标识
+	auto SysSettings = Settings::getInstance();
+	std::string CurrentTheme = SysSettings->getStringValue("Theme", "default");
+	auto ThemeInstance = ThemeFactory::getInstance(CurrentTheme);//初始化
+	ThemeFactory::SetCurrentTheme(CurrentTheme);//设置标识
 	if (action.compare("") == 0 && argc == 0) {
 		// 无参数正常启动 进入主页
-		std::string ThemeEntry = (char*)"file:\\\\\\" + Theme::GetThemeFile("default", "Test.html");
+		std::string ThemeEntry = (char*)"file:\\\\\\" + ThemeInstance->GetThemeFile("Test.html");
 		WindowBoot(ThemeEntry);
 	}
 	if (argc == 1 && action.compare("") != 0) {
 		//拖动打开文件 直接进入解压页面
 		MessageBoxW(NULL, Utf8ToUtf16(argv).c_str(), L"", NULL);
 		// #的方法无法传入信息 最好还是主动获取吧
-		std::string ThemeEntry = (char*)"file:\\\\\\" + Theme::GetThemeEntry("default") + "#action=demo&path=" + argv;
+		std::string ThemeEntry = (char*)"file:\\\\\\" + ThemeInstance->GetThemeEntry();
 		WindowBoot(ThemeEntry);
 
 	}

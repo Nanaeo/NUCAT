@@ -16,6 +16,8 @@ public:
 	const std::string& GetCurrentLang() const;
 	const bool SetCurrentLang(std::string ThemeLang);
 	static std::string GetThemeEntry(std::string ThemeName);
+	std::string GetThemeEntry();
+	std::string GetThemeFile(std::string FilePath);
 	static std::string GetThemeFile(std::string ThemeName, std::string FilePath);
 	static std::vector<std::string> ListThemePathU8();
 	static std::vector<std::wstring> ListThemePathW();
