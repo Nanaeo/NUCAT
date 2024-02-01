@@ -105,7 +105,7 @@ void WebBind::RegJsBridge() {
 		std::string  retJson = WebBind::Vstring2Json(ListPathData);
 		return retJson;
 		});
-	WebviewObject.bind("NuCatListFile", [&](const std::string& req) -> std::string {
+	WebviewObject.bind("NuCatGetListFile", [&](const std::string& req) -> std::string {
 		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
 		if (CurrentTheme == nullptr) {
 			return "{}";
@@ -116,14 +116,32 @@ void WebBind::RegJsBridge() {
 		return retJson;
 		});
 	WebviewObject.bind("NuCatReadThemeFile", [&](const std::string& req) -> std::string {
-
-		return "";
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		std::wstring FilePath = Utf8ToUtf16(Theme::GetThemeFile(CurrentTheme->getId(), webview::detail::json_parse(req, "", 0)));
+		FileOperator<std::wstring> File(FilePath);
+		std::string Content;
+		File.ReadContent(Content);
+		return WebBind::String2Json(Base64EncodeU8(Content));
 		});
 	WebviewObject.bind("NuCatWriteThemeFile", [&](const std::string& req) -> std::string {
-		return "";
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		std::wstring FilePath = Utf8ToUtf16(Theme::GetThemeFile(CurrentTheme->getId(), webview::detail::json_parse(req, "", 0)));
+		FileOperator<std::wstring> File(FilePath);
+		std::string Content = webview::detail::json_parse(req, "", 1);
+		return WebBind::Bool2Json(File.WriteContent(Content));
 		});
 	WebviewObject.bind("NuCatGetThemeFilePath", [&](const std::string& req) -> std::string {
-		return "";
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		return WebBind::String2Json(Theme::GetThemeFile(CurrentTheme->getId(), webview::detail::json_parse(req, "", 0)));
 		});
 	// language api
 	WebviewObject.bind("NuCatGetThemeLangAll", [&](const std::string& req) -> std::string {
@@ -163,19 +181,28 @@ void WebBind::RegJsBridge() {
 		return Lang->getStringValue(Key);
 		});
 	WebviewObject.bind("NuCatGetSysLang", [&](const std::string& req) -> std::string {
-		return "";
+		auto Lang = LangFactory::getInstance("System", LangFactory::GetMainFilePathW(webview::detail::json_parse(req, "", 1)));
+		std::string Key = webview::detail::json_parse(req, "", 0);
+		return Lang->getStringValue(Key);
 		});
 	WebviewObject.bind("NuCatGetSysLangAll", [&](const std::string& req) -> std::string {
-		return "";
+		auto Lang = LangFactory::getInstance("System", LangFactory::GetMainFilePathW(webview::detail::json_parse(req, "", 1)));
+		return Lang->getJsonAll();
 		});
 	WebviewObject.bind("NuCatGetSettings", [&](const std::string& req) -> std::string {
-		return "";
+		std::string Key = webview::detail::json_parse(req, "", 0);
+		auto SysSettings = Settings::getInstance();
+		return Lang->getStringValue(Key);
 		});
 	WebviewObject.bind("NuCatSetSettings", [&](const std::string& req) -> std::string {
-		return "";
+		std::string Key = webview::detail::json_parse(req, "", 0);
+		std::string Value = webview::detail::json_parse(req, "", 1);
+		auto SysSettings = Settings::getInstance();
+		return  WebBind::Bool2Json(SysSettings->setStringValue(Key,Value));
 		});
 	WebviewObject.bind("NuCatGetSettingsAll", [&](const std::string& req) -> std::string {
-		return "";
+		auto SysSettings = Settings::getInstance();
+		return SysSettings->getJsonAll();
 		});
 	// helper api
 	WebviewObject.bind("NuCatReboot", [&](const std::string& req) -> std::string {

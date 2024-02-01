@@ -4,7 +4,7 @@
 #include <fstream>
 
 std::string Version::Version = (char*)u8"1.0.0";
-std::string Version::FullVersion = (char*)u8"1.0.0-Debug.TIME2";
+std::string Version::FullVersion = (char*)u8"1.0.0-Debug.TIME3";
 #if defined(DEBUG)
 std::string BuildType = "DEBUG";
 #endif
@@ -13,7 +13,6 @@ std::string BuildType = "RELEASE";
 #endif
 auto GetVersionHash = []()->std::string {
 	SHA1 sha1;
-	//GetExecutableFilePath();
 	std::fstream file(GetExecutableFilePath(), std::ios::binary | std::ios::in);
 	if (!file) {
 		return "ErrorHash";
@@ -21,4 +20,4 @@ auto GetVersionHash = []()->std::string {
 	sha1.update(file);
 	return sha1.final();
 	};
-std::string VersionHash = GetVersionHash();
+std::string Version::VersionHash = GetVersionHash();

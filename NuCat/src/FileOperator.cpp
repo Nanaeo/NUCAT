@@ -43,6 +43,22 @@ bool FileOperator<T>::WriteContent(const  std::string& content)
 	file.close();
 	return true;
 }
+template<>
+bool FileOperator<std::string>::RemoveFile()
+{
+	if (std::remove(filePath.c_str()) != 0) {
+		return false;
+	}
+	return true;
+}
+template<>
+bool FileOperator<std::wstring>::RemoveFile()
+{
+	if (_wremove(filePath.c_str()) != 0) {
+		return false;
+	}
+	return true;
+}
 template<typename T>
 bool FileOperator<T>::AppendContent(const std::string& content)
 {
@@ -54,19 +70,6 @@ bool FileOperator<T>::AppendContent(const std::string& content)
 	file.close();
 	return true;
 }
-bool FileOperator<std::string>::RemoveFile()
-{
-	if (std::remove(filePath.c_str()) != 0) {
-		return false;
-	}
-	return true;
-}
-bool FileOperator<std::wstring>::RemoveFile()
-{
-	if (_wremove(filePath.c_str()) != 0) {
-		return false;
-	}
-	return true;
-}
+
 template class FileOperator<std::wstring>;
 template class FileOperator<std::string>;

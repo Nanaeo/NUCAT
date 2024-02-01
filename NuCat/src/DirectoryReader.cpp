@@ -23,7 +23,6 @@ template<typename T>
 std::vector<std::string> DirectoryReader<T>::GetListFileU8(const std::string& _path) {
 	return std::vector<std::string>();
 }
-
 template<>
 void DirectoryReader<std::wstring>::DeleteAllFilesInDirectory(const std::wstring& directoryPath) {
 	for (const auto& entry : std::filesystem::recursive_directory_iterator(directoryPath)) {
@@ -94,9 +93,6 @@ template<typename T>
 std::vector<std::string> DirectoryReader<T>::GetListPathU8(const std::string& _path) {
 	return std::vector<std::string>();
 }
-
-
-
 template<>
 std::vector<std::string> DirectoryReader<std::wstring>::GetListPathU8(const std::wstring& _path) {
 	std::vector<std::wstring> PathList = DirectoryReader<std::wstring>::GetListPathW(_path);
@@ -110,7 +106,6 @@ template<typename T>
 std::vector<std::string> DirectoryReader<T>::GetListPathU8(const std::wstring& _path) {
 	return std::vector<std::string>();
 }
-
 template<>
 std::vector<std::wstring> DirectoryReader<std::wstring>::GetListPathW(const std::wstring& _path) {
 	std::vector<std::wstring> RealThemeList;
@@ -125,6 +120,5 @@ template<typename T>
 std::vector<std::wstring> DirectoryReader<T>::GetListPathW(const std::wstring& _path) {
 	return std::vector<std::wstring>();
 }
-
 template class DirectoryReader<std::wstring>;
 template class DirectoryReader<std::string>;
