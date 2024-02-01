@@ -14,8 +14,8 @@ ThemeLang::ThemeLang(std::string ThemeName, std::string LocalName)
 	std::wstring Real_Full_PathU16 = (FileExists(Local_Full_PathU16.c_str()) ? Local_Full_PathU16.c_str() : Default_Full_PathU16.c_str());
 	// 获取到文件位置
 
-	FileOperator LanguageFileOperator(Real_Full_PathU16.c_str());
-	LanguageFileOperator.read(retFileData);
+	FileOperator<std::wstring> LanguageFileOperator(Real_Full_PathU16.c_str());
+	LanguageFileOperator.ReadContent(retFileData);
 
 	LanguageJsonRoot = yyjson_read(retFileData.c_str(), retFileData.length(), 0);
 	LanguageJson = yyjson_doc_get_root(LanguageJsonRoot);

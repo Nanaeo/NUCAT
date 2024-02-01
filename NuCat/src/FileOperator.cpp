@@ -1,94 +1,63 @@
 #include "include/FileOperator.h"
-FileOperator::FileOperator(const std::wstring& filePath) : filePath_(filePath), error_(ERROR_SUCCESS) {}
-
-bool FileOperator::exists() {
-    DWORD attr = GetFileAttributesW(filePath_.c_str());
-    if (attr == INVALID_FILE_ATTRIBUTES) {
-        error_ = GetLastError();
-        return false;
-    }
-    error_ = ERROR_SUCCESS;
-    return true;
+#include <fstream>
+#include <string>
+template<typename T>
+FileOperator<T>::FileOperator(const T& inFilePath)
+{
+	filePath = inFilePath;
+	std::fstream file(inFilePath, std::ios::in | std::ios::out | std::ios::app);
+	file.close();
 }
-
-bool FileOperator::read(std::string& content) {
-    HANDLE hFile = CreateFileW(filePath_.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (hFile == INVALID_HANDLE_VALUE) {
-        error_ = GetLastError();
-        return false;
-    }
-
-    DWORD fileSize = GetFileSize(hFile, NULL);
-    if (fileSize == INVALID_FILE_SIZE) {
-        error_ = GetLastError();
-        CloseHandle(hFile);
-        return false;
-    }
-
-    char* buffer = new char[fileSize];
-    DWORD bytesRead;
-    if (!ReadFile(hFile, buffer, fileSize, &bytesRead, NULL)) {
-        error_ = GetLastError();
-        delete[] buffer;
-        CloseHandle(hFile);
-        return false;
-    }
-
-    content.assign(buffer, bytesRead);
-    delete[] buffer;
-    CloseHandle(hFile);
-    error_ = ERROR_SUCCESS;
-    return true;
+template<typename T>
+FileOperator<T>::~FileOperator()
+{
 }
-
-bool FileOperator::write(const std::string& content) {
-    HANDLE hFile = CreateFileW(filePath_.c_str(), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (hFile == INVALID_HANDLE_VALUE) {
-        error_ = GetLastError();
-        return false;
-    }
-
-    DWORD bytesWritten;
-    if (!WriteFile(hFile, content.c_str(), (DWORD)content.size(), &bytesWritten, NULL)) {
-        error_ = GetLastError();
-        CloseHandle(hFile);
-        return false;
-    }
-
-    CloseHandle(hFile);
-    error_ = ERROR_SUCCESS;
-    return true;
+template<typename T>
+bool FileOperator<T>::GetIsExists()
+{
+	std::fstream file(filePath, std::ios::in);
+	bool exists = file.good();
+	file.close();
+	return exists;
 }
-
-bool FileOperator::append(const std::string& content) {
-    HANDLE hFile = CreateFileW(filePath_.c_str(), FILE_APPEND_DATA, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (hFile == INVALID_HANDLE_VALUE) {
-        error_ = GetLastError();
-        return false;
-    }
-
-    DWORD bytesWritten;
-    if (!WriteFile(hFile, content.c_str(), (DWORD)content.size(), &bytesWritten, NULL)) {
-        error_ = GetLastError();
-        CloseHandle(hFile);
-        return false;
-    }
-
-    CloseHandle(hFile);
-    error_ = ERROR_SUCCESS;
-    return true;
+template<typename T>
+bool FileOperator<T>::ReadContent(std::string& content) const
+{
+	std::fstream file(filePath, std::ios::in);
+	if (!file.is_open()) {
+		return false;
+	}
+	std::getline(file, content, '\0');
+	file.close();
+	return true;
 }
-
-bool FileOperator::remove() {
-    if (!DeleteFileW(filePath_.c_str())) {
-        error_ = GetLastError();
-        return false;
-    }
-
-    error_ = ERROR_SUCCESS;
-    return true;
+template<typename T>
+bool FileOperator<T>::WriteContent(const  std::string& content)
+{
+	std::fstream file(filePath, std::ios::out | std::ios::trunc);
+	if (!file.is_open()) {
+		return false;
+	}
+	file << content;
+	file.close();
+	return true;
 }
-
-DWORD FileOperator::getError() const {
-    return error_;
+template<typename T>
+bool FileOperator<T>::AppendContent(const std::string& content)
+{
+	std::fstream file(filePath, std::ios::out | std::ios::app);
+	if (!file.is_open()) {
+		return false;
+	}
+	file << content;
+	file.close();
+	return true;
+}
+template<typename T>
+bool FileOperator<T>::RemoveFile()
+{
+	if (std::remove(filePath.c_str()) != 0) {
+		return false;
+	}
+	return true;
 }

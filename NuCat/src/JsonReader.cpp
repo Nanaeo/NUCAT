@@ -1,8 +1,8 @@
 #include "include/JsonReader.h"
 
-JsonReader::JsonReader(const std::wstring& FileName) :FileOperator(FileName)
+JsonReader::JsonReader(const std::wstring& FileName) :FileOperator<std::wstring>(FileName)
 {
-	read(retFileData);
+	ReadContent(retFileData);
 	JsonRoot = yyjson_read(retFileData.c_str(), retFileData.length(), 0);
 	JsonVal = yyjson_doc_get_root(JsonRoot);
 }
@@ -69,7 +69,7 @@ bool JsonReader::writeCacheToFile()
 		return false;
 	}
 	std::string content(json_str, len);
-	bool result = write(content);
+	bool result = WriteContent(content);
 	delete json_str;
 	return result;
 }

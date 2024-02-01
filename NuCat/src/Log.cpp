@@ -37,7 +37,7 @@ bool Log::DefaultHandler(std::string Content, Level ErrorLevel, std::string LogL
 {
 	std::wstring CurrentDate = Utf8ToUtf16(getCurrentDate().c_str());
 	std::wstring path = L"\\Log\\" + CurrentDate + L".txt";
-	FileOperator LoggFile(GetResourcePath(path.c_str()).c_str());
+	FileOperator<std::wstring> LoggFile(GetResourcePath(path.c_str()));
 	std::string RealConten;
 	std::string  CurrentTimestamp = getCurrentDateTime();
 	RealConten.append((char*)u8"[");
@@ -48,7 +48,7 @@ bool Log::DefaultHandler(std::string Content, Level ErrorLevel, std::string LogL
 	RealConten.append((char*)u8"] ");
 	RealConten.append(Content);
 	RealConten.append("\n");
-	LoggFile.append(RealConten.c_str());
+	LoggFile.AppendContent(RealConten.c_str());
 	return true;
 }
 // 用于阻止日志

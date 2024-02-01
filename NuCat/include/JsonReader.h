@@ -4,7 +4,7 @@
 #include "include/yyjson.h"
 #include <memory>
 
-class JsonReader :private FileOperator
+class JsonReader :private FileOperator< std::wstring >
 {
 public:
 	JsonReader(const std::wstring& FileName);
