@@ -3,7 +3,7 @@
 #include "include/Util.h"
 #include "include/yyjson.h"
 #include <memory>
-
+#include <any>
 class JsonReader :private FileOperator< std::wstring >
 {
 public:
@@ -19,6 +19,6 @@ public:
 
 private:
 	std::string retFileData;
-	yyjson_val* JsonVal;
-	yyjson_doc* JsonRoot;
+	yyjson_mut_doc* mut_doc;
+	yyjson_mut_val* mut_val;
 };
