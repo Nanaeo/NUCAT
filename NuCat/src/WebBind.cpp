@@ -111,7 +111,7 @@ void WebBind::RegJsBridge() {
 			return "{}";
 		}
 		std::string _Path = webview::detail::json_parse(req, "", 0);
-		std::vector<std::string> ListPathData = DirectoryReader<std::wstring>::GetListFileU8(Theme::GetThemeFile(CurrentTheme->getId(), _Path));
+		std::vector<std::string> ListPathData = DirectoryReader<std::string>::GetListFileU8(Theme::GetThemeFile(CurrentTheme->getId(), _Path));
 		std::string  retJson = WebBind::Vstring2Json(ListPathData);
 		return retJson;
 		});

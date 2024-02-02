@@ -6,7 +6,7 @@
 #include "include/Settings.h"
 #include "include/Global.h"
 #include "include/Version.h"
-std::map<std::string, std::string> RunTimeInfo;
+
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
 	// 预先需要检查7Z依赖情况
 //#ifdef DEBUG

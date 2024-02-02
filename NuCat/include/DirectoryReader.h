@@ -7,14 +7,16 @@
 template <typename T>
 class DirectoryReader {
 public:
-	static  std::vector<std::string> GetListFileU8(const std::wstring& _path);
-	static  std::vector<std::string> GetListFileU8(const std::string& _path);
-	static  void DeleteAllFilesInDirectory(const std::wstring& directoryPath);
-	static  std::vector<std::wstring> GetFilesList(const std::wstring& directoryPath);
-	static  std::vector<std::wstring> GetDirectoriesList(const std::wstring& directoryPath);
-	static  int GetFileSize(const std::wstring& filePath);
-	static  std::string GetFileCreationTime(const std::wstring& filePath);
-	static  std::vector<std::string> GetListPathU8(const std::string& _path);
-	static  std::vector<std::string> GetListPathU8(const std::wstring& _path);
-	static  std::vector<std::wstring> GetListPathW(const std::wstring& _path);
+	static  std::vector<std::string> GetListFileU8(const T& Path);
+	static  std::vector<std::wstring> GetListFileW(const T& Path);
+	static  std::vector<std::string> GetListPathU8(const T& Path);
+	static  std::vector<std::wstring> GetListPathW(const T& Path);
+	static  std::vector<std::string> GetListRelativeFileU8(const T& Path);
+	static  std::vector<std::wstring> GetListRelativeFileW(const T& Path);
+	static  std::vector<std::string> GetListRelativePathU8(const T& Path);
+	static  std::vector<std::wstring> GetListRelativePathW(const T& Path);
+	static  std::string GetFileCreationTime(const T& Path);
+	static  bool RemovePathFiles(const T& Path);
+	static  int GetFileSize(const T& filePath);
 };
+

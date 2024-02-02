@@ -11,7 +11,7 @@ void Log::SetLogLevel(int LogLevel)
 }
 void Log::DeleteAll() {
 	// 清除所有日志 直接清空整个日志目录
-	 DirectoryReader<std::wstring>::DeleteAllFilesInDirectory(GetResourcePath(L"\\Log\\"));
+	 DirectoryReader<std::wstring>::RemovePathFiles(GetResourcePath(L"\\Log\\"));
 }
 void Log::SetOutHandler(std::function<bool(std::string, Log::Level, std::string)> callback) {
 	HandlerFunction = callback;

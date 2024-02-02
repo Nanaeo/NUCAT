@@ -17,7 +17,7 @@ Theme::Theme(std::string ThemeName) :JsonReader(getFilePath(ThemeName))
 Theme::~Theme() {}
 std::vector<std::wstring> Theme::ListThemePathW()
 {
-	std::vector<std::wstring> ThemeList = DirectoryReader<std::wstring>::GetDirectoriesList(GetResourcePath(L"\\Resource\\Theme"));
+	std::vector<std::wstring> ThemeList = DirectoryReader<std::wstring>::GetListRelativePathW(GetResourcePath(L"\\Resource\\Theme"));
 	// ThemeList.erase(ThemeList.begin(), ThemeList.begin() + 2); 擦除不了 且性能消耗大 不如新建拷贝
 	std::vector<std::wstring> RealThemeList(0);
 	if (ThemeList.size() <= 2) return RealThemeList;
