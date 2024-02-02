@@ -8,6 +8,7 @@ JsonReader::JsonReader(const std::wstring& FileName) :FileOperator<std::wstring>
 	auto JsonVal = yyjson_doc_get_root(JsonRoot);
 	mut_doc = yyjson_doc_mut_copy(JsonRoot, nullptr);
 	mut_val = yyjson_mut_doc_get_root(mut_doc);
+	yyjson_doc_free(JsonRoot);
 }
 
 
