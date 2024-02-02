@@ -12,7 +12,7 @@
 !define COPYRIGHT "Mahiru - https://docs.nucat.nanaeo.cn" ; 版权信息
 !define ICON_PATH ".\Docs\nsis.ico"
 !define UNINSTALL_KEY "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall${NAME}" ; 软件注册
-!define RELEASE_PATH ".\build\pack\" ; 构建文件所在位置
+!define RELEASE_PATH ".\build\pack" ; 构建文件所在位置
 
 
 ; 安装信息
