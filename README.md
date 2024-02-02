@@ -1,4 +1,4 @@
-<div align="center"><img src="https://gcore.jsdelivr.net/gh/MliKiowa/NUCAT/Docs/icon-128.jpg"> </div>
+<div align="center"><img src="https://github.com/MliKiowa/NUCAT/blob/main/Docs/icon-128.jpg?raw=true"> </div>
 
 <div align="center"><h1>NUCAT</h1></div>
 <div align="center"><p>开源免费图形化压缩工具</p></div>
