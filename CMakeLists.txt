@@ -18,11 +18,6 @@ endif()
 add_subdirectory("Depend/bit7z")
 add_subdirectory ("NuCat")
 
-# 移动NUCAT主程序进去
-if(EXISTS ${CMAKE_CURRENT_BINARY_DIR}/NuCat/NuCat.exe)
-    file(COPY ${CMAKE_CURRENT_BINARY_DIR}/NuCat/NuCat.exe DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/out/Pack)
-endif()
-
 # 移动NUCAT资源文件进PACK
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/Other/" DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/out/Pack/)
 # 移动NUCAT资源文件进主程序 Debug目录

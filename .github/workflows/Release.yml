@@ -21,6 +21,8 @@ jobs:
 
     - name: Build NuCat
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+    - name: Copy Resource
+      run: copy ./Resource/* ./out/pack
     - name: Copy NuCat
       run: copy ./build/NuCat/Release/NuCat.exe ./out/pack
     - name: Build Setup
