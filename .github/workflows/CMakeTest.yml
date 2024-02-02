@@ -24,7 +24,7 @@ jobs:
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
     - name: Build Setup
       shell: bash
-      run: mkdir bundle && yarn nsis-bundle
+      run: mkdir bundle && makensis ./installer.nsi
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
