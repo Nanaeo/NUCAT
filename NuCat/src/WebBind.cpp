@@ -281,20 +281,37 @@ void WebBind::RegJsBridge() {
 		return SysSettings->getJsonAll();
 		});
 	// helper api
+	WebviewObject.bind("NuCatGetCurrentLanguageName", [&](const std::string& req) -> std::string {
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		return WebBind::String2Json(CurrentTheme->getId());
+		});
+	WebviewObject.bind("NuCatGetCurrentThemeName", [&](const std::string& req) -> std::string {
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		std::string ThemeLang = CurrentTheme->GetCurrentLang();
+		return WebBind::String2Json(ThemeLang);
+		});
 	WebviewObject.bind("NuCatReboot", [&](const std::string& req) -> std::string {
+		// 暂时不实现 考虑跨平台
 		return "";
 		});
 	WebviewObject.bind("NuCatGoUrl", [&](const std::string& req) -> std::string {
-		return "";
+		// 好像JS也能自己实现啊
+		WebviewObject.navigate(webview::detail::json_parse(req, "", 0));
+		 return WebBind::Bool2Json(true);;
 		});
 	WebviewObject.bind("NuCatGoUrlBack", [&](const std::string& req) -> std::string {
+		//WebviewObject.eval("") Js不是能回去吗
 		return "";
 		});
 	WebviewObject.bind("NuCatRegPageInit", [&](const std::string& req) -> std::string {
-		return "";
-		});
-	WebviewObject.bind("NuCatReadRunTime", [&](const std::string& req) -> std::string {
-		return "";
+		WebviewObject.init(webview::detail::json_parse(req, "", 0));
+		return WebBind::Bool2Json(true);
 		});
 	// bit7z api
 	WebviewObject.bind("NuCat7ZAutoExtract", [&](const std::string& req) -> std::string {
