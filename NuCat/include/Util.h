@@ -18,7 +18,7 @@ bool FileExists(const std::wstring& fileName);
 std::string getCurrentDate();
 NativeString GetExecutableFilePath();
 std::string getCurrentTimestamp();
-std::string GetResourcePathU8(char* _path);
+std::string GetResourcePathU8(const std::string& _path);
 std::string GetResourceU8(char* _file);
 std::string getCurrentDateTime();
 bool ProgramIsAdmin();

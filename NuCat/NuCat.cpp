@@ -9,9 +9,9 @@
 
 int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nShowCmd) {
 	// 预先需要检查7Z依赖情况
-//#ifdef DEBUG
-//	OutputDebugString(Utf8ToUtf16(Base64EncodeU8((char*)u8"测试Base64文本")).c_str());
-//#endif
+	//#ifdef DEBUG
+	//	OutputDebugString(Utf8ToUtf16(Base64EncodeU8((char*)u8"测试Base64文本")).c_str());
+	//#endif
 	auto SysSettings = Settings::getInstance();
 	// 初始化设置
 	std::string LangConfig = SysSettings->getStringValue("Language", "zh-CN");

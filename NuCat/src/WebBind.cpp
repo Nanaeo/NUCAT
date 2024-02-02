@@ -95,7 +95,28 @@ void WebBind::RegJsBridge() {
 		return "{}";
 		});
 	// fs api
-	WebviewObject.bind("NuCatListDirectory", [&](const std::string& req) -> std::string {
+	// 以下API能力限制为Theme目录下
+	WebviewObject.bind("NuCatListRelativeThemeDirectory", [&](const std::string& req) -> std::string {
+		std::string _Path = webview::detail::json_parse(req, "", 0);
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		auto ListPathData = DirectoryReader<std::string>::GetListPathU8(Theme::GetThemeFile(CurrentTheme->getId(), _Path));
+		std::string  retJson = WebBind::Vstring2Json(ListPathData);
+		return retJson;
+		});
+	WebviewObject.bind("NuCatGetListRelativeThemeFile", [&](const std::string& req) -> std::string {
+		std::string _Path = webview::detail::json_parse(req, "", 0);
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		std::vector<std::string> ListPathData = DirectoryReader<std::string>::GetListRelativeFileU8(Theme::GetThemeFile(CurrentTheme->getId(), _Path));
+		std::string  retJson = WebBind::Vstring2Json(ListPathData);
+		return retJson;
+		});
+	WebviewObject.bind("NuCatListThemeDirectory", [&](const std::string& req) -> std::string {
 		std::string _Path = webview::detail::json_parse(req, "", 0);
 		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
 		if (CurrentTheme == nullptr) {
@@ -105,7 +126,7 @@ void WebBind::RegJsBridge() {
 		std::string  retJson = WebBind::Vstring2Json(ListPathData);
 		return retJson;
 		});
-	WebviewObject.bind("NuCatGetListFile", [&](const std::string& req) -> std::string {
+	WebviewObject.bind("NuCatGetListThemeFile", [&](const std::string& req) -> std::string {
 		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
 		if (CurrentTheme == nullptr) {
 			return "{}";
@@ -142,6 +163,61 @@ void WebBind::RegJsBridge() {
 			return "{}";
 		}
 		return WebBind::String2Json(Theme::GetThemeFile(CurrentTheme->getId(), webview::detail::json_parse(req, "", 0)));
+		});
+	// 以下Api不对能力进行限制
+	WebviewObject.bind("NuCatListRelativeDirectory", [&](const std::string& req) -> std::string {
+		std::string _Path = webview::detail::json_parse(req, "", 0);
+		auto ListPathData = DirectoryReader<std::string>::GetListRelativePathU8(_Path);
+		std::string  retJson = WebBind::Vstring2Json(ListPathData);
+		return retJson;
+		});
+	WebviewObject.bind("NuCatGetListRelativeFile", [&](const std::string& req) -> std::string {
+		std::string _Path = webview::detail::json_parse(req, "", 0);
+		std::vector<std::string> ListPathData = DirectoryReader<std::string>::GetListRelativeFileU8(_Path);
+		std::string  retJson = WebBind::Vstring2Json(ListPathData);
+		return retJson;
+		});
+	WebviewObject.bind("NuCatListDirectory", [&](const std::string& req) -> std::string {
+		std::string _Path = webview::detail::json_parse(req, "", 0);
+		auto ListPathData = DirectoryReader<std::string>::GetListPathU8(_Path);
+		std::string  retJson = WebBind::Vstring2Json(ListPathData);
+		return retJson;
+		});
+	WebviewObject.bind("NuCatGetListFile", [&](const std::string& req) -> std::string {
+		std::string _Path = webview::detail::json_parse(req, "", 0);
+		std::vector<std::string> ListPathData = DirectoryReader<std::string>::GetListFileU8(_Path);
+		std::string  retJson = WebBind::Vstring2Json(ListPathData);
+		return retJson;
+		});
+	WebviewObject.bind("NuCatReadFile", [&](const std::string& req) -> std::string {
+		std::wstring FilePath = Utf8ToUtf16(webview::detail::json_parse(req, "", 0));
+		FileOperator<std::wstring> File(FilePath);
+		std::string Content;
+		File.ReadContent(Content);
+		return WebBind::String2Json(Base64EncodeU8(Content));
+		});
+	WebviewObject.bind("NuCatWriteFile", [&](const std::string& req) -> std::string {
+		std::wstring FilePath = Utf8ToUtf16(webview::detail::json_parse(req, "", 0));
+		FileOperator<std::wstring> File(FilePath);
+		std::string Content = webview::detail::json_parse(req, "", 1);
+		return WebBind::Bool2Json(File.WriteContent(Content));
+		});
+	WebviewObject.bind("NuCatGetMainDirectory", [&](const std::string& req) -> std::string {
+		std::string RPath= webview::detail::json_parse(req, "", 0);
+		return WebBind::String2Json(GetResourcePathU8(RPath));
+		});
+	WebviewObject.bind("NuCatGetThemeDirectory", [&](const std::string& req) -> std::string {
+		std::string ThemeName = webview::detail::json_parse(req, "", 0);
+		std::string RPath = webview::detail::json_parse(req, "", 1);
+		return WebBind::String2Json(Theme::GetThemeFile(ThemeName, RPath));
+		});
+	WebviewObject.bind("NuCatGetCurrentThemeDirectory", [&](const std::string& req) -> std::string {
+		auto CurrentTheme = ThemeFactory::GetCurrentTheme();
+		if (CurrentTheme == nullptr) {
+			return "{}";
+		}
+		std::string RPath = webview::detail::json_parse(req, "", 0);
+		return WebBind::String2Json(CurrentTheme->GetThemeFile(RPath));
 		});
 	// language api
 	WebviewObject.bind("NuCatGetThemeLangAll", [&](const std::string& req) -> std::string {
