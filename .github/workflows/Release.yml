@@ -1,10 +1,9 @@
-name: CMake Test
+name: N
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - '*.*'
 
 env:
   BUILD_TYPE: Release
@@ -25,8 +24,12 @@ jobs:
     - name: Build Setup
       shell: bash
       run: mkdir bundle && makensis ./Install.nsi
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2
+    - name: Upload Windows Asset
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: NuCat_Windows_Setup
-        path: bundle/NuCat_Setup.exe
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: NuCat_Windows/NuCat.zip
+          asset_name: NuCat_Windows${{ github.ref_name }}.zip
+          asset_content_type: application/zip
