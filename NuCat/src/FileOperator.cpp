@@ -11,10 +11,6 @@ FileOperator<T>::FileOperator(const T& inFilePath)
 	file.close();
 }
 template<typename T>
-FileOperator<T>::~FileOperator()
-{
-}
-template<typename T>
 bool FileOperator<T>::GetIsExists()
 {
 	std::fstream file(filePath, std::ios::in);

@@ -4,7 +4,7 @@ template <typename T>
 class FileOperator {
 public:
     FileOperator(const T& inFilePath);
-    ~FileOperator();
+    ~FileOperator() = default;
     bool GetIsExists();
     bool ReadContent(std::string& content) const;
     bool WriteContent(const std::string& content);
