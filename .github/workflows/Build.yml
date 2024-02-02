@@ -1,9 +1,9 @@
-name: NuCat Release
+name: NuCat Build
 
 on:
   push:
-    tags:
-      - '*.*'
+    branches:
+      - main
 
 env:
   BUILD_TYPE: Release
