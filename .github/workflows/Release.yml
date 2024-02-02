@@ -21,11 +21,11 @@ jobs:
 
     - name: Build Nucat
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      
     - name: Build Setup
       shell: bash
       run: mkdir bundle && makensis ./Install.nsi
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
+      
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -37,17 +37,13 @@ jobs:
           body_path: releasenote.md
           draft: true
           prerelease: false
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2
-      with:
-          name: NuCat_Windows_Setup
-          path: bundle/NuCat_Setup.exe
+          
     - name: Upload Windows Asset
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: NuCat_Windows_Setup/NuCat_Setup.exe
+          asset_path: bundle/NuCat_Setup.exe
           asset_name: NuCat_Windows_Setup_${{ github.ref_name }}.exe
           asset_content_type: application/vnd.microsoft.portable-executable
