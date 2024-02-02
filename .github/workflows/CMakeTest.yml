@@ -14,10 +14,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+    - uses: actions/checkout@v4
 
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
-    - name: Build
+    - name: Build Nucat
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+    - name: Build Setup
+      shell: bash
+      run: mkdir bundle && yarn nsis-bundle
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: NuCat_Windows_Setup
+        path: bundle/WebGal_Terre_Setup.exe
