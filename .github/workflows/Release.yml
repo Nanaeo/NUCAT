@@ -24,6 +24,11 @@ jobs:
     - name: Build Setup
       shell: bash
       run: mkdir bundle && makensis ./Install.nsi
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+          name: NuCat_Windows_Setup
+          path: bundle/NuCat_Setup.exe
     - name: Upload Windows Asset
       uses: actions/upload-release-asset@v1
       env:
