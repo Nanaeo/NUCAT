@@ -10,7 +10,7 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
 endif()
 include_directories(SYSTEM "${PROJECT_SOURCE_DIR}/Depend/wil/include/")
 include_directories(SYSTEM "${PROJECT_SOURCE_DIR}/Depend/webview2/build/native/include/")
-
+include_directories(SYSTEM "${PROJECT_SOURCE_DIR}/Depend/meojson/")
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(PLATFORM "x64")
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
@@ -28,6 +28,6 @@ link_libraries("${PROJECT_SOURCE_DIR}/Depend/webview2/build/native/${PLATFORM}/W
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 # 编译全部代码
 file(GLOB SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-add_executable (NuCat WIN32 ${SOURCES} "src/yyjson.c" "NuCat.cpp")
+add_executable (NuCat WIN32 ${SOURCES}  "NuCat.cpp")
 target_link_libraries(NuCat PRIVATE bit7z )
 message("-----------------NUCAT_END---------------")

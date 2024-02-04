@@ -207,10 +207,17 @@ bool Bit7zWrapper::GetArchiveInfoWithIsEncrypted(std::string path, const bit7z::
 	}
 	return true;
 }
-/* 解压与压缩测试
-Bit7zWrapper::Extract((char*)u8"F:\\CPPDEV\\测试.zip", (char *)u8"F:\\CPPDEV\\测试\\", bit7z::BitFormat::Zip, "");
-std::string filePath = (char*)u8"F:\\CPPDEV\\测试.zip";
-std::shared_ptr<bit7z::BitArchiveReader> reader;
-Bit7zWrapper::GetArchiveInfo(filePath, bit7z::BitFormat::Zip, reader);
-int x = reader->size();
-*/
+bool Bit7zWrapper::GetArchiveInfoWithIsEncryptedAuto(std::string path, bool& isEncrypted, bool& isHeaderEncrypted)
+{
+	try {
+		auto retData = bit7z::BitArchiveReader(lib, path, bit7z::BitFormat::Auto);
+		isEncrypted = retData.isEncrypted();
+		isHeaderEncrypted = retData.isHeaderEncrypted(lib, path, bit7z::BitFormat::Auto);
+	}
+	catch (const bit7z::BitException& ex) {
+		return false;
+	}
+	//std::tuple<bool,bool,bool,std::map<>>
+	return true;
+}
+// 序列化信息 以便生成Json

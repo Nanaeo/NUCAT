@@ -1,5 +1,4 @@
 #include "include/WebBind.h"
-#include "include/yyjson.h"
 #include "include/Util.h"
 #include "include/Global.h"
 #include "include/DirectoryReader.h"
@@ -10,49 +9,14 @@
 #include "include/Settings.h"
 std::string WebBind::Vstring2Json(const std::vector<std::string>& data)
 {
-	yyjson_mut_doc* doc = yyjson_mut_doc_new(NULL);
-	if (!doc) return "";
-	yyjson_mut_val* arr = yyjson_mut_arr(doc);
-	if (!arr) {
-		yyjson_mut_doc_free(doc);
-		return "";
-	}
-	for (const auto& item : data) {
-		yyjson_mut_val* str = yyjson_mut_str(doc, item.c_str());
-		if (!str || !yyjson_mut_arr_append(arr, str)) {
-			yyjson_mut_doc_free(doc);
-			return "";
-		}
-	}
-	yyjson_mut_val* obj = yyjson_mut_obj(doc);
-	if (!obj) {
-		yyjson_mut_doc_free(doc);
-		return "";
-	}
-	yyjson_mut_val* key = yyjson_mut_str(doc, "data");
-	if (!key || !yyjson_mut_obj_add(obj, key, arr)) {
-		yyjson_mut_doc_free(doc);
-		return "";
-	}
-	yyjson_mut_doc_set_root(doc, obj);
-	char* json_text = yyjson_mut_write(doc, YYJSON_WRITE_ESCAPE_UNICODE, NULL);
-	std::string result = json_text ? json_text : "";
-	yyjson_mut_doc_free(doc);
-	free(json_text);
-	return result;
+	json::value Json;
+	Json["data"] = data;
+	return Json.to_string();
 }
 std::string WebBind::String2Json(const std::string& data) {
-	std::string _data = data;
-	std::string toReplace = "\"";
-	std::string replaceWith = "\\\"";
-	size_t pos = 0;
-	while ((pos = _data.find(toReplace, pos)) != std::string::npos) {
-		_data.replace(pos, toReplace.length(), replaceWith);
-		pos += replaceWith.length();
-	}
-	std::string _data_handle = utf8_to_escape_sequenceWithoutAscii(_data);
-	std::string _ret = (char*)u8"{\"data\":\"" + _data_handle + (char*)u8"\"}";
-	return  _ret;
+	json::value Json;
+	Json["data"] = data;
+	return Json.to_string();
 }
 std::string WebBind::Number2Json(int data) {
 	std::string _ret = (char*)u8"{\"data\":\"" + std::to_string(data) + (char*)u8"\"}";
@@ -203,7 +167,7 @@ void WebBind::RegJsBridge() {
 		return WebBind::Bool2Json(File.WriteContent(Content));
 		});
 	WebviewObject.bind("NuCatGetMainDirectory", [&](const std::string& req) -> std::string {
-		std::string RPath= webview::detail::json_parse(req, "", 0);
+		std::string RPath = webview::detail::json_parse(req, "", 0);
 		return WebBind::String2Json(GetResourcePathU8(RPath));
 		});
 	WebviewObject.bind("NuCatGetThemeDirectory", [&](const std::string& req) -> std::string {
@@ -274,7 +238,7 @@ void WebBind::RegJsBridge() {
 		std::string Key = webview::detail::json_parse(req, "", 0);
 		std::string Value = webview::detail::json_parse(req, "", 1);
 		auto SysSettings = Settings::getInstance();
-		return  WebBind::Bool2Json(SysSettings->setStringValue(Key,Value));
+		return  WebBind::Bool2Json(SysSettings->setStringValue(Key, Value));
 		});
 	WebviewObject.bind("NuCatGetSettingsAll", [&](const std::string& req) -> std::string {
 		auto SysSettings = Settings::getInstance();
@@ -303,7 +267,7 @@ void WebBind::RegJsBridge() {
 	WebviewObject.bind("NuCatGoUrl", [&](const std::string& req) -> std::string {
 		// 好像JS也能自己实现啊
 		WebviewObject.navigate(webview::detail::json_parse(req, "", 0));
-		 return WebBind::Bool2Json(true);;
+		return WebBind::Bool2Json(true);;
 		});
 	WebviewObject.bind("NuCatGoUrlBack", [&](const std::string& req) -> std::string {
 		//WebviewObject.eval("") Js不是能回去吗
@@ -313,7 +277,7 @@ void WebBind::RegJsBridge() {
 		WebviewObject.init(webview::detail::json_parse(req, "", 0));
 		return WebBind::Bool2Json(true);
 		});
-	// bit7z api
+	// bit7z api 未来需要重构为多线程版本 构建一写多读的进度获取设计等等
 	WebviewObject.bind("NuCat7ZAutoExtract", [&](const std::string& req) -> std::string {
 		std::string File = webview::detail::json_parse(req, "", 0);
 		std::string OutPath = webview::detail::json_parse(req, "", 1);
@@ -333,7 +297,13 @@ void WebBind::RegJsBridge() {
 	WebviewObject.bind("NuCat7ZGetArchiveInfo", [&](const std::string& req) -> std::string {
 		return "";
 		});
+	WebviewObject.bind("NuCat7ZGetArchiveInfoWithIsEncrypted", [&](const std::string& req) -> std::string {
+		bool isEncrypted = false, isHeadEncrypted = false;
+		Bit7zWrapper::GetArchiveInfoWithIsEncryptedAuto(webview::detail::json_parse(req, "", 0), isEncrypted, isHeadEncrypted);
+		return "";
+		});
 	WebviewObject.bind("NuCat7ZAutoGetArchiveInfo", [&](const std::string& req) -> std::string {
+
 		return "";
 		});
 }

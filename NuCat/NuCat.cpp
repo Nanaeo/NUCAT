@@ -12,6 +12,8 @@ int  wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ L
 	//#ifdef DEBUG
 	//	OutputDebugString(Utf8ToUtf16(Base64EncodeU8((char*)u8"测试Base64文本")).c_str());
 	//#endif
+	const std::locale utf8("zh_CN.UTF-8");
+	std::locale::global(utf8);
 	auto SysSettings = Settings::getInstance();
 	// 初始化设置
 	std::string LangConfig = SysSettings->getStringValue("Language", "zh-CN");

@@ -418,62 +418,98 @@ namespace webview {
 		constexpr bool is_json_special_char(unsigned int c) {
 			return c == '"' || c == '\\';
 		}
-
-		constexpr bool is_control_char(unsigned int c) {
-			return c <= 0x1f || (c >= 0x7f && c <= 0x9f);
+		constexpr bool is_other_char(unsigned int c) {
+			return c <= 0x1f || (c >= 0x7f);
 		}
+		inline std::string string_to_hex(const std::string& input) {
+			static const char hex_digits[] = "0123456789ABCDEF";
+			std::string output;
+			output.reserve(input.length() * 2);
 
-		inline std::string json_escape(const std::string& s, bool add_quotes = true) {
-			constexpr char hex_alphabet[]{ "0123456789abcdef" };
-			// Calculate the size of the resulting string.
-			// Add space for the double quotes.
-			auto required_length = s.size() + (add_quotes ? 2 : 0);
-			for (auto c : s) {
-				auto uc = static_cast<unsigned char>(c);
-				if (is_json_special_char(uc)) {
-					// '\' and a single following character
-					required_length += 2;
-					continue;
-				}
-				if (is_control_char(uc)) {
-					// '\', 'u', 4 digits
-					required_length += 6;
-					continue;
-				}
-				++required_length;
+			for (unsigned char c : input) {
+				output.push_back(hex_digits[c >> 4]); // 高四位
+				output.push_back(hex_digits[c & 15]); // 低四位
 			}
-			// Allocate memory for resulting string only once.
+
+			return output;
+		}
+		inline std::string utf8Toucs2(const std::string& utf8Str) {
+			std::u16string utf16Str;
+			const char* Table = "0123456789ABCDEF";
 			std::string result;
-			result.reserve(required_length);
-			if (add_quotes) {
-				result += '"';
-			}
-			// Copy string while escaping characters.
-			for (auto c : s) {
-				auto uc = static_cast<unsigned char>(c);
-				if (is_json_special_char(uc)) {
-					result += '\\';
-					result += c;
-					continue;
+			for (size_t i = 0; i < utf8Str.size(); ) {
+				uint8_t firstByte = utf8Str[i];
+				// 标准UTF8 1-4字节
+				if (firstByte < 0x80) {
+					// 单字节字符 Ascii码区
+					result.push_back(firstByte);
+					i += 1;
 				}
-				if (is_control_char(uc)) {
-					auto h = (uc >> 4) & 0x0f;
-					auto l = uc & 0x0f;
-					result += "\\u00";
-					// NOLINTBEGIN(cppcoreguidelines-pro-bounds-constant-array-index)
-					result += hex_alphabet[h];
-					result += hex_alphabet[l];
-					// NOLINTEND(cppcoreguidelines-pro-bounds-constant-array-index)
-					continue;
+				else if (firstByte < 0xE0) {
+					char Bit0 = 0;
+					char Bit1 = (firstByte & 0x1F) >> 2;
+					char Bit2 = ((firstByte & 0x3) << 2) | ((utf8Str[i + 1] & 0x3F) >> 4);
+					char Bit3 = (utf8Str[i + 1] & 0x3F) >> 4;
+					result += "\\u";
+					result.push_back(Table[Bit0]);
+					result.push_back(Table[Bit1]);
+					result.push_back(Table[Bit2]);
+					result.push_back(Table[Bit3]);
+					i += 2;
 				}
-				result += c;
-			}
-			if (add_quotes) {
-				result += '"';
+				else if (firstByte < 0xF0) {
+					// 三字节字符
+					char Bit0 = firstByte & 0x0F;
+					char Bit1 = (utf8Str[i + 1] & 0x3F) >> 2;
+					char Bit2 = ((utf8Str[i + 1] & 0x3) << 2) | ((utf8Str[i + 2] & 0x3F) >> 4);
+					char Bit3 = utf8Str[i + 2] & 0xF;
+					result += "\\u";
+					result.push_back(Table[Bit0]);
+					result.push_back(Table[Bit1]);
+					result.push_back(Table[Bit2]);
+					result.push_back(Table[Bit3]);
+					i += 3;
+				}
+				else {
+					// 四字节字符
+					char Bit0 = (firstByte & 0x7) >> 2;
+					char Bit1 = (firstByte & 0x3) << 2 | ((utf8Str[i + 1] & 0x3F) >> 4);
+					char Bit2 = utf8Str[i + 1] & 0xF;
+					char Bit3 = (utf8Str[i + 2] & 0x3F) >> 2;
+					char Bit4 = ((utf8Str[i + 2] & 0x3) << 2) | (utf8Str[i + 3] & 0x3F) >> 4;
+					char Bit5 = utf8Str[i + 3] & 0xF;
+					result += "\\u";
+					result.push_back(Table[Bit0]);
+					result.push_back(Table[Bit1]);
+					result.push_back(Table[Bit2]);
+					result.push_back(Table[Bit3]);
+					result.push_back(Table[Bit4]);
+					result.push_back(Table[Bit5]);
+					i += 4;
+				}
 			}
 			return result;
 		}
 
+		inline std::string json_escape(const std::string& s, bool add_quotes = true) {
+			auto waitString = s;
+			std::string result;
+			for (int i = 0; i <= waitString.length(); i++) {
+				auto c = waitString[i];
+				auto uc = static_cast<unsigned char>(c);
+				if (is_json_special_char(uc)) {
+					result += '\\';
+					result += c;
+				}
+				else {
+					result += c;
+				}
+			}
+			std::string ret = utf8Toucs2(result);
+			ret.pop_back();
+			ret = "\"" + ret + "\"";
+			return  ret;
+		}
 		inline int json_unescape(const char* s, size_t n, char* out) {
 			int r = 0;
 			if (*s++ != '"') {
@@ -1487,9 +1523,9 @@ namespace webview {
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
-				}
+		}
 				return nullptr;
-			}
+	}
 
 			// Returns true if the library is currently loaded; otherwise false.
 			bool is_loaded() const { return !!m_handle; }
@@ -1498,7 +1534,7 @@ namespace webview {
 
 		private:
 			HMODULE m_handle = nullptr;
-		};
+};
 
 		namespace ntdll_symbols {
 			using RtlGetVersion_t =
@@ -1942,7 +1978,7 @@ namespace webview {
 #else
 					return ::GetAvailableCoreWebView2BrowserVersionString(browser_dir, version);
 #endif /* WEBVIEW_MSWEBVIEW2_EXPLICIT_LINK */
-				}
+					}
 
 			private:
 #if WEBVIEW_MSWEBVIEW2_BUILTIN_IMPL == 1
@@ -2092,7 +2128,7 @@ namespace webview {
 #if WEBVIEW_MSWEBVIEW2_EXPLICIT_LINK == 1
 				native_library m_lib{ L"WebView2Loader.dll" };
 #endif
-			};
+				};
 
 			namespace cast_info {
 				static constexpr auto controller_completed =
@@ -2111,7 +2147,7 @@ namespace webview {
 					cast_info_t<ICoreWebView2PermissionRequestedEventHandler>{
 						IID_ICoreWebView2PermissionRequestedEventHandler };
 			} // namespace cast_info
-		} // namespace mswebview2
+			} // namespace mswebview2
 
 		class webview2_com_handler
 			: public ICoreWebView2CreateCoreWebView2EnvironmentCompletedHandler,
@@ -2749,7 +2785,7 @@ namespace webview {
 			int m_dpi{};
 		};
 
-	} // namespace detail
+		} // namespace detail
 
 	using browser_engine = detail::win32_edge_engine;
 

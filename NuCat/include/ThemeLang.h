@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include <string>
-#include "include/yyjson.h"
 #include "include/Util.h"
 class ThemeLang
 {
@@ -12,8 +11,6 @@ public:
 	std::string LanguageGetAll();
 
 private:
-	yyjson_val* LanguageJson;
-	yyjson_doc* LanguageJsonRoot;
 	std::string retFileData;
 };
 // 关于为什么拆开 是因为ThemeLang需要多例 数量多于Theme类 同时不能伴生Theme 同时肯定也不能设计成Language一样的namespace隔开

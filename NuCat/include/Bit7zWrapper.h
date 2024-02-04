@@ -15,4 +15,5 @@ public:
 	static bool CommpressDirectory(std::string path, bit7z::BitInOutFormat& format, std::wstring outfile, std::string password);
 	static bool GetArchiveInfo(std::string file, const bit7z::BitInFormat& format, std::shared_ptr<bit7z::BitArchiveReader>& retData);
 	static bool GetArchiveInfoWithIsEncrypted(std::string path, const bit7z::BitInFormat& format, std::shared_ptr<bit7z::BitArchiveReader>& retData, bool& isEncrypted, bool& isHeaderEncrypted);
+	static bool GetArchiveInfoWithIsEncryptedAuto(std::string path, bool& isEncrypted, bool& isHeaderEncrypted);
 };

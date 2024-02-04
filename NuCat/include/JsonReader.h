@@ -1,7 +1,7 @@
 #pragma once
 #include "include/FileOperator.h"
 #include "include/Util.h"
-#include "include/yyjson.h"
+#include "include/json.hpp"
 #include <memory>
 #include <any>
 class JsonReader :private FileOperator< std::wstring >
@@ -18,7 +18,6 @@ public:
 	~JsonReader();
 
 private:
-	std::string retFileData;
-	yyjson_mut_doc* mut_doc;
-	yyjson_mut_val* mut_val;
+	std::string retFileData = "";
+	std::optional<json::value> JsonRoot;
 };

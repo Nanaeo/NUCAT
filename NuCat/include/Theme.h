@@ -4,7 +4,6 @@
 #include "include/JsonReader.h"
 #include <vector>
 #include <string>
-#include "yyjson.h"
 class Theme :public JsonReader
 {
 public:
