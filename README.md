@@ -30,7 +30,7 @@ NUCAT 是一个压缩软件，它可以帮助你压缩和解压缩文件。它�
 
 代码标准:  17/23
 
-依赖资源:  WebView2 YYJSON bit7z webview/webview(无需手动引入) 
+依赖资源:  WebView2 MeoJson bit7z WebView2/WebView2(无需手动引入) 
 
 ## 贡献须知
 需要安装以上环境同时 安装Git
@@ -43,6 +43,6 @@ NuCat并未实现压缩与解压缩等等代码
 如果你需要部分代码例如7z.dll 请前往其开源仓库查找
 
 ## 感谢
-YYJSON/webview2/7ZIP/bit7z/webview/@xichanggumeng/@Simplxss 为本项目提供了可能
+MeoJson/WebView2/7ZIP/Bit7z/webview/@Simplxss 为本项目提供了可能
 
 如果你需要更多帮助，可以查看 NUCAT 的文档。
