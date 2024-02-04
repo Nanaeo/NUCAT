@@ -6,6 +6,7 @@ if (POLICY CMP0141)
 endif()
 project ("NuCat")
 set(BIT7Z_AUTO_FORMAT true)
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 # 设置编译标记
 # 设置 cpp标准同时 设置utf8
 set(CMAKE_CXX_STANDARD 23)
