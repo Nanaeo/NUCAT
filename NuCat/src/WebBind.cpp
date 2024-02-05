@@ -183,6 +183,9 @@ void WebBind::RegJsBridge() {
 		std::string RPath = webview::detail::json_parse(req, "", 0);
 		return WebBind::String2Json(CurrentTheme->GetThemeFile(RPath));
 		});
+	WebviewObject.bind("TestUTF8", [&](const std::string& req) -> std::string {
+		return (char*)u8"{\"Test\":\"中文\"}";
+		});
 	// language api
 	WebviewObject.bind("NuCatGetThemeLangAll", [&](const std::string& req) -> std::string {
 		auto CurrentTheme = ThemeFactory::GetCurrentTheme();

@@ -421,76 +421,34 @@ namespace webview {
 		constexpr bool is_other_char(unsigned int c) {
 			return c <= 0x1f || (c >= 0x7f);
 		}
-		inline std::string string_to_hex(const std::string& input) {
-			static const char hex_digits[] = "0123456789ABCDEF";
-			std::string output;
-			output.reserve(input.length() * 2);
-
-			for (unsigned char c : input) {
-				output.push_back(hex_digits[c >> 4]); // 高四位
-				output.push_back(hex_digits[c & 15]); // 低四位
-			}
-
-			return output;
+		template<class Facet>
+		struct deletable_facet : Facet
+		{
+			template<class... Args>
+			deletable_facet(Args&&... args) : Facet(std::forward<Args>(args)...) {}
+			~deletable_facet() {}
+		};
+		inline std::wstring Utf8ToUtf16(const std::string& utf8_string) {
+			std::wstring_convert<deletable_facet<std::codecvt<char16_t, char, std::mbstate_t>>, char16_t> conv16;
+			std::u16string wstr = conv16.from_bytes(utf8_string);
+			return std::wstring(wstr.begin(), wstr.end());
 		}
-		inline std::string utf8Toucs2(const std::string& utf8Str) {
-			std::u16string utf16Str;
-			const char* Table = "0123456789ABCDEF";
-			std::string result;
-			for (size_t i = 0; i < utf8Str.size(); ) {
-				uint8_t firstByte = utf8Str[i];
-				// 标准UTF8 1-4字节
-				if (firstByte < 0x80) {
-					// 单字节字符 Ascii码区
-					result.push_back(firstByte);
-					i += 1;
-				}
-				else if (firstByte < 0xE0) {
-					char Bit0 = 0;
-					char Bit1 = (firstByte & 0x1F) >> 2;
-					char Bit2 = ((firstByte & 0x3) << 2) | ((utf8Str[i + 1] & 0x3F) >> 4);
-					char Bit3 = (utf8Str[i + 1] & 0x3F) >> 4;
-					result += "\\u";
-					result.push_back(Table[Bit0]);
-					result.push_back(Table[Bit1]);
-					result.push_back(Table[Bit2]);
-					result.push_back(Table[Bit3]);
-					i += 2;
-				}
-				else if (firstByte < 0xF0) {
-					// 三字节字符
-					char Bit0 = firstByte & 0x0F;
-					char Bit1 = (utf8Str[i + 1] & 0x3F) >> 2;
-					char Bit2 = ((utf8Str[i + 1] & 0x3) << 2) | ((utf8Str[i + 2] & 0x3F) >> 4);
-					char Bit3 = utf8Str[i + 2] & 0xF;
-					result += "\\u";
-					result.push_back(Table[Bit0]);
-					result.push_back(Table[Bit1]);
-					result.push_back(Table[Bit2]);
-					result.push_back(Table[Bit3]);
-					i += 3;
+		inline std::string Utf16ToUnicode(const std::wstring& wstr) {
+			std::string ret;
+			const char* Table = "0123456789abcdef";
+			for (int i = 0; i < wstr.length(); ++i) {
+				if (wstr[i] >= 0 && wstr[i] <= 127) { // ASCII
+					ret.push_back(static_cast<char>(wstr[i]));
 				}
 				else {
-					// 四字节字符
-					char Bit0 = (firstByte & 0x7) >> 2;
-					char Bit1 = (firstByte & 0x3) << 2 | ((utf8Str[i + 1] & 0x3F) >> 4);
-					char Bit2 = utf8Str[i + 1] & 0xF;
-					char Bit3 = (utf8Str[i + 2] & 0x3F) >> 2;
-					char Bit4 = ((utf8Str[i + 2] & 0x3) << 2) | (utf8Str[i + 3] & 0x3F) >> 4;
-					char Bit5 = utf8Str[i + 3] & 0xF;
-					result += "\\u";
-					result.push_back(Table[Bit0]);
-					result.push_back(Table[Bit1]);
-					result.push_back(Table[Bit2]);
-					result.push_back(Table[Bit3]);
-					result.push_back(Table[Bit4]);
-					result.push_back(Table[Bit5]);
-					i += 4;
+					ret += "\\u";
+					for (int ichar = 0; ichar < 4; ichar++) {
+						ret.push_back((Table[wstr[i] >> (12 - ichar * 4) & 0xF]));
+					}
 				}
 			}
-			return result;
+			return ret;
 		}
-
 		inline std::string json_escape(const std::string& s, bool add_quotes = true) {
 			auto waitString = s;
 			std::string result;
@@ -505,7 +463,7 @@ namespace webview {
 					result += c;
 				}
 			}
-			std::string ret = utf8Toucs2(result);
+			std::string ret = Utf16ToUnicode(Utf8ToUtf16(result));
 			ret.pop_back();
 			ret = "\"" + ret + "\"";
 			return  ret;
@@ -2883,6 +2841,7 @@ namespace webview {
 					js += R"js(;
 var promise = window._rpc[seq];
 delete window._rpc[seq];
+debugger;
 if (result !== undefined) {
   try {
     result = JSON.parse(result);
