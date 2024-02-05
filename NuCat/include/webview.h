@@ -1260,6 +1260,7 @@ namespace webview {
 #include <stdlib.h>
 #include <windows.h>
 #include <Dwmapi.h>
+#include <codecvt>
 #include <winuser.h>
 #include <windowsx.h>
 #include "WebView2.h"
